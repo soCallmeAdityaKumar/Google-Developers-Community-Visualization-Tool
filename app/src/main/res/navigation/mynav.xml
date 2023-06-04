@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/upcomingEvents"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.UpcomingEvents"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.UpcomingEvents.UpcomingEvents"
         android:label="fragment_upcoming_events"
         tools:layout="@layout/fragment_upcoming_events" />
 </navigation>
