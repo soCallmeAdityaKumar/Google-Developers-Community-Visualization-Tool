@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.example.googledeveloperscommunityvisualisationtool.Repository.GdgScrapingRespository
 import com.example.googledeveloperscommunityvisualisationtool.Repository.UpcomingEventRepository
 import com.example.googledeveloperscommunityvisualisationtool.ViewModel.UpcomingEventViewModel
 import com.example.googledeveloperscommunityvisualisationtool.ViewModel.UpcomingEventViewModelFactory
@@ -25,6 +26,11 @@ class MainActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch{
             upcomingEventViewModel.getResponseViewModel()
+        }
+
+        var gdgScrapingRespository=GdgScrapingRespository()
+        CoroutineScope(Dispatchers.IO).launch {
+            gdgScrapingRespository.scrape()
         }
     }
 }
