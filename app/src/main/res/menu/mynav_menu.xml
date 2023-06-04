@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_home"
+        android:title="Home"/>
+    <item android:id="@+id/maps"
+        android:title="Maps"/>
+    <item android:id="@+id/hash_tags"
+        android:title="Hashtags"/>
+    <item android:id="@+id/events"
+        android:title="events"/>
+    <item android:id="@+id/calender"
+        android:title="Calender"/>
+    <item android:id="@+id/projects"
+        android:title="Project"/>
+    <item android:id="@+id/meet"
+        android:title="Meets"/>
+    <item android:id="@+id/teams"
+        android:title="Teams"/>
+    <item android:id="@+id/settings"
+        android:title="Settings"/>
+</menu>
