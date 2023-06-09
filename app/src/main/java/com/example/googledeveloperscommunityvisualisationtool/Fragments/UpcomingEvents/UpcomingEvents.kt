@@ -1,51 +1,202 @@
 package com.example.googledeveloperscommunityvisualisationtool.Fragments.UpcomingEvents
 
+import android.app.ProgressDialog
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.drawerlayout.widget.DrawerLayout
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.withCreated
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.googledeveloperscommunityvisualisationtool.DataClass.Volley.Chapter
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Volley.Result
-import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.Repository.UpcomingEventRepository
 import com.example.googledeveloperscommunityvisualisationtool.ViewModel.UpcomingEventViewModel
 import com.example.googledeveloperscommunityvisualisationtool.ViewModel.UpcomingEventViewModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentUpcomingEventsBinding
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.UpcomingEventEntity
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.UpcomingEventRoomViewModelFactory
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.UpcomingEventdatabaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class UpcomingEvents : Fragment() {
     lateinit var binding:FragmentUpcomingEventsBinding
     lateinit var upcomingEventViewModel:UpcomingEventViewModel
-    lateinit var eventList:List<Result>
-    lateinit var toggle:ActionBarDrawerToggle
+     var eventlist= mutableListOf <Result>()
+    lateinit var upcomingDatBaseViewModel: UpcomingEventdatabaseViewModel
+    lateinit var adapter: Adapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-            binding=FragmentUpcomingEventsBinding.inflate(layoutInflater,container,false)
-            val view= binding.root
-            val upcomingEventRepository= UpcomingEventRepository(view.context)
-
-            upcomingEventViewModel= ViewModelProvider(this, UpcomingEventViewModelFactory(upcomingEventRepository)).get(
-                    UpcomingEventViewModel::class.java)
-
-            CoroutineScope(Dispatchers.IO).launch{
-                 eventList=upcomingEventViewModel.getResponseViewModel()
-            }
-            binding.recyclerView.layoutManager=LinearLayoutManager(view.context, RecyclerView.VERTICAL,false)
-            binding.recyclerView.adapter=Adapter(eventList)
-
-
-            return view
+        savedInstanceState: Bundle?): View
+    {
+        binding=FragmentUpcomingEventsBinding.inflate(layoutInflater,container,false)
+        val progressBar=ProgressBar(context)
+        progressBar.visibility=View.VISIBLE
+        val view= binding.root
+        binding.recyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+        binding.recyclerView.visibility=View.GONE
+        adapter=Adapter(eventlist)
+        binding.recyclerView.adapter = adapter
+        binding.secondcardviewTextView.text="Upcoming Events"
+        binding.thirdcardviewTextView.text="Last Week Events"
+        return view
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        binding.contentLoadingProgressBar.visibility=View.VISIBLE
+        //ViewModel for fetching the events list
+        val upcomingEventRepository= UpcomingEventRepository(requireContext())
+        upcomingEventViewModel= ViewModelProvider(this, UpcomingEventViewModelFactory(upcomingEventRepository,requireContext()))
+            .get(UpcomingEventViewModel::class.java)
+
+
+        //ViewModel for Database
+        upcomingDatBaseViewModel=ViewModelProvider(this,UpcomingEventRoomViewModelFactory(requireContext()))
+            .get(UpcomingEventdatabaseViewModel::class.java)
+        binding.contentLoadingProgressBar.visibility=View.VISIBLE
+        checkDatabase()
+
+
+    }
+
+
+    private fun checkDatabase() {
+
+        upcomingDatBaseViewModel.readAllEventViewModel.observe(viewLifecycleOwner, Observer {list->
+            if(list.isEmpty()){
+                networkCheckAndRun()
+                binding.recyclerView.visibility=View.VISIBLE
+                binding.contentLoadingProgressBar.visibility=View.GONE
+
+            }else{
+                val events=convertDataType(list)
+                adapter.refreshData(events)
+                binding.contentLoadingProgressBar.visibility=View.GONE
+                binding.recyclerView.visibility=View.VISIBLE
+
+            }
+        })
+
+    }
+
+    private fun convertDataType(list: List<UpcomingEventEntity>?): List<Result> {
+        val eventList= mutableListOf<Result>()
+        if (list != null) {
+
+            for(event in list){
+                val tags= mutableListOf<String>()
+                var string=""
+                for(i in 0 until event.tags.length){
+                    if(event.tags[i]==' '){
+                        tags.add(string)
+                        string =""
+                    }else{
+                        string+=event.tags[i]
+                    }
+                }
+                val eventlist=Result(
+                    Chapter(
+                        event.Chapter_location,
+                        event.CityName,
+                        event.Country,
+                        event.Country_name,
+                        event.Description,
+                        event.ChapterId,
+                        event.Relative_url,
+                        event.State,
+                        event.Timezone,
+                        event.ChapterTitle,
+                        event.ChapterUrl),
+                    event.city,
+                    event.description_short,
+                    event.event_type_title,
+                    event.id,
+                    event.start_date,
+                    tags,
+                    event.title,
+                    event.url
+                )
+            eventList.add(eventlist)
+            }
+        }
+        return eventList
+    }
+
+    private fun networkCheckAndRun() {
+        if(upcomingEventViewModel.isNetworkAvailable()){
+            binding.contentLoadingProgressBar.visibility=View.VISIBLE
+            getAllUpcomingEvents()
+        }else{
+            Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show()
+            binding.contentLoadingProgressBar.visibility = View.GONE
+        }
+    }
+
+    private fun getAllUpcomingEvents() {
+            CoroutineScope(Dispatchers.IO).launch {
+                Log.d("Inside the getAllUpcoEvet", Thread.currentThread().name)
+                upcomingEventViewModel.getResponseViewModel()
+                delay(5000)
+                Log.d("after network call", "using recycler View")
+                withContext(Dispatchers.Main) {
+                    Log.d("Inside the getAllUpcoEvet for recycler", Thread.currentThread().name)
+                    eventlist = upcomingEventViewModel.returnlistViewModel()
+                }
+                withContext(Dispatchers.Main) {
+                    adapter.refreshData(eventlist)
+                    binding.recyclerView.visibility=View.VISIBLE
+                    binding.contentLoadingProgressBar.visibility=View.GONE
+                }
+                insertToDatabase()
+
+            }
+    }
+
+    private  fun insertToDatabase() {
+        Log.d("eventsizeininsertDatabase",eventlist.size.toString())
+        for (events in eventlist){
+            var alltags=""
+            for (eventstags in events.tags){
+                alltags+="$eventstags "
+            }
+            val upcomingEvents=UpcomingEventEntity(
+                events.chapter.chapter_location,
+                events.chapter.city,
+                events.chapter.country,
+                events.chapter.country_name,
+                events.chapter.description,
+                events.chapter.id,
+                events.chapter.relative_url,
+                events.chapter.state,
+                events.chapter.timezone,
+                events.chapter.title,events.chapter.url,
+                events.city,
+                events.description_short,
+                events.event_type_title,
+                events.id,
+                events.start_date,
+                alltags,
+                events.title,
+                events.url
+            )
+            upcomingDatBaseViewModel.addEventViewModel(upcomingEvents)
+        }
+    }
+
 
 }
