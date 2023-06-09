@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settingsnav_graph"
+    app:startDestination="@id/settings3">
+
+    <fragment
+        android:id="@+id/settings3"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.Settings.Settings"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settings3_to_connection"
+            app:destination="@id/connection" />
+        <action
+            android:id="@+id/action_settings3_to_alarm_notification"
+            app:destination="@id/alarm_notification" />
+    </fragment>
+    <fragment
+        android:id="@+id/connection"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.Settings.Connection.connection"
+        android:label="fragment_connection"
+        tools:layout="@layout/fragment_connection" />
+    <fragment
+        android:id="@+id/alarm_notification"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.Settings.AlarmNotification.Alarm_notification"
+        android:label="Alarm_notification" />
+</navigation>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.Settings.Connection.connection"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Connection"
+        android:textSize="60dp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="50dp"
+        android:layout_height="wrap_content"/>
+    <EditText
+        android:id="@+id/IpAddressEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="LG Ip Address"
+        android:textSize="30dp"
+        android:layout_marginTop="40dp"
+        android:textAlignment="viewStart"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:padding="20dp"
+        android:background="@drawable/cardview"
+        />
+    <EditText
+        android:id="@+id/PortEdittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Port"
+        android:textSize="30dp"
+        android:layout_marginTop="40dp"
+        android:textAlignment="viewStart"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:padding="20dp"
+        android:background="@drawable/cardview"
+        />
+    <EditText
+        android:id="@+id/LgNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="LG Name"
+        android:textSize="30dp"
+        android:layout_marginTop="40dp"
+        android:textAlignment="viewStart"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:padding="20dp"
+        android:background="@drawable/cardview"
+        />
+    <EditText
+        android:id="@+id/LgPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="LG Password"
+        android:textSize="30dp"
+        android:layout_marginTop="40dp"
+        android:textAlignment="viewStart"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:padding="20dp"
+        android:background="@drawable/cardview"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cardview"
+        android:text="Connect"
+        android:layout_marginStart="550dp"
+        android:layout_marginTop="20dp"
+        android:padding="20dp"/>
+
+</LinearLayout>
+</FrameLayout>

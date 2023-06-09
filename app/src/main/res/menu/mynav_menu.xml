@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_home"
+        android:visible="true"
+        android:icon="@drawable/home"
         android:title="Home"/>
     <item android:id="@+id/maps"
+        android:visible="true"
+        android:icon="@drawable/globe"
         android:title="Maps"/>
     <item android:id="@+id/hash_tags"
+        android:icon="@drawable/hashtags"
         android:title="Hashtags"/>
     <item android:id="@+id/events"
-        android:title="events"/>
+        android:visible="true"
+        android:icon="@drawable/events"
+        android:title="Upcoming events"/>
     <item android:id="@+id/calender"
+        android:icon="@drawable/calendar"
         android:title="Calender"/>
     <item android:id="@+id/projects"
+        android:visible="false"
         android:title="Project"/>
     <item android:id="@+id/meet"
+        android:visible="true"
+        android:icon="@drawable/meets"
         android:title="Meets"/>
     <item android:id="@+id/teams"
+        android:icon="@drawable/teams"
+        android:visible="false"
         android:title="Teams"/>
     <item android:id="@+id/settings"
+        android:visible="true"
+        android:icon="@drawable/settings"
         android:title="Settings"/>
 </menu>
