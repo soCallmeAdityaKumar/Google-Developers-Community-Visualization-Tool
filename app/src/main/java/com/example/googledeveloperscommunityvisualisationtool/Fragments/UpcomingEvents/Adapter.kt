@@ -10,7 +10,7 @@ import com.example.googledeveloperscommunityvisualisationtool.DataClass.Volley.R
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.EventsitemlistBinding
 
-class Adapter(private val eventList:List<Result>):RecyclerView.Adapter<Adapter.MyViewHolder>() {
+class Adapter(private var eventList:List<Result>):RecyclerView.Adapter<Adapter.MyViewHolder>() {
     class MyViewHolder(val binding: EventsitemlistBinding) :RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -33,12 +33,15 @@ class Adapter(private val eventList:List<Result>):RecyclerView.Adapter<Adapter.M
                     tag += this.tags[i]
                 }
                 binding.tags.text=tag.toString()
-                binding.description.text=this.description_short.toString()
-                binding.ViewDetailsButton.setOnClickListener {
 
                 }
             }
         }
+    fun refreshData(eventsList:List<Result>){
+        this.eventList=eventsList
+        notifyDataSetChanged()
+
     }
 
 }
+
