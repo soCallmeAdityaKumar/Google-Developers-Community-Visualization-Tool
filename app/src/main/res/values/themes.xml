@@ -1,14 +1,26 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.GoogleDevelopersCommunityVisualisationTool" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary brand color. -->
+        <item name="android:colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+        <!-- Customize your theme here. -->
+        <item name="navigationViewStyle">@style/Widget.App.NavigationView</item>
+
+    </style>
+    <style name="Widget.App.NavigationView" parent="Widget.MaterialComponents.NavigationView">
+<!--        <item name="itemIconTint">@color/navigation_item_color</item>-->
+<!--        <item name="itemTextColor">@color/navigation_item_color</item>-->
+<!--        <item name="itemShapeFillColor">@color/navigation_item_background_color</item>-->
     </style>
 
-    <style name="Theme.GoogleDevelopersCommunityVisualisationTool" parent="Base.Theme.GoogleDevelopersCommunityVisualisationTool" />
-    <style name="RoundCorner" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">10dp</item>
-        <item name="color">@color/black</item>
-    </style>
+
 </resources>
