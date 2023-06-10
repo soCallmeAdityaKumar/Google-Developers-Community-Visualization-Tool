@@ -1,27 +1,38 @@
 package com.example.googledeveloperscommunityvisualisationtool.Fragments.UpcomingEvents
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
+import android.widget.Toast
+import com.example.googledeveloperscommunityvisualisationtool.DataClass.Scraping.GdgGroupClasses.GdgGroupDataClassItem
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgChaptersViewModelFactory
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgScrapingRespository
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgViewModel
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentHomeBinding
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapters.GdgChapterDatabaseViewModel
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapters.GdgChaptersEntity
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapters.GdgDatabaseViewModelfactory
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class Home : Fragment() {
-
-    private lateinit var viewModel: HomeViewModel
+//    lateinit var adapter: GdgChaptersAdapter
     private lateinit var binding:FragmentHomeBinding
     private lateinit var sharedPref:SharedPreferences
+    private  lateinit var gdgChaptersViewModel:GdgViewModel
+    private lateinit var gdgChaptersList:ArrayList<GdgGroupDataClassItem>
+    private  lateinit var gdgChapterDatabaseViewModel: GdgChapterDatabaseViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +49,56 @@ class Home : Fragment() {
 
 
     }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val gdgChapterRepo=GdgScrapingRespository()
+        //For Chapter Database
+        gdgChapterDatabaseViewModel=ViewModelProvider(this,GdgDatabaseViewModelfactory(requireContext())).get(GdgChapterDatabaseViewModel::class.java)
+
+        //For Chapter Scraping
+        gdgChaptersViewModel=ViewModelProvider(this,GdgChaptersViewModelFactory(gdgChapterRepo,requireContext())).get(GdgViewModel::class.java)
+        networkCheck()
+
+
+    }
+
+    private fun networkCheck() {
+        if(gdgChaptersViewModel.isNetworkAvailable()){
+            getAllGdgChapters()
+        }else{
+            Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun getAllGdgChapters() {
+        CoroutineScope(Dispatchers.IO).launch {
+            gdgChaptersList=gdgChaptersViewModel.getChaptersViewModel()
+            val gdgChapterEntityList=convertGdgDataTypes(gdgChaptersList)
+            for( chapter in gdgChapterEntityList){
+                gdgChapterDatabaseViewModel.addChapterViewModel(chapter)
+            }
+            Log.d("gdgChapterList",gdgChaptersList.size.toString())
+        }
+    }
+
+    private fun convertGdgDataTypes(gdgChaptersList: ArrayList<GdgGroupDataClassItem>):ArrayList<GdgChaptersEntity> {
+        val gdgChaptersEntityList= ArrayList<GdgChaptersEntity>()
+        for(chapter in gdgChaptersList){
+            val gdgchapter=GdgChaptersEntity(
+                0,
+                chapter.avatar,
+                chapter.banner,
+                chapter.city,
+                chapter.city_name,
+                chapter.country,
+                chapter.latitude ,
+                chapter.longitude ,
+                chapter.url)
+            gdgChaptersEntityList.add(gdgchapter)
+        }
+        return gdgChaptersEntityList
+    }
+
 
     private fun secondCardViewTapTarget() {
         if(!sharedPref.getBoolean("didShowPrompt",false)){
@@ -105,10 +166,6 @@ class Home : Fragment() {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 }

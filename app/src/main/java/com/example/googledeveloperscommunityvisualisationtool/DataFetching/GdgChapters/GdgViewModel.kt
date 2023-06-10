@@ -1,29 +1,19 @@
-package com.example.googledeveloperscommunityvisualisationtool.ViewModel
+package com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.android.volley.Response
-import com.example.googledeveloperscommunityvisualisationtool.DataClass.Volley.Result
-import com.example.googledeveloperscommunityvisualisationtool.Repository.UpcomingEventRepository
-import kotlinx.coroutines.delay
+import com.example.googledeveloperscommunityvisualisationtool.DataClass.Scraping.GdgGroupClasses.GdgGroupDataClassItem
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.UpcomingEvents.UpcomingEventViewModel
 
-class UpcomingEventViewModel(val repository: UpcomingEventRepository,val context:Context):ViewModel() {
-
-      var eventList= mutableListOf<Result>()
-      fun getResponseViewModel(){
-        repository.getResponse()
+class GdgViewModel(val gdgChaptersRepo:GdgScrapingRespository,val context:Context): ViewModel() {
+    private  var chapters=ArrayList<GdgGroupDataClassItem>()
+    fun getChaptersViewModel():ArrayList<GdgGroupDataClassItem>{
+        chapters=gdgChaptersRepo.getGdgChapters()
+        return  chapters
     }
-    fun returnlistViewModel():MutableList<Result>{
-        val eventList=repository.returnEventList()
-        Log.d("viewModelList",eventList.size.toString())
-        return repository.returnEventList()
-
-    }
-
     fun isNetworkAvailable(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -49,6 +39,4 @@ class UpcomingEventViewModel(val repository: UpcomingEventRepository,val context
         }
         return false
     }
-
-
 }

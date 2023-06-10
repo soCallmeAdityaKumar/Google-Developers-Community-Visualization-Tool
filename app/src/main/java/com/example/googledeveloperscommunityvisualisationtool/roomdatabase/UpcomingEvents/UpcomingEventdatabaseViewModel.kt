@@ -1,4 +1,4 @@
-package com.example.googledeveloperscommunityvisualisationtool.roomdatabase
+package com.example.googledeveloperscommunityvisualisationtool.roomdatabase.UpcomingEvents
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -10,15 +10,15 @@ import kotlinx.coroutines.launch
 class UpcomingEventdatabaseViewModel(context: Context):ViewModel() {
 
       val readAllEventViewModel:LiveData<List<UpcomingEventEntity>>
-    private  val repo:UpcomingEventdatabaseRepository
+    private  val repo: UpcomingEventdatabaseRepository
 
     init {
-        val dao=EventsDatabase.getEventDatabase(context).eventDao()
+        val dao= EventsDatabase.getEventDatabase(context).eventDao()
         repo= UpcomingEventdatabaseRepository(dao)
         readAllEventViewModel=repo.readAllEventRepo
     }
 
-    fun addEventViewModel(event:UpcomingEventEntity){
+    fun addEventViewModel(event: UpcomingEventEntity){
         viewModelScope.launch(Dispatchers.IO) {
             repo.addEventsRepo(event)
         }

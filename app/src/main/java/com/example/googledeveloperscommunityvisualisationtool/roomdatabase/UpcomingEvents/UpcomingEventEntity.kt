@@ -1,4 +1,4 @@
-package com.example.googledeveloperscommunityvisualisationtool.roomdatabase
+package com.example.googledeveloperscommunityvisualisationtool.roomdatabase.UpcomingEvents
 
 import androidx.room.Embedded
 import androidx.room.Entity

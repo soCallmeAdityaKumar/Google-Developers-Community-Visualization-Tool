@@ -1,16 +1,12 @@
 package com.example.googledeveloperscommunityvisualisationtool.Fragments.UpcomingEvents
 
-import android.media.Image
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView.RecyclerListener
 import androidx.recyclerview.widget.RecyclerView
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Volley.Result
-import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.EventsitemlistBinding
 
-class Adapter(private var eventList:List<Result>):RecyclerView.Adapter<Adapter.MyViewHolder>() {
+class UpcomingEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter<UpcomingEventsAdapter.MyViewHolder>() {
     class MyViewHolder(val binding: EventsitemlistBinding) :RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
