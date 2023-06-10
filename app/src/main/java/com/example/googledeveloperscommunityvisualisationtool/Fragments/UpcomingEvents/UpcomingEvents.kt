@@ -1,7 +1,5 @@
 package com.example.googledeveloperscommunityvisualisationtool.Fragments.UpcomingEvents
 
-import android.app.ProgressDialog
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,31 +10,28 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.withCreated
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Volley.Chapter
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Volley.Result
-import com.example.googledeveloperscommunityvisualisationtool.Repository.UpcomingEventRepository
-import com.example.googledeveloperscommunityvisualisationtool.ViewModel.UpcomingEventViewModel
-import com.example.googledeveloperscommunityvisualisationtool.ViewModel.UpcomingEventViewModelFactory
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.UpcomingEvents.UpcomingEventRepository
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.UpcomingEvents.UpcomingEventViewModel
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.UpcomingEvents.UpcomingEventViewModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentUpcomingEventsBinding
-import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.UpcomingEventEntity
-import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.UpcomingEventRoomViewModelFactory
-import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.UpcomingEventdatabaseViewModel
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.UpcomingEvents.UpcomingEventEntity
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.UpcomingEvents.UpcomingEventRoomViewModelFactory
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.UpcomingEvents.UpcomingEventdatabaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class UpcomingEvents : Fragment() {
     lateinit var binding:FragmentUpcomingEventsBinding
-    lateinit var upcomingEventViewModel:UpcomingEventViewModel
+    lateinit var upcomingEventViewModel: UpcomingEventViewModel
      var eventlist= mutableListOf <Result>()
     lateinit var upcomingDatBaseViewModel: UpcomingEventdatabaseViewModel
-    lateinit var adapter: Adapter
+    lateinit var adapter: UpcomingEventsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +43,7 @@ class UpcomingEvents : Fragment() {
         val view= binding.root
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         binding.recyclerView.visibility=View.GONE
-        adapter=Adapter(eventlist)
+        adapter=UpcomingEventsAdapter(eventlist)
         binding.recyclerView.adapter = adapter
         binding.secondcardviewTextView.text="Upcoming Events"
         binding.thirdcardviewTextView.text="Last Week Events"
@@ -66,7 +61,9 @@ class UpcomingEvents : Fragment() {
 
 
         //ViewModel for Database
-        upcomingDatBaseViewModel=ViewModelProvider(this,UpcomingEventRoomViewModelFactory(requireContext()))
+        upcomingDatBaseViewModel=ViewModelProvider(this,
+            UpcomingEventRoomViewModelFactory(requireContext())
+        )
             .get(UpcomingEventdatabaseViewModel::class.java)
         binding.contentLoadingProgressBar.visibility=View.VISIBLE
         checkDatabase()
@@ -174,7 +171,7 @@ class UpcomingEvents : Fragment() {
             for (eventstags in events.tags){
                 alltags+="$eventstags "
             }
-            val upcomingEvents=UpcomingEventEntity(
+            val upcomingEvents= UpcomingEventEntity(
                 events.chapter.chapter_location,
                 events.chapter.city,
                 events.chapter.country,

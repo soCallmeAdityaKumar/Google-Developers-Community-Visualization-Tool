@@ -1,4 +1,4 @@
-package com.example.googledeveloperscommunityvisualisationtool.Repository
+package com.example.googledeveloperscommunityvisualisationtool.DataFetching.UpcomingEvents
 
 import android.content.Context
 import android.util.Log
@@ -6,20 +6,11 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Volley.Chapter
-import com.example.googledeveloperscommunityvisualisationtool.DataClass.Volley.Logo
-import com.example.googledeveloperscommunityvisualisationtool.DataClass.Volley.Picture
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Volley.Result
-import com.google.gson.JsonArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import org.json.JSONArray
 import org.json.JSONObject
-import java.util.Objects
-import kotlin.math.log
 
 const val  url = "https://gdg.community.dev/api/search/?result_types=upcoming_event&order_by_proximity=true&proximity=3300"
 
@@ -114,8 +105,6 @@ class UpcomingEventRepository(val context: Context) {
 
              Log.d("resulrsize", resultArray.size.toString())
          }
-
-
     }
     fun returnEventList():MutableList<Result>{
         return resultArray
