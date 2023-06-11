@@ -11,92 +11,198 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Scraping.GdgGroupClasses.GdgGroupDataClassItem
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgChaptersViewModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgScrapingRespository
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgViewModel
+import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.GdgChaptersAdapter
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentHomeBinding
-import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapters.GdgChapterDatabaseViewModel
-import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapters.GdgChaptersEntity
-import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapters.GdgDatabaseViewModelfactory
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterViewModel
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterViewModelFactory
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapters.ChapterUrlDatabaseViewModel
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapters.ChaptersUrlEntity
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapters.ChapterUrlDatabaseViewModelfactory
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Home : Fragment() {
-//    lateinit var adapter: GdgChaptersAdapter
-    private lateinit var binding:FragmentHomeBinding
-    private lateinit var sharedPref:SharedPreferences
-    private  lateinit var gdgChaptersViewModel:GdgViewModel
-    private lateinit var gdgChaptersList:ArrayList<GdgGroupDataClassItem>
-    private  lateinit var gdgChapterDatabaseViewModel: GdgChapterDatabaseViewModel
+    //    lateinit var adapter: GdgChaptersAdapter
+    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var adapterlist: List<ChapterEntity>
+    private lateinit var binding: FragmentHomeBinding
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var gdgChaptersViewModel: GdgViewModel
+    private lateinit var gdgChaptersList: ArrayList<GdgGroupDataClassItem>
+    private lateinit var chapterUrlDatabaseViewModel: ChapterUrlDatabaseViewModel
+    private lateinit var chapterDatabaseViewModel:ChapterViewModel
+    private lateinit var adapter: GdgChaptersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding=FragmentHomeBinding.inflate(layoutInflater,container, false)
-        val view=binding.root
-
-         sharedPref= activity?.getSharedPreferences("didShowPrompt",Context.MODE_PRIVATE)!!
-        val prefEdit=sharedPref?.edit()
+        binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        val view = binding.root
+        adapterlist = listOf()
+        adapter = GdgChaptersAdapter(adapterlist)
+        binding.recyclerViewChapters.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerViewChapters.adapter = adapter
+        sharedPref = activity?.getSharedPreferences("didShowPrompt", Context.MODE_PRIVATE)!!
+        val prefEdit = sharedPref?.edit()
         secondCardViewTapTarget()
 
         return view
 
 
     }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val gdgChapterRepo=GdgScrapingRespository()
+        val gdgChapterRepo = GdgScrapingRespository()
         //For Chapter Database
-        gdgChapterDatabaseViewModel=ViewModelProvider(this,GdgDatabaseViewModelfactory(requireContext())).get(GdgChapterDatabaseViewModel::class.java)
+        chapterUrlDatabaseViewModel =
+            ViewModelProvider(this, ChapterUrlDatabaseViewModelfactory(requireContext())).get(
+                ChapterUrlDatabaseViewModel::class.java
+            )
+
+        //For HomeViewModel
+        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         //For Chapter Scraping
-        gdgChaptersViewModel=ViewModelProvider(this,GdgChaptersViewModelFactory(gdgChapterRepo,requireContext())).get(GdgViewModel::class.java)
-        networkCheck()
+        gdgChaptersViewModel = ViewModelProvider(
+            this,
+            GdgChaptersViewModelFactory(gdgChapterRepo, requireContext())
+        ).get(GdgViewModel::class.java)
+
+
+        //Chapter ViewModel
+        chapterDatabaseViewModel=ViewModelProvider(this,ChapterViewModelFactory(requireContext())).get(ChapterViewModel::class.java)
+
+        checkurlDatabase()
+        Log.d("gdglistsize", adapterlist.size.toString())
 
 
     }
 
+    private fun checkurlDatabase() {
+        chapterUrlDatabaseViewModel.readAllChapterUrlViewModel.observe(viewLifecycleOwner, Observer {list->
+            if(list.isEmpty()){
+                networkCheck()
+
+            }else{
+
+                chapterDatabaseViewModel.readAllChaptersViewModel.observe(viewLifecycleOwner,
+                    Observer { chapterEntity ->
+
+                            if (chapterEntity.isEmpty()) {
+                                getAllGdgChapter()
+                            } else {
+                                getChapterFromDatabase()
+                            }
+
+
+                    })
+
+            }
+        })
+    }
+
+    private fun getChapterFromDatabase() {
+        chapterDatabaseViewModel.readAllChaptersViewModel.observe(viewLifecycleOwner, Observer {it->
+            adapterlist=it
+            adapter.refreshData(adapterlist)
+            binding.recyclerViewChapters.adapter = adapter
+        })
+    }
+
     private fun networkCheck() {
-        if(gdgChaptersViewModel.isNetworkAvailable()){
-            getAllGdgChapters()
-        }else{
+
+        if (gdgChaptersViewModel.isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                async { storeUrlinDatabase()}.await()
+//                delay(4000)
+//                getAllGdgChapter()
+            }
+
+        } else {
             Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun getAllGdgChapters() {
-        CoroutineScope(Dispatchers.IO).launch {
-            gdgChaptersList=gdgChaptersViewModel.getChaptersViewModel()
-            val gdgChapterEntityList=convertGdgDataTypes(gdgChaptersList)
-            for( chapter in gdgChapterEntityList){
-                gdgChapterDatabaseViewModel.addChapterViewModel(chapter)
-            }
-            Log.d("gdgChapterList",gdgChaptersList.size.toString())
+    private fun getAllGdgChapter() {
+        Log.d("getAllgdgChapters", "beforedelay")
+        CoroutineScope(Dispatchers.Main).launch {
+            chapterUrlDatabaseViewModel.readAllChapterUrlViewModel.observe(viewLifecycleOwner,
+                Observer { gdgChapterEntity ->
+                    for (chapter in gdgChapterEntity) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val details = homeViewModel.getResponse(chapter.url)
+                            withContext(Dispatchers.Main) {
+                                chapterDatabaseViewModel.addChaptersViewModel(
+                                    ChapterEntity(
+                                        chapter.avatar,
+                                        chapter.banner,
+                                        chapter.city,
+                                        chapter.city_name,
+                                        chapter.country,
+                                        chapter.latitude,
+                                        chapter.longitude,
+                                        chapter.url,
+                                        details.gdgName,
+                                        details.membersNumber,
+                                        details.about
+                                    )
+                                )
+                            }
+                        }
+                    }
+                })
         }
+
     }
 
-    private fun convertGdgDataTypes(gdgChaptersList: ArrayList<GdgGroupDataClassItem>):ArrayList<GdgChaptersEntity> {
-        val gdgChaptersEntityList= ArrayList<GdgChaptersEntity>()
-        for(chapter in gdgChaptersList){
-            val gdgchapter=GdgChaptersEntity(
-                0,
-                chapter.avatar,
-                chapter.banner,
-                chapter.city,
-                chapter.city_name,
-                chapter.country,
-                chapter.latitude ,
-                chapter.longitude ,
-                chapter.url)
-            gdgChaptersEntityList.add(gdgchapter)
+
+
+
+    private fun storeUrlinDatabase() {
+        Log.d("storeindatabase","beforedelay")
+        CoroutineScope(Dispatchers.IO).launch {
+            gdgChaptersList = gdgChaptersViewModel.getChaptersViewModel()
+            val gdgChapterEntityList = convertGdgDataTypes(gdgChaptersList)
+                for (chapter in gdgChapterEntityList) {
+                    chapterUrlDatabaseViewModel.addChapterUrlViewModel(chapter)
+                }
+            Log.d("storeindatabase","afterdelay")
         }
-        return gdgChaptersEntityList
+
+    }
+
+    private fun convertGdgDataTypes(gdgChaptersList: ArrayList<GdgGroupDataClassItem>):ArrayList<ChaptersUrlEntity> {
+        val chaptersUrlEntityList= ArrayList<ChaptersUrlEntity>()
+        for(chapter in gdgChaptersList){
+            val gdgchapter=ChaptersUrlEntity(
+                chapter.avatar,
+            chapter.banner,
+            chapter.city_name,
+            chapter.city,
+            chapter.country,
+            chapter.latitude,
+            chapter.longitude,
+            chapter.url)
+            chaptersUrlEntityList.add(gdgchapter)
+        }
+        return chaptersUrlEntityList
     }
 
 

@@ -5,10 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Scraping.GdgGroupClasses.Banner
 
-@Entity(tableName = "Chapter_table")
-data class GdgChaptersEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id:Int,
+@Entity(tableName = "Chapter_url")
+data class ChaptersUrlEntity(
     val avatar: String,
     @Embedded
     val banner: Banner,
@@ -17,5 +15,7 @@ data class GdgChaptersEntity(
     val country: String,
     val latitude: Double,
     val longitude: Double,
+    @PrimaryKey
     val url: String
     )
+
