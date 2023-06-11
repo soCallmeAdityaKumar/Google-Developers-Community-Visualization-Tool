@@ -24,13 +24,13 @@ class GdgScrapingRespository {
             val longitude:Double=  obj.getJSONObject(i).optDouble("latitude",0.0)
             val latitude =  obj.getJSONObject(i).optDouble("latitude",0.0)
             val url=obj.getJSONObject(i).getString("url")
-            Log.d("latitude",longitude.toString())
-            Log.d("longitude",latitude.toString())
+//            Log.d("latitude",longitude.toString())
+//            Log.d("longitude",latitude.toString())
 
             val gdgGroupDataClassItem=GdgGroupDataClassItem(avatar,banner,city,cityName,country, latitude,longitude,url)
             gdgChapters.add(gdgGroupDataClassItem)
         }
-        Log.d("gdgChapters",gdgChapters.size.toString())
+//        Log.d("gdgChapters",gdgChapters.size.toString())
         return gdgChapters
     }
 }

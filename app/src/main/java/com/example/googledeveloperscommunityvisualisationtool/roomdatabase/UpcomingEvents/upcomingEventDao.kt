@@ -10,7 +10,7 @@ import androidx.room.Query
 interface upcomingEventDao
 {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addEvents(upcomingEventEntity: UpcomingEventEntity)
 
     @Query("SELECT * FROM upcoming_event_entity Order By start_date")
