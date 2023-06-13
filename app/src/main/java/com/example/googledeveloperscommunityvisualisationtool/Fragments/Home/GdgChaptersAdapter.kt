@@ -7,12 +7,27 @@ import com.example.googledeveloperscommunityvisualisationtool.databinding.GdgCha
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
 
 class GdgChaptersAdapter(var chapterList: List<ChapterEntity>):RecyclerView.Adapter<GdgChaptersAdapter.MyViewHolder>() {
-    class MyViewHolder(val binding:GdgChaptersListBinding):RecyclerView.ViewHolder(binding.root) {
+
+    private lateinit var mListener:onItemClickListener
+    interface  onItemClickListener{
+        fun onItemClick(position: Int)
+    }
+
+    fun setOnItemClickListener(listener:onItemClickListener){
+        mListener=listener
+    }
+    class MyViewHolder(val binding:GdgChaptersListBinding,listener: onItemClickListener):RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            itemView.setOnClickListener {
+                listener.onItemClick(adapterPosition)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding= GdgChaptersListBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return MyViewHolder(binding)
+        return MyViewHolder(binding,mListener)
     }
 
     override fun getItemCount(): Int {
@@ -20,10 +35,11 @@ class GdgChaptersAdapter(var chapterList: List<ChapterEntity>):RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        with(holder){
-            with(chapterList[position]){
-                binding.GdgNameTextView.text=this.gdgName
-                binding.GdgCityTextView.text=this.city_name
+        with(holder) {
+            with(chapterList[position]) {
+                binding.GdgNameTextView.text = this.gdgName
+                binding.GdgCityTextView.text = this.city_name
+                binding.GDGCountryTextView.text=this.country
             }
         }
     }

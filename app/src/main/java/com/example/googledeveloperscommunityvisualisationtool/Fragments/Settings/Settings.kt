@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Settings.AlarmNotification.Alarm_notification
@@ -27,21 +28,11 @@ class Settings : Fragment() {
         binding=FragmentSettingsBinding.inflate(layoutInflater,container,false)
         val view=binding.root
 
-
-
         binding.FirstcardView.setOnClickListener{
-//            val fragmentManager=
-//            val fragmenttransaction=fragmentManager.beginTransaction()
-//            fragmenttransaction.replace(R.id.linearlayout,connection())
-//            fragmenttransaction.commit()
-//            findNavController()?.navigate(R.id.action_settings3_to_connection)
+
         }
         binding.ThirdcardView.setOnClickListener {
-//            val fragmentManager=parentFragmentManager
-//            val fragmenttransaction=fragmentManager.beginTransaction()
-//            fragmenttransaction.replace(R.id.linearlayout,Alarm_notification())
-//            fragmenttransaction.commit()
-//            findNavController()?.navigate(R.id.action_settings3_to_alarm_notification)
+
         }
         return view
     }
