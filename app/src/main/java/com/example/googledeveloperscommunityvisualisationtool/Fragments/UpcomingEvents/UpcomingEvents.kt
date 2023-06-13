@@ -38,15 +38,17 @@ class UpcomingEvents : Fragment() {
         savedInstanceState: Bundle?): View
     {
         binding=FragmentUpcomingEventsBinding.inflate(layoutInflater,container,false)
-        val progressBar=ProgressBar(context)
-        progressBar.visibility=View.VISIBLE
         val view= binding.root
+
+
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
-        binding.recyclerView.visibility=View.GONE
         adapter=UpcomingEventsAdapter(eventlist)
         binding.recyclerView.adapter = adapter
+
+
         binding.secondcardviewTextView.text="Upcoming Events"
         binding.thirdcardviewTextView.text="Last Week Events"
+
         return view
     }
 
@@ -54,6 +56,7 @@ class UpcomingEvents : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         binding.contentLoadingProgressBar.visibility=View.VISIBLE
+
         //ViewModel for fetching the events list
         val upcomingEventRepository= UpcomingEventRepository(requireContext())
         upcomingEventViewModel= ViewModelProvider(this, UpcomingEventViewModelFactory(upcomingEventRepository,requireContext()))
@@ -66,6 +69,8 @@ class UpcomingEvents : Fragment() {
         )
             .get(UpcomingEventdatabaseViewModel::class.java)
         binding.contentLoadingProgressBar.visibility=View.VISIBLE
+
+
         checkDatabase()
 
 
@@ -77,9 +82,6 @@ class UpcomingEvents : Fragment() {
         upcomingDatBaseViewModel.readAllEventViewModel.observe(viewLifecycleOwner, Observer {list->
             if(list.isEmpty()){
                 networkCheckAndRun()
-                binding.recyclerView.visibility=View.VISIBLE
-                binding.contentLoadingProgressBar.visibility=View.GONE
-
             }else{
                 val events=convertDataType(list)
                 adapter.refreshData(events)
@@ -94,7 +96,6 @@ class UpcomingEvents : Fragment() {
     private fun convertDataType(list: List<UpcomingEventEntity>?): List<Result> {
         val eventList= mutableListOf<Result>()
         if (list != null) {
-
             for(event in list){
                 val tags= mutableListOf<String>()
                 var string=""
@@ -136,15 +137,14 @@ class UpcomingEvents : Fragment() {
 
     private fun networkCheckAndRun() {
         if(upcomingEventViewModel.isNetworkAvailable()){
-            binding.contentLoadingProgressBar.visibility=View.VISIBLE
             getAllUpcomingEvents()
         }else{
             Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show()
-            binding.contentLoadingProgressBar.visibility = View.GONE
         }
     }
 
     private fun getAllUpcomingEvents() {
+        binding.contentLoadingProgressBar.visibility=View.VISIBLE
             CoroutineScope(Dispatchers.IO).launch {
                 Log.d("Inside the getAllUpcoEvet", Thread.currentThread().name)
                 upcomingEventViewModel.getResponseViewModel()

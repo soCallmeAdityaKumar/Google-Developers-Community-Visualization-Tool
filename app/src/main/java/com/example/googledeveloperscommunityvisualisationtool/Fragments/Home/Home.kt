@@ -104,7 +104,6 @@ class Home : Fragment() {
 
                 chapterDatabaseViewModel.readAllChaptersViewModel.observe(viewLifecycleOwner,
                     Observer { chapterEntity ->
-
                             if (chapterEntity.isEmpty()) {
                                 getAllGdgChapter()
                             } else {
@@ -123,6 +122,13 @@ class Home : Fragment() {
             adapterlist=it
             adapter.refreshData(adapterlist)
             binding.recyclerViewChapters.adapter = adapter
+
+            adapter.setOnItemClickListener(object :GdgChaptersAdapter.onItemClickListener{
+                override fun onItemClick(position: Int) {
+
+                }
+
+            })
         })
     }
 

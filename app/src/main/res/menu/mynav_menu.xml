@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/nav_home"
+    <item android:id="@+id/home"
         android:visible="true"
         android:icon="@drawable/home"
         android:title="Home"/>
@@ -11,7 +11,7 @@
     <item android:id="@+id/hash_tags"
         android:icon="@drawable/hashtags"
         android:title="Hashtags"/>
-    <item android:id="@+id/events"
+    <item android:id="@+id/upcomingEvents"
         android:visible="true"
         android:icon="@drawable/events"
         android:title="Upcoming events"/>
