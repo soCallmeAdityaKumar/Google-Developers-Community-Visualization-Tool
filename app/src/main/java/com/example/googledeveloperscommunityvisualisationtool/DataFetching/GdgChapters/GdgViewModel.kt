@@ -7,12 +7,19 @@ import android.os.Build
 import androidx.lifecycle.ViewModel
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Scraping.GdgGroupClasses.GdgGroupDataClassItem
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.UpcomingEvents.UpcomingEventViewModel
+import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.GDGDetails
 
 class GdgViewModel(val gdgChaptersRepo:GdgScrapingRespository,val context:Context): ViewModel() {
     private  var chapters=ArrayList<GdgGroupDataClassItem>()
-    fun getChaptersViewModel():ArrayList<GdgGroupDataClassItem>{
-        chapters=gdgChaptersRepo.getGdgChapters()
-        return  chapters
+    fun getChaptersViewModel(){
+        gdgChaptersRepo.getGdgChapters()
+    }
+    fun returnGDGChapterViewModel():ArrayList<GdgGroupDataClassItem>{
+        chapters=gdgChaptersRepo.returnchapter()
+        return chapters
+    }
+    suspend fun getCompleteGDGdetails(url:String):GDGDetails{
+        return gdgChaptersRepo.getResponse(url)
     }
     fun isNetworkAvailable(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

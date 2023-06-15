@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_home_to_upcomingEvents"
             app:destination="@id/upcomingEvents" />
+        <action
+            android:id="@+id/action_home_to_gdgChapterDetails"
+            app:destination="@id/gdgChapterDetails" />
     </fragment>
     <fragment
         android:id="@+id/maps"
@@ -58,4 +61,13 @@
         android:id="@+id/connection"
         android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.Settings.Connection.connection"
         android:label="connection" />
+    <fragment
+        android:id="@+id/gdgChapterDetails"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.GDGChapterDetails.GdgChapterDetails"
+        android:label="fragment_gdg_chapter_details"
+        tools:layout="@layout/fragment_gdg_chapter_details" >
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
 </navigation>
