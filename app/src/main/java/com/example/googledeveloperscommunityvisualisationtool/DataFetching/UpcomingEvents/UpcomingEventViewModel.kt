@@ -12,13 +12,13 @@ import com.example.googledeveloperscommunityvisualisationtool.DataFetching.Upcom
 class UpcomingEventViewModel(val repository: UpcomingEventRepository, val context:Context):ViewModel() {
 
       var eventList= mutableListOf<Result>()
-      fun getResponseViewModel(){
+      suspend fun getResponseViewModel(){
         repository.getResponse()
     }
     fun returnlistViewModel():MutableList<Result>{
-        val eventList=repository.returnEventList()
+         eventList=repository.returnEventList()
         Log.d("viewModelList",eventList.size.toString())
-        return repository.returnEventList()
+        return eventList
 
     }
 

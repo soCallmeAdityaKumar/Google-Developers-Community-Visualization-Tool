@@ -28,7 +28,7 @@ class UpcomingEventsAdapter(private var eventList:List<Result>):RecyclerView.Ada
                 for (i in 0 until this.tags!!.size){
                     tag += this.tags[i]
                 }
-                binding.tags.text=tag.toString()
+//                binding.tags.text=tag.toString()
 
                 }
             }

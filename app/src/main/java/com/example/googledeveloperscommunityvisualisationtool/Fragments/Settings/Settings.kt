@@ -29,10 +29,10 @@ class Settings : Fragment() {
         val view=binding.root
 
         binding.FirstcardView.setOnClickListener{
-
+            findNavController().navigate(R.id.action_settings_to_connection)
         }
         binding.ThirdcardView.setOnClickListener {
-
+            findNavController().navigate(R.id.action_settings_to_alarm_notification)
         }
         return view
     }
