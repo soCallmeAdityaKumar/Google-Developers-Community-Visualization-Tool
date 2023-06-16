@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
@@ -16,7 +16,7 @@
 
             <TextView
                 android:id="@+id/GdgNameTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="450dp"
                 android:layout_height="wrap_content"
                 android:hint="GDG Ahemdabad"
                 android:textSize="60dp"
@@ -28,13 +28,12 @@
 
             <TextView
                 android:id="@+id/GdgCityTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="20dp"
                 android:hint="Gdg City"
                 android:textSize="40dp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.973"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +41,7 @@
 
             <TextView
                 android:id="@+id/GDGCountryTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:hint="Gdg Country"

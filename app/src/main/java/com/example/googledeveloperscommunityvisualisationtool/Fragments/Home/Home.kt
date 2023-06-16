@@ -12,14 +12,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Scraping.GdgGroupClasses.GdgGroupDataClassItem
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgChaptersViewModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgScrapingRespository
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgViewModel
-import com.example.googledeveloperscommunityvisualisationtool.DataFetching.UpcomingEvents.url
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.GdgChaptersAdapter
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentHomeBinding
@@ -33,10 +31,8 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class Home : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
@@ -131,7 +127,8 @@ class Home : Fragment() {
                 Observer { gdgURlChapterEntity ->
                     for (chapter in gdgURlChapterEntity) {
                         val job3=CoroutineScope(Dispatchers.IO).launch {
-                            val details = gdgChaptersViewModel.getCompleteGDGdetails(chapter.url)
+                            gdgChaptersViewModel.getCompleteGDGdetails(chapter.url)
+                            val details=gdgChaptersViewModel.getdetails()
                             Log.d("gdgddetails","gdgdetials response got")
                             chapterDatabaseViewModel.addChaptersViewModel(
                                 ChapterEntity(
@@ -179,7 +176,8 @@ class Home : Fragment() {
 
             adapter.setOnItemClickListener(object :GdgChaptersAdapter.onItemClickListener{
                 override fun onItemClick(position: Int) {
-                    val action=HomeDirections.actionHomeToGdgChapterDetails(it[position].url)
+
+                    val action=HomeDirections.actionHomeToGdgChapterDetails(it[position])
                     findNavController().navigate(action)
                 }
             })
