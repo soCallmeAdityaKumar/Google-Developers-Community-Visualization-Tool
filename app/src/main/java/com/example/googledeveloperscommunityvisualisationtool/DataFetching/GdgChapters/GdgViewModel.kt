@@ -11,6 +11,7 @@ import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.GDG
 
 class GdgViewModel(val gdgChaptersRepo:GdgScrapingRespository,val context:Context): ViewModel() {
     private  var chapters=ArrayList<GdgGroupDataClassItem>()
+    private lateinit var gdgDetails:GDGDetails
     fun getChaptersViewModel(){
         gdgChaptersRepo.getGdgChapters()
     }
@@ -18,8 +19,11 @@ class GdgViewModel(val gdgChaptersRepo:GdgScrapingRespository,val context:Contex
         chapters=gdgChaptersRepo.returnchapter()
         return chapters
     }
-    suspend fun getCompleteGDGdetails(url:String):GDGDetails{
-        return gdgChaptersRepo.getResponse(url)
+    suspend fun getCompleteGDGdetails(url:String){
+         gdgDetails=gdgChaptersRepo.getResponse(url)
+    }
+    fun getdetails():GDGDetails{
+        return gdgDetails
     }
     fun isNetworkAvailable(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

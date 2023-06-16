@@ -68,6 +68,6 @@
         tools:layout="@layout/fragment_gdg_chapter_details" >
         <argument
             android:name="url"
-            app:argType="string" />
+            app:argType="com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity" />
     </fragment>
 </navigation>
