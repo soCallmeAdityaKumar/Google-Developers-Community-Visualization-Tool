@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_home_to_gdgChapterDetails"
             app:destination="@id/gdgChapterDetails" />
+        <action
+            android:id="@+id/action_home_to_oldGdgList"
+            app:destination="@id/oldGdgList" />
     </fragment>
     <fragment
         android:id="@+id/maps"
@@ -62,12 +65,30 @@
         android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.Settings.Connection.connection"
         android:label="connection" />
     <fragment
+        android:id="@+id/oldGdgList"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldGdg.OldGdgList"
+        android:label="fragment_old_gdg_list"
+        tools:layout="@layout/fragment_old_gdg_list" >
+        <action
+            android:id="@+id/action_oldGdgList_to_oldEvent"
+            app:destination="@id/oldEvent" />
+    </fragment>
+    <fragment
         android:id="@+id/gdgChapterDetails"
         android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.GDGChapterDetails.GdgChapterDetails"
         android:label="fragment_gdg_chapter_details"
         tools:layout="@layout/fragment_gdg_chapter_details" >
         <argument
-            android:name="url"
+            android:name="chapter"
             app:argType="com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity" />
+    </fragment>
+    <fragment
+        android:id="@+id/oldEvent"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldEvents.OldEvent"
+        android:label="fragment_old_event"
+        tools:layout="@layout/fragment_old_event" >
+        <argument
+            android:name="chaptername"
+            app:argType="string" />
     </fragment>
 </navigation>

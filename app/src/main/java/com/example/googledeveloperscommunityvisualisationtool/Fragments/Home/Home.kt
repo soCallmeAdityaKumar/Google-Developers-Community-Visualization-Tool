@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.liveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Scraping.GdgGroupClasses.GdgGroupDataClassItem
@@ -31,11 +33,15 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Home : Fragment() {
-    private lateinit var homeViewModel: HomeViewModel
+    lateinit var progressBar: ProgressBar
     private lateinit var adapterlist: List<ChapterEntity>
     private lateinit var binding: FragmentHomeBinding
     private lateinit var sharedPref: SharedPreferences
@@ -53,7 +59,7 @@ class Home : Fragment() {
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         val view = binding.root
 
-
+        progressBar=binding.progressBar
         adapterlist = listOf()
         adapter = GdgChaptersAdapter(adapterlist)
         binding.recyclerViewChapters.layoutManager =
@@ -85,6 +91,7 @@ class Home : Fragment() {
 
         //Chapter All details ViewModel
         chapterDatabaseViewModel=ViewModelProvider(this,ChapterViewModelFactory(requireContext())).get(ChapterViewModel::class.java)
+        Log.d("coroutines", "before checkurldatabase")
 
         checkurlDatabase()
         Log.d("gdglistsize", adapterlist.size.toString())
@@ -95,24 +102,30 @@ class Home : Fragment() {
 
     //Check if chapter_url database is empty then fetch data and if
     private fun checkurlDatabase() {
-        chapterDatabaseViewModel.readAllChaptersViewModel.observe(viewLifecycleOwner, Observer {
+        Log.d("coroutines", "inside checkurldatabase")
+        if(progressBar.visibility==View.GONE)progressBar.visibility=View.VISIBLE
+        chapterDatabaseViewModel.readAllChaptersViewModel.observe(viewLifecycleOwner, Observer {it->
             if(it.isEmpty()){
+                Log.d("it",it.size.toString())
                 chapterUrlDatabaseViewModel.readAllChapterUrlViewModel.observe(viewLifecycleOwner,
                     Observer {urllist->
                         if(urllist.isEmpty()){
-                            CoroutineScope(Dispatchers.IO).launch {
+                             CoroutineScope(Dispatchers.IO).launch {
                                 networkCheck()
                             }
                         }else{
                             Log.d("urlsize","after database ${urllist.size}")
                             CoroutineScope(Dispatchers.IO).launch {
-                                delay(5000)
+                                delay(3000)
+                                Log.d("coroutines","getallgdgchapter started")
                                 getAllGdgChapter()
+
+
                             }
                         }
                     })
             }else{
-                Log.d("checkdatabase","before getchapterdatabase ")
+                Log.d("coroutines","before getchapterdatabase ")
                 getChapterFromDatabase()
             }
         })
@@ -120,16 +133,16 @@ class Home : Fragment() {
 
 
     private fun getAllGdgChapter() {
-        Log.d("getAllgdgChapters", "beforedelay")
+        Log.d("coroutines", "beforedelay")
 
         val job4=CoroutineScope(Dispatchers.Main).launch {
-            chapterUrlDatabaseViewModel.readAllChapterUrlViewModel.observe(viewLifecycleOwner,
+           chapterUrlDatabaseViewModel.readAllChapterUrlViewModel.observe(viewLifecycleOwner,
                 Observer { gdgURlChapterEntity ->
                     for (chapter in gdgURlChapterEntity) {
                         val job3=CoroutineScope(Dispatchers.IO).launch {
                             gdgChaptersViewModel.getCompleteGDGdetails(chapter.url)
                             val details=gdgChaptersViewModel.getdetails()
-                            Log.d("gdgddetails","gdgdetials response got")
+                            Log.d("gdgdetails","gdgdetials response got")
                             chapterDatabaseViewModel.addChaptersViewModel(
                                 ChapterEntity(
                                     chapter.avatar,
@@ -146,23 +159,21 @@ class Home : Fragment() {
                                 )
                             )
                             Log.d("gdgddetails","gdgdetials response added to database")
-
                         }
-//                            withContext(Dispatchers.Main) {
-//
-//                            }
                         CoroutineScope(Dispatchers.IO).launch {
                             job3.join()
+                            job3.cancel()
                         }
-
                     }
                 })
+
         }
         CoroutineScope(Dispatchers.Main).launch {
-            job4.join()
-            delay(30000)
-            job4.cancel()
-            Log.d("job4","calling getChapterFrom Database")
+            Log.d("coroutines","job4 is ${job4.isActive}||${job4.isCompleted}||${job4.isCancelled}")
+            delay(3000)
+            job4.cancelAndJoin()
+            Log.d("coroutines","job4 is ${job4.isActive}||${job4.isCompleted}||${job4.isCancelled}")
+            Log.d("coroutines","calling getChapterFrom Database")
             getChapterFromDatabase()
         }
 
@@ -172,11 +183,10 @@ class Home : Fragment() {
         chapterDatabaseViewModel.readAllChaptersViewModel.observe(viewLifecycleOwner, Observer {it->
             adapterlist=it
             adapter.refreshData(adapterlist)
-            binding.recyclerViewChapters.adapter = adapter
+            if (progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
 
             adapter.setOnItemClickListener(object :GdgChaptersAdapter.onItemClickListener{
                 override fun onItemClick(position: Int) {
-
                     val action=HomeDirections.actionHomeToGdgChapterDetails(it[position])
                     findNavController().navigate(action)
                 }
@@ -185,7 +195,7 @@ class Home : Fragment() {
     }
 
     private suspend fun networkCheck() {
-
+        Log.d("coroutines", "inside network check")
         if (gdgChaptersViewModel.isNetworkAvailable()) {
                 storeUrlinDatabase()
         } else {
@@ -199,31 +209,31 @@ class Home : Fragment() {
 
 
     private suspend fun storeUrlinDatabase() {
-        Log.d("storeindatabase","beforedelay")
-
+        Log.d("coroutines","beforedelay")
+        Log.d("coroutines", "inside store url database")
         val job1=CoroutineScope(Dispatchers.IO).launch {
             Log.d("coroutines","Inside the Job1 started")
             val job2=CoroutineScope(Dispatchers.IO).launch {
-                Log.d("coroutines","Inside the Job2 started")
+                Log.d("coroutines","Inside the Job2 started ${Thread.currentThread().name}")
 
                 gdgChaptersViewModel.getChaptersViewModel()
-                delay(5000)
                 Log.d("coroutines","Inside the Job2 ended")
             }
+            delay(3000)
             job2.join()
             Log.d("coroutines","After the Job2 join")
             gdgChaptersList=gdgChaptersViewModel.returnGDGChapterViewModel()
             val gdgChapterEntityList = convertGdgDataTypes(gdgChaptersList)
-            Log.d("urlsize","before database ${gdgChapterEntityList.size}")
+            Log.d("coroutines","before database ${gdgChapterEntityList.size}")
             for (chapter in gdgChapterEntityList) {
                 chapterUrlDatabaseViewModel.addChapterUrlViewModel(chapter)
             }
         }
         Log.d("coroutines","Inside the Job1 ended")
         job1.join()
+        job1.cancel()
+        Log.d("coroutines","job1 is ${job1.isActive} || ${job1.isCancelled}||${job1.isCompleted}")
         Log.d("coroutines"," after the Job1 join")
-
-
     }
 
     private fun convertGdgDataTypes(gdgChaptersList: ArrayList<GdgGroupDataClassItem>):ArrayList<ChaptersUrlEntity> {

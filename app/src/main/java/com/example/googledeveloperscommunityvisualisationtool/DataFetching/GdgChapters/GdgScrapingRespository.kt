@@ -7,9 +7,15 @@ import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.GDG
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.Organizers
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.PastEvents
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.UpcomingEvents
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 const val baseUrl="https://gdg.community.dev/chapters/"
 class GdgScrapingRespository {
@@ -18,7 +24,9 @@ class GdgScrapingRespository {
     private  lateinit var gdgDetails: GDGDetails
 
     fun getGdgChapters(){
+        Log.d("home","inside the get chapter repo")
         val doc = Jsoup.connect(baseUrl).get()
+        Log.d("home",doc.body().toString())
         Log.d("value",doc.body().getElementsByTag("script")[1].toString())
         var html=doc.body().getElementsByTag("script")[1].html().replace("var localChapters = ","")
         html="$html"
@@ -36,6 +44,7 @@ class GdgScrapingRespository {
 //            Log.d("longitude",latitude.toString())
 
             val gdgGroupDataClassItem=GdgGroupDataClassItem(avatar,banner,city,cityName,country, latitude,longitude,url)
+//            Log.d("home",gdgGroupDataClassItem.toString())
             gdgChapters.add(gdgGroupDataClassItem)
         }
 //        Log.d("gdgChapters",gdgChapters.size.toString())
@@ -151,9 +160,10 @@ class GdgScrapingRespository {
     suspend fun getResponse(url:String): GDGDetails {
         val totalRequests = 1
         val delayMillis = 0L
-        val retryAttempts = 1
+        val retryAttempts = 2
 
         makeRequests(url, totalRequests, delayMillis, retryAttempts)
         return gdgDetails
     }
+
 }

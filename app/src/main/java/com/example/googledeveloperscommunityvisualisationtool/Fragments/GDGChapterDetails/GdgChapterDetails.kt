@@ -108,17 +108,17 @@ class GdgChapterDetails : Fragment() {
 
     private suspend fun getDetails() {
         val job=CoroutineScope(Dispatchers.IO).launch {
-            gdgViewModel.getCompleteGDGdetails(args.url.url)
+            gdgViewModel.getCompleteGDGdetails(args.chapter.url)
 
         }
         job.join()
         withContext(Dispatchers.Main){
             gdgDetails=gdgViewModel.getdetails()
             gdgName.text=gdgDetails.gdgName
-            cityName.text=args.url.city_name
-            countryName.text=args.url.country
-            aboutGdg.text=args.url.about
-            member.text=args.url.membersNumber
+            cityName.text=args.chapter.city_name
+            countryName.text=args.chapter.country
+            aboutGdg.text=args.chapter.about
+            member.text=args.chapter.membersNumber
             organizerList=gdgDetails.orgnaizersList
             pastEventsList=coneverttoeventsbypast(gdgDetails.pastEventsList)
 

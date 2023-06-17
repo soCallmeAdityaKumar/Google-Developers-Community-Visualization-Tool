@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:hint="EventTitle"
                 android:textAlignment="viewStart"
-                android:textSize="30dp"
+                android:textSize="20dp"
                 android:layout_margin="20dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -54,7 +54,7 @@
                 android:layout_marginStart="200dp"
                 android:hint="GDG Name"
                 android:textAlignment="viewEnd"
-                android:textSize="30dp"
+                android:textSize="20dp"
                 app:layout_constraintStart_toEndOf="@+id/eventTitle"
                 app:layout_constraintTop_toBottomOf="@+id/eventTitle" />
 
@@ -66,7 +66,7 @@
                 android:layout_marginStart="200dp"
                 android:hint="City"
                 android:textAlignment="viewEnd"
-                android:textSize="30dp"
+                android:textSize="20dp"
                 app:layout_constraintStart_toEndOf="@+id/eventTitle"
                 app:layout_constraintTop_toBottomOf="@+id/GDGname" />
 

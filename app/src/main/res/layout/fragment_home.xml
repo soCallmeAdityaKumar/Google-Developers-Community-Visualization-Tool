@@ -119,8 +119,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:background="@drawable/cardview"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@drawable/cardview">
 
                 <TextView
                     android:id="@+id/fourthcardviewTextView"
@@ -157,14 +157,29 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/FourthcardView" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="30dp"
+            android:minWidth="30dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchChaptersView" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewChapters"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/searchChaptersView"
+            tools:listitem="@layout/gdg_chapters_list"
+            app:layout_constraintBottom_toBottomOf="@id/firstConstraintLayout"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/firstConstraintLayout"/>
+            app:layout_constraintTop_toBottomOf="@+id/searchChaptersView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </FrameLayout>

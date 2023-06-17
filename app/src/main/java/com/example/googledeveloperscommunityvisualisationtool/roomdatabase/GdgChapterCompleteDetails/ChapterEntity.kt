@@ -5,14 +5,12 @@ import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.versionedparcelable.ParcelField
-import androidx.versionedparcelable.VersionedParcelize
 import com.example.googledeveloperscommunityvisualisationtool.DataClass.Scraping.GdgGroupClasses.Banner
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.Organizers
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.PastEvents
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.UpcomingEvents
 
-@VersionedParcelize
+
 @Entity(tableName = "Chapter_complete_details")
 data class ChapterEntity(
     val avatar: String,
@@ -35,7 +33,7 @@ data class ChapterEntity(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readDouble(),
+        parcel.readDouble()!!,
         parcel.readDouble(),
         parcel.readString()!!,
         parcel.readString()!!,

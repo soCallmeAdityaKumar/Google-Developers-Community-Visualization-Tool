@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.teamDetails -> "TEAM DETAILS"
                 R.id.upcomingEvents -> "EVENTS"
                 R.id.home -> "HOME"
+                R.id.oldGdgList->"OLD GDG DATA"
                 else -> "GOOGLE DEVELOPER COMMUNITY VISULIZATION TOOL"
             }
         }
