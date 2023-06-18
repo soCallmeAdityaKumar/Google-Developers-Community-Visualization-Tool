@@ -9,8 +9,8 @@ class OldEventViewModel( val repo:OldEventRepository, context: Context): ViewMod
     fun getResponse(endpoint:String){
         repo.getResponse(endpoint)
     }
-    fun getOldEventsViewModel():List<oldEventsData>{
-        return repo.oldEventsData
+    fun getOldEventsViewModel():oldEventsData{
+        return repo.event
     }
 
 }

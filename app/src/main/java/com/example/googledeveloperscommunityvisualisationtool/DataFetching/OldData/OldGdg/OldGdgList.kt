@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentOldGdgListBinding
@@ -42,22 +43,19 @@ class OldGdgList : Fragment() {
         val repo=OldGdgRepository(requireContext())
         viewModel = ViewModelProvider(this,OldGdgViewModelFactory(repo,requireContext())).get(OldGdgListViewModel::class.java)
 
-        Log.d("oldgdg","befor job")
         val job=CoroutineScope(Dispatchers.IO).launch {
             viewModel.getGdgdata()
-            Log.d("oldgdg","after .getgdgdata")
         }
         CoroutineScope(Dispatchers.IO).launch {
             job.join()
             delay(2000)
-            Log.d("oldgdg","after job.join")
             withContext(Dispatchers.Main){
                 gdglist=viewModel.returnlist()
-                Log.d("oldgdg","gdglist ${gdglist.size}")
                 oldgdgAdapter.refreshdata(gdglist)
                 oldgdgAdapter.setOnItemClickListener(object :oldgdgAdapter.onItemClickListener{
                     override fun onItemClick(position: Int) {
-
+                        val action=OldGdgListDirections.actionOldGdgListToOldEvent(gdglist[position])
+                        findNavController().navigate(action)
                     }
 
                 })

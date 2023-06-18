@@ -1,7 +1,7 @@
 package com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldEvents.OldEventsDataClass
 
 data class Organizer(
-    val bio: String,
+//    val bio: String,
 //    val city: String,
     val country: String,
     val group_profile: GroupProfile,

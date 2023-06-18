@@ -52,6 +52,7 @@ class GdgChapterDetails : Fragment() {
     lateinit var organizerAdapter:OrganizersAdapter
     lateinit var organizerList:List<Organizers>
     lateinit var contentLoading:ProgressBar
+    lateinit var noUpcomingEventTextView:TextView
 
 
      override fun onCreateView(
@@ -82,6 +83,10 @@ class GdgChapterDetails : Fragment() {
          upcomingEventsRecycler.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
          eventsAdapterupcoming=EventsAdapter(upcomingEventlist)
          upcomingEventsRecycler.adapter=eventsAdapterupcoming
+         upcomingEventsRecycler.visibility=View.GONE
+
+         noUpcomingEventTextView=binding.NoUpcomingView
+         noUpcomingEventTextView.visibility=View.VISIBLE
 
          pastEventsList= listOf()
          pasteventsRecycler.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
@@ -123,6 +128,10 @@ class GdgChapterDetails : Fragment() {
             pastEventsList=coneverttoeventsbypast(gdgDetails.pastEventsList)
 
             upcomingEventlist=coneverttoeventsbyupcoming(gdgDetails.upcomingEventsList)
+            if (upcomingEventlist.size!=0){
+                upcomingEventsRecycler.visibility=View.VISIBLE
+                noUpcomingEventTextView.visibility=View.GONE
+            }
             for(i in upcomingEventlist){
                 Log.d("hello",i.toString())
             }

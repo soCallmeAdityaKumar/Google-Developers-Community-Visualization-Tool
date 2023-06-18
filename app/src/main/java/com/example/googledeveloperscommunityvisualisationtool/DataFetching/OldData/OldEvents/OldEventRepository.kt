@@ -5,24 +5,64 @@ import android.util.Log
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldEvents.OldEventsDataClass.Event
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldEvents.OldEventsDataClass.Group
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldEvents.OldEventsDataClass.GroupProfile
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldEvents.OldEventsDataClass.Organizer
+import com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldEvents.OldEventsDataClass.Photo
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldEvents.OldEventsDataClass.oldEventsData
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.UpcomingEvents.url
 import org.json.JSONArray
 import org.json.JSONObject
 
-const val baseurl="https://github.com/kevinsimper/gdg-events/tree/bfa3df84b0b444788a3e794a27ec4ef91a888b4e/"
+const val baseurl="https://raw.githubusercontent.com/kevinsimper/gdg-events/master/"
 class OldEventRepository (val context:Context){
- var oldEventsData: MutableList<oldEventsData> = mutableListOf()
+    var event=oldEventsData(
+        listOf(Event("",Group("","","",""),"",""
+            ,"","")), listOf(Organizer("",GroupProfile("",""),"","",Photo(""),""))
+    )
     fun getResponse(endpoint:String){
         var queue = Volley.newRequestQueue(context)
-        val url= baseurl+endpoint
+        val url= baseurl+endpoint+".json"
         val stringRequest = StringRequest(Request.Method.GET,url, { response ->
+            val result = JSONObject(response)
+                val events=result.getJSONArray("events")
+                val eventlist= mutableListOf<Event>()
+                for( j in 0 until events.length()){
+                    val desc=events.getJSONObject(j).optString("description","")
+                    val group=events.getJSONObject(j).getJSONObject("group")
+                    val link=events.getJSONObject(j).optString("link","")
+                    val country=group.getString("region")
+                    val localizedLocation=group.optString("localized_location","")
+                    val state=group.optString("state","")
+                    val groupName=group.optString("name","")
+                    val eventName=events.getJSONObject(j).optString("name","")
+                    val date=events.getJSONObject(j).optString("local_date","")
+                    val time=events.getJSONObject(j).optString("local_time","")
+                    Log.d("oldeventdata"," events->${Event(desc,Group(country,localizedLocation,groupName,state),link,date,time,eventName)}")
+                    eventlist.add(Event(desc,Group(country,localizedLocation,groupName,state),link,date,time,eventName))
+                }
+                val organizersList= mutableListOf<Organizer>()
+                val organizer=result.getJSONArray("organizers")
+                for(j in 0 until organizer.length()){
+//                    val bio=organizer.getJSONObject(j).getString("bio")
+                    val country=organizer.getJSONObject(j).getString("country")
+                    val groupProfile=organizer.getJSONObject(j).getJSONObject("group_profile")
+                    val groupProfileLink=groupProfile.getString("link")
+                    val groupProfileRole=groupProfile.getString("role")
+                    val localisedCountry=organizer.getJSONObject(j).getString("localized_country_name")
+                    val name=organizer.getJSONObject(j).getString("name")
+                    val photo=organizer.getJSONObject(j).getJSONObject("photo")
+                    val baseurl=photo.getString("photo_link")
+                    val state=organizer.getJSONObject(j).optString("state","")
 
-            val result = JSONArray(response)
-            for( i in 0 until result.length()  ){
-                val events=result.getJSONObject(i).getJSONArray("Event")
-                Log.d("oldevent",events.toString())
-            }
+                    Log.d("oldeventdata"," organizers->${Organizer(country, GroupProfile(groupProfileLink,groupProfileRole),localisedCountry,name,
+                        Photo(baseurl),state)}")
+                    organizersList.add(Organizer(country, GroupProfile(groupProfileLink,groupProfileRole),localisedCountry,name,
+                        Photo(baseurl),state))
+
+                }
+                 event=oldEventsData(eventlist,organizersList)
 
 
         }){

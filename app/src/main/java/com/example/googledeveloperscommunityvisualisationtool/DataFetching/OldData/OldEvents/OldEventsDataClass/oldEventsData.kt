@@ -3,5 +3,5 @@ package com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldD
 data class oldEventsData(
     val events: List<Event>,
     val organizers: List<Organizer>,
-    val upcoming: List<Any>
+//    val upcoming: List<Any>
 )

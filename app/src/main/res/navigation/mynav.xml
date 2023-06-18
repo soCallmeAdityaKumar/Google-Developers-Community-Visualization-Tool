@@ -89,6 +89,6 @@
         tools:layout="@layout/fragment_old_event" >
         <argument
             android:name="chaptername"
-            app:argType="string" />
+            app:argType="com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldGdg.oldGdgDataItem" />
     </fragment>
 </navigation>

@@ -57,9 +57,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.upcomingEvents -> "EVENTS"
                 R.id.home -> "HOME"
                 R.id.oldGdgList->"OLD GDG DATA"
+                R.id.gdgChapterDetails->"CHAPTER DETAIL"
+                R.id.oldGdgList->"OLD GOOGLE DEVELOPER GROUPS"
                 else -> "GOOGLE DEVELOPER COMMUNITY VISULIZATION TOOL"
             }
+
         }
+
         sharedPref=getSharedPreferences("didShowPrompt", MODE_PRIVATE)
         prefEdit=sharedPref.edit()
 
@@ -103,14 +107,13 @@ class MainActivity : AppCompatActivity() {
 //
 //        }
 
-
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController=findNavController(R.id.fragmentContainerView)
         return navController.navigateUp(appBarConfiguration)|| super.onSupportNavigateUp()
     }
+
 
 //    fun showNavHometaptarget(){
 //        if(!sharedPref.getBoolean("didShowPrompt",false)){

@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="450dp"
+        android:layout_height="400dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="15dp"
+        android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,14 +18,13 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="300dp"
+                android:layout_width="400dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:textSize="20dp"
+                android:layout_marginTop="60dp"
+                android:fontFamily="@font/montserratmedium"
                 android:textAlignment="center"
-                android:textStyle="bold"
+                android:textSize="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.48"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,12 +33,12 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                android:textSize="20dp"
+                android:fontFamily="@font/montserratmedium"
                 android:textAlignment="center"
+                android:textSize="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.466"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
@@ -49,19 +46,19 @@
                 android:id="@+id/description"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp"
-                android:textSize="20dp"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/montserratmedium"
                 android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.501"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="22dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/date" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/date"
+                app:layout_constraintVertical_bias="0.007" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
