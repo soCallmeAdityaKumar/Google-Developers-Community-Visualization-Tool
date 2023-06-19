@@ -4,8 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.googledeveloperscommunityvisualisationtool.databinding.OldgdglistitemBinding
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.OldGDGEntity
 
-class oldgdgAdapter(var gdglist:List<oldGdgDataItem>): RecyclerView.Adapter<oldgdgAdapter.myViewHolder>() {
+class oldgdgAdapter(var gdglist:List<OldGDGEntity>): RecyclerView.Adapter<oldgdgAdapter.myViewHolder>() {
 
     private lateinit var mListener:onItemClickListener
     interface  onItemClickListener{
@@ -42,7 +43,7 @@ class oldgdgAdapter(var gdglist:List<oldGdgDataItem>): RecyclerView.Adapter<oldg
             }
         }
     }
-    fun refreshdata(list:List<oldGdgDataItem>){
+    fun refreshdata(list:List<OldGDGEntity>){
         this.gdglist=list
         notifyDataSetChanged()
     }

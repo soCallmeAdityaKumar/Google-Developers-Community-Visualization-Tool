@@ -48,8 +48,8 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="20dp"
                             android:textAlignment="viewStart"
+                            android:fontFamily="@font/chivomonomedium"
                             android:textSize="30dp"
-                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -71,19 +71,21 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_margin="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/SecondcardView"
                     app:layout_constraintVertical_bias="1.0"
-                    tools:listitem="@layout/eventsitemlist" />
+                    />
 
                 <ProgressBar
-                    android:id="@+id/contentLoadingProgressBar"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:visibility="gone"
+                    android:indeterminate="true"
+                    style="?android:attr/progressBarStyleLarge"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +123,7 @@
                             android:layout_margin="20dp"
                             android:textAlignment="viewStart"
                             android:textSize="30dp"
-                            android:textStyle="bold"
+                            android:fontFamily="@font/chivomonomedium"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -144,7 +146,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ThirdcardView" />

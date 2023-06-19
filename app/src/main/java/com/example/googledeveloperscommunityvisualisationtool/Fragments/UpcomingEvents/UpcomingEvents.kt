@@ -34,6 +34,7 @@ class UpcomingEvents : Fragment() {
     lateinit var upcomingEventViewModel: UpcomingEventViewModel
       var eventlist= mutableListOf <Result>()
     lateinit var adapter: UpcomingEventsAdapter
+    lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +43,8 @@ class UpcomingEvents : Fragment() {
         binding=FragmentUpcomingEventsBinding.inflate(layoutInflater,container,false)
         val view= binding.root
 
-        binding.contentLoadingProgressBar.visibility=View.VISIBLE
+
+        progressBar=binding.progressBar
 
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         adapter=UpcomingEventsAdapter(eventlist)
@@ -85,10 +87,9 @@ class UpcomingEvents : Fragment() {
 
                 } else {
                     Log.d("events", "inside the checkdatabase else part")
-                        val events = convertDataType(it)
-                        adapter.refreshData(events)
-                        binding.contentLoadingProgressBar.visibility=View.GONE
-                        binding.recyclerView.visibility=View.VISIBLE
+                    if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
+                    val events = convertDataType(it)
+                    adapter.refreshData(events)
 
                 }
             })
@@ -108,7 +109,9 @@ class UpcomingEvents : Fragment() {
     private suspend fun getAllUpcomingEvents() {
 
         //getting the event from api
-
+        withContext(Dispatchers.Main) {
+            if (progressBar.visibility == View.GONE) progressBar.visibility = View.VISIBLE
+        }
         val job=CoroutineScope(Dispatchers.Main).launch {
 
             val job2=CoroutineScope(Dispatchers.IO).launch {
@@ -125,6 +128,9 @@ class UpcomingEvents : Fragment() {
         delay(5000)
             job.join()
         insertToDatabase()
+        withContext(Dispatchers.Main){
+            checkDatabase()
+        }
 
         //Now insert into database
 

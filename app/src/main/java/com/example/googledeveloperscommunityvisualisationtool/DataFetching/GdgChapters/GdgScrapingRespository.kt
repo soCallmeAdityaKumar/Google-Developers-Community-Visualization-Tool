@@ -132,25 +132,23 @@ class GdgScrapingRespository {
         var counter = 0
         var currentDelay = delayMillis
 
-        while (counter < totalRequests) {
+        while (counter < retryAttempts) {
             try {
                 getGdgDetails(url)
                 counter++
                 println("Request ${gdgDetails.gdgName} completed.")
                 break
             } catch (e: Exception) {
-                if (e is java.io.IOException && counter < totalRequests) {
+                if (e is java.io.IOException && counter < retryAttempts) {
                     println("Error occurred: ${e.message}")
                     println("Retrying after delay...")
                     delay(currentDelay)
                     currentDelay *= 2
-                    continue
                 } else {
                     println("Maximum retry attempts reached. Exiting.")
                     break
                 }
             }
-
             delay(delayMillis)
         }
 
@@ -158,7 +156,7 @@ class GdgScrapingRespository {
     }
 
     suspend fun getResponse(url:String): GDGDetails {
-        val totalRequests = 1
+        val totalRequests = 969
         val delayMillis = 0L
         val retryAttempts = 2
 

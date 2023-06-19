@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.oldGdgList->"OLD GDG DATA"
                 R.id.gdgChapterDetails->"CHAPTER DETAIL"
                 R.id.oldGdgList->"OLD GOOGLE DEVELOPER GROUPS"
-                else -> "GOOGLE DEVELOPER COMMUNITY VISULIZATION TOOL"
+                else -> "GOOGLE DEVELOPER COMMUNITY VISUALIZATION TOOL"
             }
 
         }

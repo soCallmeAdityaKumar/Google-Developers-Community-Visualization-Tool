@@ -8,7 +8,7 @@
         android:title="Home"/>
     <item android:id="@+id/maps"
         android:visible="true"
-        android:icon="@drawable/globe"
+        android:icon="@drawable/map"
         android:title="Maps"/>
     <item android:id="@+id/hash_tags"
         android:icon="@drawable/hashtags"
@@ -37,6 +37,7 @@
         android:title="Settings"/>
     <item android:id="@+id/oldGdgList"
         android:visible="true"
+        android:icon="@drawable/clockimg"
         android:title="Old Data"/>
     </group>
 </menu>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Google Developers Community Visualisation Tool</string>
+    <string name="app_name">Google Developers Community Visualization Tool</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="title_activity_splash_screen">splash_screen</string>
