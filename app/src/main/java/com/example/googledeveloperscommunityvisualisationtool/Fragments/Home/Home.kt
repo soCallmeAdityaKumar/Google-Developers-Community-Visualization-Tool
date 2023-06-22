@@ -53,6 +53,7 @@ class Home : Fragment() {
     private lateinit var chapterDatabaseViewModel:ChapterViewModel
     private lateinit var adapter: GdgChaptersAdapter
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,7 +75,6 @@ class Home : Fragment() {
         sharedPref = activity?.getSharedPreferences("didShowPrompt", Context.MODE_PRIVATE)!!
         val prefEdit = sharedPref?.edit()
 
-
 //        secondCardViewTapTarget()
 
         return view
@@ -86,64 +86,69 @@ class Home : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         // Chapter URL Database ViewModel
-        chapterUrlDatabaseViewModel = ViewModelProvider(this, ChapterUrlDatabaseViewModelfactory(requireContext())).get(ChapterUrlDatabaseViewModel::class.java)
+        chapterUrlDatabaseViewModel = ViewModelProvider(requireActivity(), ChapterUrlDatabaseViewModelfactory(requireContext())).get(ChapterUrlDatabaseViewModel::class.java)
 
         //For Chapter Scraping
         val gdgChapterRepo = GdgScrapingRespository()
-        gdgChaptersViewModel = ViewModelProvider(this, GdgChaptersViewModelFactory(gdgChapterRepo, requireContext())).get(GdgViewModel::class.java)
+        gdgChaptersViewModel = ViewModelProvider(requireActivity(), GdgChaptersViewModelFactory(gdgChapterRepo, requireContext())).get(GdgViewModel::class.java)
 
 
         //Chapter All details ViewModel
-        chapterDatabaseViewModel=ViewModelProvider(this,ChapterViewModelFactory(requireContext())).get(ChapterViewModel::class.java)
+        chapterDatabaseViewModel=ViewModelProvider(requireActivity(),ChapterViewModelFactory(requireContext())).get(ChapterViewModel::class.java)
         Log.d("coroutines", "before checkurldatabase")
 
         checkurlDatabase()
-        Log.d("gdglistsize", adapterlist.size.toString())
 
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        chapterUrlDatabaseViewModel.readAllChapterUrlViewModel.removeObserver{}
+        chapterDatabaseViewModel.readAllChaptersViewModel.removeObserver{}
     }
 
 
     //Check if chapter_url database is empty then fetch data and if
     private fun checkurlDatabase() {
-        var flag=0
-        Log.d("coroutines", "inside checkurldatabase")
-        if(progressBar.visibility==View.GONE)progressBar.visibility=View.VISIBLE
-        chapterDatabaseViewModel.readAllChaptersViewModel.observe(viewLifecycleOwner, Observer {it->
-            if(it.size in 0 until 969&&flag==0){
-                //if chapter details database is empty
-                flag++
-                Log.d("url size",it.size.toString())
-                chapterUrlDatabaseViewModel.readAllChapterUrlViewModel.observe(viewLifecycleOwner,
-                    Observer {urllist->
-                        if(urllist.isEmpty()){
-                             CoroutineScope(Dispatchers.IO).launch {
-                                networkCheck()
-                                 Log.d("coroutines","after network check")
+        var flag1=0
+        var urlListsize=0
+         chapterDatabaseViewModel.readAllChaptersViewModel.observe(viewLifecycleOwner,Observer{chapterList->
+             Log.d("coroutines","inside the checkurldatabase")
+             if(flag1==0){
+                 chapterUrlDatabaseViewModel.readAllChapterUrlViewModel.observe(viewLifecycleOwner,Observer {urlList->
+                     Log.d("coroutines","inside the chapterUrlDatabase->${urlList.size}")
+                     urlListsize=urlList.size
+                     if(flag1==0){
+                         flag1++
+                         CoroutineScope(Dispatchers.IO).launch {
+                             val job = CoroutineScope(Dispatchers.IO).launch {
+                                 networkCheck()
                              }
-                        } else if(urllist.size==969&&it.size!=urllist.size){
-                            Log.d("urlsize","after database ${urllist.size}")
-                            CoroutineScope(Dispatchers.IO).launch {
-//                                delay(3000)
-                                Log.d("coroutines","getallgdgchapter started")
-                                getAllGdgChapter(it.size)
-                            }
-                        }
-                    })
-            }else if(it.isNotEmpty()){
-                    Log.d("coroutines","before getchapterdatabase ")
-                    getChapterFromDatabase()
-
-            }
-        })
+                             job.join()
+                             Log.d("coroutines","inside the chapterUrlDatabase->${urlList.size}")
+                             delay(5000)
+                             if (urlListsize == chapterList.size) {
+                                 Log.d("coroutines","urlList.size == chapterList.size ${urlList.size} ${chapterList.size}")
+                                 getChapterFromDatabase()
+                             } else {
+                                 Log.d("coroutines","urlList.size != chapterList.size ${urlList.size} ${chapterList.size}")
+                                 getAllGdgChapter(chapterList.size)
+                             }
+                         }
+                     }
+                 })
+             }
+             getChapterFromDatabase()
+         })
     }
 
 
     private fun getAllGdgChapter(j:Int) {
         Log.d("coroutines", "beforedelay")
         val job4=CoroutineScope(Dispatchers.Main).launch {
-           chapterUrlDatabaseViewModel.readAllChapterUrlViewModel.observe(viewLifecycleOwner,
-                Observer { gdgURlChapterEntity ->
+           chapterUrlDatabaseViewModel.readAllChapterUrlViewModel.observe(requireActivity(),
+               Observer{ gdgURlChapterEntity ->
                     Log.d("home","starting from ${gdgURlChapterEntity[j].url}")
                     CoroutineScope(Dispatchers.IO).launch {
                         for (i in j until gdgURlChapterEntity.size) {
@@ -172,6 +177,7 @@ class Home : Fragment() {
             getChapterFromDatabase()
 
         }
+
 //        CoroutineScope(Dispatchers.Main).launch {
 //            Log.d("coroutines","job4 is ${job4.isActive}||${job4.isCompleted}||${job4.isCancelled}")
 //            delay(3000)
@@ -184,18 +190,21 @@ class Home : Fragment() {
     }
 
     private fun getChapterFromDatabase() {
-        chapterDatabaseViewModel.readAllChaptersViewModel.observe(viewLifecycleOwner, Observer {it->
-            adapterlist=it
-            adapter.refreshData(adapterlist)
-            if (progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
+        CoroutineScope(Dispatchers.Main).launch{
+            chapterDatabaseViewModel.readAllChaptersViewModel.observe(requireActivity(),Observer {it->
+                adapterlist=it
+                adapter.refreshData(adapterlist)
+                if (progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
 
-            adapter.setOnItemClickListener(object :GdgChaptersAdapter.onItemClickListener{
-                override fun onItemClick(position: Int) {
-                    val action=HomeDirections.actionHomeToGdgChapterDetails(it[position])
-                    findNavController().navigate(action)
-                }
+                adapter.setOnItemClickListener(object :GdgChaptersAdapter.onItemClickListener{
+                    override fun onItemClick(position: Int) {
+                        val action=HomeDirections.actionHomeToGdgChapterDetails(it[position])
+                        findNavController().navigate(action)
+                        onPause()
+                    }
+                })
             })
-        })
+        }
     }
 
     private suspend fun networkCheck() {
