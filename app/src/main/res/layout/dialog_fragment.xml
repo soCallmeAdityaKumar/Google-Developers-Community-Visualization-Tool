@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/pop_up_window_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/backgroundDialog"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColorClick"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:padding="5dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColorPrimary"
+            android:text="OK"
+            android:padding="5dp"
+            android:layout_gravity="center_horizontal"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/textColorPrimary"
+            android:text="Cancel"
+            android:padding="5dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            tools:ignore="ButtonStyle" />
+
+    </LinearLayout>
+
+</LinearLayout>

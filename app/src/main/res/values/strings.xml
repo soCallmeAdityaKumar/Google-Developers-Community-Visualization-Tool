@@ -8,5 +8,10 @@
     <string name="NavViewMenuButton">"Slide to show Navigation"</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="test_connection"> Test Location …</string>
+    //Messages
+    <string name="activity_connection_error">It was not possible to connect to Liquid Galaxy. \n Please, go to the tab connect and try again.</string>
+
+
 
 </resources>

@@ -69,7 +69,19 @@
         app:layout_constraintStart_toEndOf="@+id/cityname"
         app:layout_constraintTop_toBottomOf="@+id/gdgname" />
 
-    <TextView
+        <Button
+            android:id="@+id/StarttourGdgButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="Start Tour GDG"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/countryname"
+            app:layout_constraintTop_toBottomOf="@+id/memebers" />
+
+        <TextView
         android:id="@+id/aboutgdgtextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

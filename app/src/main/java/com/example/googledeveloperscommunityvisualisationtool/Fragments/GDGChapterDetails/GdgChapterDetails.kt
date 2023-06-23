@@ -1,35 +1,38 @@
 package com.example.googledeveloperscommunityvisualisationtool.Fragments.GDGChapterDetails
 
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.widget.ContentLoadingProgressBar
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.googledeveloperscommunityvisualisationtool.DataBinderMapperImpl
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgChaptersViewModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgScrapingRespository
 import com.example.googledeveloperscommunityvisualisationtool.DataFetching.GdgChapters.GdgViewModel
+import com.example.googledeveloperscommunityvisualisationtool.Dialog.CustomDialogUtility.showDialog
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.GDGDetails
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.Organizers
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.PastEvents
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.UpcomingEvents
-import com.example.googledeveloperscommunityvisualisationtool.R
+import com.example.googledeveloperscommunityvisualisationtool.Utility.ConstantPrefs
+import com.example.googledeveloperscommunityvisualisationtool.create.utility.LGConnectionTest.testPriorConnection
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentGdgChapterDetailsBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.w3c.dom.Text
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class GdgChapterDetails : Fragment() {
@@ -53,6 +56,9 @@ class GdgChapterDetails : Fragment() {
     lateinit var organizerList:List<Organizers>
     lateinit var contentLoading:ProgressBar
     lateinit var noUpcomingEventTextView:TextView
+    lateinit var starttourGdgButton:Button
+     var handler=Handler()
+
 
 
      override fun onCreateView(
@@ -62,7 +68,6 @@ class GdgChapterDetails : Fragment() {
         // Inflate the layout for this fragment
          binding=FragmentGdgChapterDetailsBinding.inflate(layoutInflater,container, false)
          val view=binding.root
-
          contentLoading=binding.contentLoadingProgressBar
          gdgName=binding.gdgname
          cityName=binding.cityname
@@ -93,9 +98,45 @@ class GdgChapterDetails : Fragment() {
          eventsAdapterpast= EventsAdapter(pastEventsList)
          pasteventsRecycler.adapter=eventsAdapterpast
 
+         starttourGdgButton=binding.StarttourGdgButton
+         starttourGdgButton.setOnClickListener { tour() }
+
+
 
         return view
     }
+
+    private fun tour() {
+        val isConnected = AtomicBoolean(false)
+        testPriorConnection(requireActivity(), isConnected)
+        val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
+        handler.postDelayed({
+            if (isConnected.get()) {
+                showDialog(requireActivity(), "Starting the GDG TOUR")
+//                tourGDG = TourGDGThread(
+//                    infoScrapingList!!,
+//                    this@WebScrapingActivity,
+//                    buttTour!!,
+//                    buttStopTour!!
+//                )
+//                tourGDG!!.start()
+//                buttTour!!.visibility = View.INVISIBLE
+//                buttStopTour!!.visibility = View.VISIBLE
+            }
+//            loadConnectionStatus(sharedPreferences)
+        }, 1200)
+    }
+//    private fun loadConnectionStatus(sharedPreferences: SharedPreferences) {
+//        val isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+//        if (isConnected) {
+//            connectionStatus!!.background =
+//                ContextCompat.getDrawable(applicationContext, R.drawable.ic_status_connection_green)
+//        } else {
+//            connectionStatus!!.background =
+//                ContextCompat.getDrawable(applicationContext, R.drawable.ic_status_connection_red)
+//        }
+//    }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

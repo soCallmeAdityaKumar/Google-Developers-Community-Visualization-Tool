@@ -95,5 +95,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.google.code.gson:gson:2.9.0'
 
+    implementation group: 'com.jcraft', name: 'jsch', version: '0.1.54'
+
+
 
 }

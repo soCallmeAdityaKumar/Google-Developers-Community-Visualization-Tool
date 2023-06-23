@@ -6,4 +6,10 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="selected_color">#6759FF</color>
     <color name="default_color">#FFFFFF</color>
+    <color name="backgroundDialog">#E5E5E5</color>
+    <color name="textColorClick">#000000</color>
+    <color name="colorPrimary">#3B79AE</color>
+    <color name="textColorPrimary">#F2F2F2</color>
+
+
 </resources>
