@@ -4,9 +4,7 @@ import android.os.Handler
 import android.os.Looper
 
 class LGCommand(val command: String, val priorityType: Short, private val listener: Listener?) {
-    /** Callback interface for delivering parsed responses.  */
     interface Listener {
-        /** Called when a response is received.  */
         fun onResponse(response: String?)
     }
 

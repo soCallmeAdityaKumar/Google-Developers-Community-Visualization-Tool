@@ -1,7 +1,6 @@
 package com.example.googledeveloperscommunityvisualisationtool.Fragments.GDGChapterDetails
 
 import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -12,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +24,7 @@ import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.Org
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.PastEvents
 import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.UpcomingEvents
 import com.example.googledeveloperscommunityvisualisationtool.Utility.ConstantPrefs
-import com.example.googledeveloperscommunityvisualisationtool.create.utility.LGConnectionTest.testPriorConnection
+import com.example.googledeveloperscommunityvisualisationtool.create.utility.connection.LGConnectionTest.testPriorConnection
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentGdgChapterDetailsBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +55,7 @@ class GdgChapterDetails : Fragment() {
     lateinit var contentLoading:ProgressBar
     lateinit var noUpcomingEventTextView:TextView
     lateinit var starttourGdgButton:Button
+    lateinit var stoptourGgdButton:Button
      var handler=Handler()
 
 
@@ -99,7 +98,9 @@ class GdgChapterDetails : Fragment() {
          pasteventsRecycler.adapter=eventsAdapterpast
 
          starttourGdgButton=binding.StarttourGdgButton
-         starttourGdgButton.setOnClickListener { tour() }
+         stoptourGgdButton=binding.StoptourGdgButton
+//         starttourGdgButton.setOnClickListener { tour() }
+//         stoptourGgdButton.setOnClickListener { stopTour() }
 
 
 
@@ -115,13 +116,13 @@ class GdgChapterDetails : Fragment() {
                 showDialog(requireActivity(), "Starting the GDG TOUR")
 //                tourGDG = TourGDGThread(
 //                    infoScrapingList!!,
-//                    this@WebScrapingActivity,
-//                    buttTour!!,
-//                    buttStopTour!!
+//                    requireActivity(),
+//                    starttourGdgButton!!,
+//                    stoptourGgdButton!!
 //                )
 //                tourGDG!!.start()
-//                buttTour!!.visibility = View.INVISIBLE
-//                buttStopTour!!.visibility = View.VISIBLE
+                starttourGdgButton!!.visibility = View.INVISIBLE
+                stoptourGgdButton!!.visibility = View.VISIBLE
             }
 //            loadConnectionStatus(sharedPreferences)
         }, 1200)

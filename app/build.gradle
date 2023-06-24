@@ -97,6 +97,10 @@ dependencies {
 
     implementation group: 'com.jcraft', name: 'jsch', version: '0.1.54'
 
+//    implementation('com.google.api-client:google-api-client-android:1.30.2') {
+//        exclude group: 'org.apache.httpcomponents'
+//    }
+
 
 
 }

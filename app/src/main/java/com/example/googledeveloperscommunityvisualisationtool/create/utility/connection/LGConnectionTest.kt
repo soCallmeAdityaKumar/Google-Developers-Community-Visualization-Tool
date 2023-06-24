@@ -1,8 +1,7 @@
-package com.example.googledeveloperscommunityvisualisationtool.create.utility
+package com.example.googledeveloperscommunityvisualisationtool.create.utility.connection
 
 import android.content.Context
 import android.os.Handler
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.example.googledeveloperscommunityvisualisationtool.Connection.LGCommand
 import com.example.googledeveloperscommunityvisualisationtool.Connection.LGConnectionManager.Companion.getInstance
