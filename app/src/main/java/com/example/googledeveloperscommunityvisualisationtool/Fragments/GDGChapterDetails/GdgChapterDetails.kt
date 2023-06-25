@@ -26,6 +26,7 @@ import com.example.googledeveloperscommunityvisualisationtool.Fragments.Home.Upc
 import com.example.googledeveloperscommunityvisualisationtool.Utility.ConstantPrefs
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.connection.LGConnectionTest.testPriorConnection
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentGdgChapterDetailsBinding
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,6 +44,7 @@ class GdgChapterDetails : Fragment() {
     lateinit var upcomingEventsRecycler:RecyclerView
     lateinit var pasteventsRecycler:RecyclerView
     lateinit var pastEventsList:List<events>
+    lateinit var tourGDG:TourGDGThread
     lateinit var upcomingEventlist:List<events>
     lateinit var eventsAdapterpast: EventsAdapter
     lateinit var eventsAdapterupcoming: EventsAdapter
@@ -99,12 +101,18 @@ class GdgChapterDetails : Fragment() {
 
          starttourGdgButton=binding.StarttourGdgButton
          stoptourGgdButton=binding.StoptourGdgButton
-//         starttourGdgButton.setOnClickListener { tour() }
-//         stoptourGgdButton.setOnClickListener { stopTour() }
+         starttourGdgButton.setOnClickListener { tour() }
+         stoptourGgdButton.setOnClickListener { stopTour() }
 
 
 
         return view
+    }
+
+    private fun stopTour() {
+        tourGDG!!.stop()
+        starttourGdgButton!!.visibility = View.VISIBLE
+        stoptourGgdButton!!.visibility = View.INVISIBLE
     }
 
     private fun tour() {
@@ -114,13 +122,13 @@ class GdgChapterDetails : Fragment() {
         handler.postDelayed({
             if (isConnected.get()) {
                 showDialog(requireActivity(), "Starting the GDG TOUR")
-//                tourGDG = TourGDGThread(
-//                    infoScrapingList!!,
-//                    requireActivity(),
-//                    starttourGdgButton!!,
-//                    stoptourGgdButton!!
-//                )
-//                tourGDG!!.start()
+                tourGDG = TourGDGThread(
+                    args.chapter as ChapterEntity,
+                    requireActivity(),
+                    starttourGdgButton!!,
+                    stoptourGgdButton!!
+                )
+                tourGDG!!.start()
                 starttourGdgButton!!.visibility = View.INVISIBLE
                 stoptourGgdButton!!.visibility = View.VISIBLE
             }

@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.example.googledeveloperscommunityvisualisationtool.Connection.LGCommand
 import com.example.googledeveloperscommunityvisualisationtool.Connection.LGConnectionManager
 import com.example.googledeveloperscommunityvisualisationtool.Connection.LGConnectionSendFile
@@ -188,7 +189,7 @@ private constructor() {
     /**
      * Paint a balloon with the logos
      */
-    fun sendBalloonWithLogos(activity: AppCompatActivity) {
+    fun sendBalloonWithLogos(activity: FragmentActivity) {
         createResourcesFolder()
         val imagePath = getLogosFile(activity)
         val lgConnectionSendFile = LGConnectionSendFile.getInstance()
@@ -209,7 +210,7 @@ private constructor() {
         }, 2000)
     }
 
-    private fun getLogosFile(activity: AppCompatActivity): String {
+    private fun getLogosFile(activity: FragmentActivity): String {
         val file = File(activity.cacheDir.toString() + "/logos.png")
         if (!file.exists()) {
             try {
