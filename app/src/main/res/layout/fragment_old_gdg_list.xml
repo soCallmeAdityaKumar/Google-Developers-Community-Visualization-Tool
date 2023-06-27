@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DataFetching.OldData.OldGdg.OldGdgList">
+    tools:context=".dataFetching.oldData.oldGdg.OldGdgList">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"

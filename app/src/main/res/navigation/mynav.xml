@@ -7,12 +7,16 @@
 
     <fragment
         android:id="@+id/upcomingEvents"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.UpcomingEvents.UpcomingEvents"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.UpcomingEvents"
         android:label="fragment_upcoming_events"
-        tools:layout="@layout/fragment_upcoming_events" />
+        tools:layout="@layout/fragment_upcoming_events" >
+        <action
+            android:id="@+id/action_upcomingEvents_to_upcomingEventDetails"
+            app:destination="@id/upcomingEventDetails" />
+    </fragment>
     <fragment
         android:id="@+id/home"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.UpcomingEvents.Home"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.home.Home"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -36,12 +40,12 @@
     </fragment>
     <fragment
         android:id="@+id/maps"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.Maps.maps"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.maps.maps"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" />
     <fragment
         android:id="@+id/settings"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.Settings.Settings"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.settings.Settings"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
@@ -53,20 +57,20 @@
     </fragment>
     <fragment
         android:id="@+id/teamDetails"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.TeamDetails.teamDetails"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.teamDetails.teamDetails"
         android:label="fragment_team_details"
         tools:layout="@layout/fragment_team_details" />
     <fragment
         android:id="@+id/alarm_notification"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.Settings.AlarmNotification.Alarm_notification"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.settings.alarmNotification.Alarm_notification"
         android:label="Alarm_notification" />
     <fragment
         android:id="@+id/connection"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.Settings.Connection.connection"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.settings.connection.connection"
         android:label="connection" />
     <fragment
         android:id="@+id/oldGdgList"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldGdg.OldGdgList"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldGdg.OldGdgList"
         android:label="fragment_old_gdg_list"
         tools:layout="@layout/fragment_old_gdg_list" >
         <action
@@ -75,7 +79,7 @@
     </fragment>
     <fragment
         android:id="@+id/gdgChapterDetails"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.Fragments.GDGChapterDetails.GdgChapterDetails"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails.GdgChapterDetails"
         android:label="fragment_gdg_chapter_details"
         tools:layout="@layout/fragment_gdg_chapter_details" >
         <argument
@@ -84,11 +88,20 @@
     </fragment>
     <fragment
         android:id="@+id/oldEvent"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.DataFetching.OldData.OldEvents.OldEvent"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldEvents.oldEvent"
         android:label="fragment_old_event"
         tools:layout="@layout/fragment_old_event" >
         <argument
             android:name="chaptername"
             app:argType="com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.OldGDGEntity" />
+    </fragment>
+    <fragment
+        android:id="@+id/upcomingEventDetails"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.UpcomingEventDetails"
+        android:label="fragment_upcoming_event_details"
+        tools:layout="@layout/fragment_upcoming_event_details" >
+        <argument
+            android:name="upcomingeventsUrl"
+            app:argType="string" />
     </fragment>
 </navigation>

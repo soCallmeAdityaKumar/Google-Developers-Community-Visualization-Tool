@@ -1,3 +1,0 @@
-package com.example.googledeveloperscommunityvisualisationtool.DataClass.Scraping.GdgGroupClasses
-
-class GdgGroupDataClass : ArrayList<GdgGroupDataClassItem>()

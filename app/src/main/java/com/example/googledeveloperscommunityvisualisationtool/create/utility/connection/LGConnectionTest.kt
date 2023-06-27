@@ -3,11 +3,11 @@ package com.example.googledeveloperscommunityvisualisationtool.create.utility.co
 import android.content.Context
 import android.os.Handler
 import androidx.fragment.app.FragmentActivity
-import com.example.googledeveloperscommunityvisualisationtool.Connection.LGCommand
-import com.example.googledeveloperscommunityvisualisationtool.Connection.LGConnectionManager.Companion.getInstance
-import com.example.googledeveloperscommunityvisualisationtool.Dialog.CustomDialogUtility
+import com.example.googledeveloperscommunityvisualisationtool.connection.LGCommand
+import com.example.googledeveloperscommunityvisualisationtool.connection.LGConnectionManager.Companion.getInstance
+import com.example.googledeveloperscommunityvisualisationtool.dialog.CustomDialogUtility
 import com.example.googledeveloperscommunityvisualisationtool.R
-import com.example.googledeveloperscommunityvisualisationtool.Utility.ConstantPrefs
+import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import java.util.concurrent.atomic.AtomicBoolean
 
 object LGConnectionTest {
