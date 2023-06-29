@@ -3,11 +3,13 @@ package com.example.googledeveloperscommunityvisualisationtool.fragments.upcomin
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.Result
 import com.example.googledeveloperscommunityvisualisationtool.databinding.EventsitemlistBinding
+import kotlin.random.Random
 
 class UpcoEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter<UpcoEventsAdapter.MyViewHolder>() {
-
+    var listofDrawable= listOf(R.drawable.onecard, R.drawable.twocard, R.drawable.threecard, R.drawable.fourcard)
     private lateinit var mListener:onItemClickListener
     interface  onItemClickListener {
         fun onItemClick(position: Int)
@@ -39,6 +41,7 @@ class UpcoEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter
                 binding.eventTitle.text=this.title.toString()
                 binding.GDGname.text=this.chapter?.title.toString()
                 binding.city.text=this.city.toString()
+                binding.backgroundImageView.setBackgroundResource(listofDrawable[getDrawableCards()])
                 var tag=""
                 for (i in 0 until this.tags!!.size){
                     tag += this.tags[i]
@@ -48,6 +51,11 @@ class UpcoEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter
                 }
             }
         }
+
+    private fun getDrawableCards(): Int {
+        val rand= Random.nextInt(listofDrawable.size)
+        return rand
+    }
     fun refreshData(eventsList:List<Result>){
         this.eventList=eventsList
         notifyDataSetChanged()

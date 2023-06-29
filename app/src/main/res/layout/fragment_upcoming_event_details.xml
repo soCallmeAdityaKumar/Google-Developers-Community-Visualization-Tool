@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragments.upcomingEvents.detailsUpcomingEvents.UpcomingEventDetails">
 
         <TextView
@@ -12,12 +17,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/staatlichesregular"
+            android:fontFamily="@font/robotocondensedbold"
             android:hint="Event NAME"
             android:textSize="42dp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.49"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
@@ -27,43 +33,52 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="address"
-            android:textSize="32dp"
+            android:textSize="20dp"
+            android:visibility="visible"
+            android:fontFamily="@font/montserratmedium"
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eventsName" />
-
-        <TextView
-            android:id="@+id/gdgdName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="gdgname"
-            android:textSize="32dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address" />
-
         <TextView
             android:id="@+id/rsvp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
             android:hint="rsvp"
+            android:visibility="visible"
             android:textAlignment="viewEnd"
-            android:textSize="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="20dp"
+            android:fontFamily="@font/montserratmedium"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/address"
-            app:layout_constraintTop_toBottomOf="@+id/eventsName" />
+/>
+
+
+        <TextView
+            android:id="@+id/gdgdName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="gdgname"
+            android:textSize="20dp"
+            android:fontFamily="@font/montserratmedium"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/address" />
+
+
 
         <TextView
             android:id="@+id/dateandtime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="date and time"
-            android:textSize="32dp"
+            android:textSize="20dp"
+            android:visibility="visible"
+            android:fontFamily="@font/montserratmedium"
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,6 +102,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             app:cardCornerRadius="10dp"
+            app:cardElevation="5dp"
+            android:backgroundTint="#F7F2FA"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/abouttheEvent">
@@ -95,6 +112,9 @@
                     android:id="@+id/desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratmedium"
+                    android:textSize="20dp"
+                    android:layout_margin="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -117,6 +137,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            app:cardCornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -129,4 +150,5 @@
                     android:layout_height="wrap_content" />
         </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
+</ScrollView>

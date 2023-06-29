@@ -1,7 +1,9 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents
 
+import android.opengl.Visibility
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +19,9 @@ import com.example.googledeveloperscommunityvisualisationtool.fragments.gdgChapt
 import com.example.googledeveloperscommunityvisualisationtool.fragments.home.Organizers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.w3c.dom.Text
 
 class UpcomingEventDetails : Fragment() {
@@ -68,8 +72,39 @@ class UpcomingEventDetails : Fragment() {
         viewModel=ViewModelProvider(requireActivity(),upcoeventDetailFactory(upcoEventDetailsRepo)).get(UpcoEventDetailsModel::class.java)
 
         CoroutineScope(Dispatchers.IO).launch {
-            viewModel.getResponseModel(url.upcomingeventsUrl)
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.getResponseModel(url.upcomingeventsUrl)
+                Log.d("eventdetails","after getResponse")
+            }
+            Log.d("eventdetails","before fetching")
+            delay(5000)
+            withContext(Dispatchers.Main){
+                val eventData= viewModel.returnEvents()
+                gdgName.text=eventData.gdgName
+                eventTitle.text=eventData.title
+                if(eventData.address.isEmpty()){
+                    address.visibility=View.GONE
+                }else{
+                    address.text=eventData.address
+                }
+                if(eventData.dateAndTime.isEmpty()){
+                    dateAndTime.visibility=View.GONE
+                }else{
+                    dateAndTime.text=eventData.dateAndTime
+                }
+                desc.text=eventData.desc
+                if(eventData.rsvp.isEmpty()){
+                    rsvp.visibility=View.GONE
+                }else{
+                    rsvp.text=eventData.rsvp
+                }
+                organizerList=eventData.mentors.toList()
+                organizersAdapter.refreshData(organizerList)
+            }
+
         }
+
+
     }
 
 }

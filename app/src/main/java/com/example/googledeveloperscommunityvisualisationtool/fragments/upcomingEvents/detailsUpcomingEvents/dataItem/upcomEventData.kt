@@ -12,5 +12,5 @@ data class upcomEventData(
     val rsvp:String,
     val desc:String,
     val duration:String,
-    val mentors:List<Organizers>
+    val mentors:Set<Organizers>
     )

@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -25,14 +26,17 @@ import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgCh
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.gdgChapters.ChapUrlroomViewModel
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.gdgChapters.ChaptersUrlEntity
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.gdgChapters.ChapUrlroomfactory
+import com.google.android.material.search.SearchBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class Home : Fragment() {
     lateinit var progressBar: ProgressBar
     private lateinit var adapterlist: List<ChapterEntity>
+    private lateinit var newadapterlist:MutableList<ChapterEntity>
     private lateinit var binding: FragmentHomeBinding
     private lateinit var sharedPref: SharedPreferences
     private lateinit var gdgChaptersViewModel: GdgViewModel
@@ -40,6 +44,7 @@ class Home : Fragment() {
     private lateinit var chapUrlroomViewModel: ChapUrlroomViewModel
     private lateinit var chapterDatabaseViewModel:ChapterViewModel
     private lateinit var adapter: GdgChaptersAdapter
+    private lateinit var searchView:SearchView
 
 
     override fun onCreateView(
@@ -50,14 +55,21 @@ class Home : Fragment() {
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         val view = binding.root
 
+
         progressBar=binding.progressBar
 
-
-        adapterlist = listOf()
-        adapter = GdgChaptersAdapter(adapterlist)
+        newadapterlist = mutableListOf()
+        adapter = GdgChaptersAdapter(newadapterlist)
         binding.recyclerViewChapters.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerViewChapters.adapter = adapter
+
+
+        searchView=binding.searchChaptersView
+
+
+
+
 
 
         sharedPref = activity?.getSharedPreferences("didShowPrompt", Context.MODE_PRIVATE)!!
@@ -183,10 +195,34 @@ class Home : Fragment() {
                 adapterlist=it
                 adapter.refreshData(adapterlist)
                 if (progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
+                newadapterlist=adapterlist.toMutableList()
+                searchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return false
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        newadapterlist.clear()
+                        val searchtext=newText!!.toLowerCase(Locale.getDefault())
+                        if(searchtext.isNotEmpty()){
+                            adapterlist.forEach {
+                                if(it.gdgName.lowercase(Locale.getDefault()).contains(searchtext)){
+                                    newadapterlist.add(it)
+                                }
+                            }
+                            adapter.refreshData(newadapterlist)
+                        }else{
+                            newadapterlist.clear()
+                            newadapterlist.addAll(adapterlist)
+                            adapter.refreshData(newadapterlist)
+                        }
+                        return false
+                    }
+                })
 
                 adapter.setOnItemClickListener(object :GdgChaptersAdapter.onItemClickListener{
                     override fun onItemClick(position: Int) {
-                        val action= HomeDirections.actionHomeToGdgChapterDetails(it[position])
+                        val action= HomeDirections.actionHomeToGdgChapterDetails(newadapterlist[position])
                         findNavController().navigate(action)
                         onPause()
                     }

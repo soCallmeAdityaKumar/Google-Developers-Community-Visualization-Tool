@@ -6,8 +6,9 @@
     android:id="@+id/cardView2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="15dp"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="20dp"
+    android:background="@drawable/oldcardviewitem"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -16,7 +17,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp"
+        android:padding="5dp"
+        android:background="@drawable/oldcardviewitem"
         app:layout_constraintEnd_toStartOf="@+id/gdgname"
         app:layout_constraintStart_toStartOf="@+id/gdgname">
 
@@ -26,8 +28,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:fontFamily="@font/montserratmedium"
             android:textSize="20dp"
+            android:textColor="#6750A4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -41,6 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="200dp"
             android:textSize="20dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="#6750A4"
             app:layout_constraintBaseline_toBaselineOf="@+id/gdgname"
             app:layout_constraintStart_toEndOf="@+id/gdgname" />
 
@@ -50,6 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="200dp"
             android:textSize="20dp"
+            android:textColor="#6750A4"
+            android:layout_marginBottom="20dp"
             app:layout_constraintBaseline_toBaselineOf="@+id/gdgname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/city" />

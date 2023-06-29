@@ -2,12 +2,15 @@ package com.example.googledeveloperscommunityvisualisationtool.fragments.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
+import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.GdgChaptersListBinding
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
+import kotlin.random.Random
 
 class GdgChaptersAdapter(var chapterList: List<ChapterEntity>):RecyclerView.Adapter<GdgChaptersAdapter.MyViewHolder>() {
-
+    var listofDrawable= listOf(R.drawable.onecard,R.drawable.twocard,R.drawable.threecard,R.drawable.fourcard)
     private lateinit var mListen:onItemClickListener
     interface  onItemClickListener {
          fun onItemClick(position: Int)
@@ -40,9 +43,16 @@ class GdgChaptersAdapter(var chapterList: List<ChapterEntity>):RecyclerView.Adap
                 binding.GdgNameTextView.text = this.gdgName
                 binding.GdgCityTextView.text = this.city_name
                 binding.GDGCountryTextView.text=this.country
+                binding.backgroundImageView.setBackgroundResource(listofDrawable[getDrawableCards()])
             }
         }
     }
+
+    private fun getDrawableCards(): Int {
+        val rand= Random.nextInt(listofDrawable.size)
+        return rand
+    }
+
     fun refreshData(chapterList:List<ChapterEntity>){
         this.chapterList=chapterList
         notifyDataSetChanged()

@@ -11,12 +11,12 @@ private lateinit var details:upcomEventData
         val doc=Jsoup.connect(baseurl).get()
         //event title
         val title=doc.getElementsByClass("font_banner2").text()
-        val address=doc.getElementsByClass("event-header-address").text()
+        val address=doc.getElementsByClass("city-date").get(0).getElementsByClass("event-header-address").text().replace("- View Map".toRegex(),"")?:""
         val gdgname=doc.getElementsByClass("event-chapter-title").text()
         val dateAndTime=doc.getElementsByClass("event-date-time").text()
-        val rsvp=doc.getElementsByClass("event-attendees").text()
+        val rsvp=doc.getElementsByClass("event-attendees").text()?:""
         val desc=doc.getElementsByClass("event-description general-body").text()
-        val duration=doc.getElementsByClass("title-span").text()
+        val duration=doc.getElementsByClass("title-span").text()?:""
         //mentors
         val mentors= mutableListOf<Organizers>()
         val people=doc.getElementsByClass("people-card general-card")
@@ -28,7 +28,7 @@ private lateinit var details:upcomEventData
             mentors.add(Organizers(name, company, title, image))
             Log.d("mentor","$name,$company,$title,$image")
         }
-        details= upcomEventData(title,address,gdgname,dateAndTime,rsvp,desc,duration,mentors)
+        details= upcomEventData(title,address,gdgname,dateAndTime,rsvp,desc,duration,mentors.toSet())
     }
     fun returndetails():upcomEventData{
         return details

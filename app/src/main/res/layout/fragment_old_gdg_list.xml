@@ -6,14 +6,93 @@
     android:layout_height="match_parent"
     tools:context=".dataFetching.oldData.oldGdg.OldGdgList">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView2"
-        android:layout_width="0dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:elevation="40dp"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/cardview"
+            app:layout_constraintEnd_toStartOf="@+id/gdgname"
+            app:layout_constraintStart_toStartOf="@+id/gdgname">
+
+        <TextView
+            android:id="@+id/gdgname"
+            android:layout_width="387dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            android:fontFamily="@font/chivomonomedium"
+            android:textSize="32dp"
+            android:text="GDG Name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="200dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="32dp"
+            android:fontFamily="@font/chivomonomedium"
+            android:textAlignment="center"
+            android:text="City"
+            app:layout_constraintBaseline_toBaselineOf="@+id/gdgname"
+            app:layout_constraintStart_toEndOf="@+id/gdgname" />
+
+        <TextView
+            android:id="@+id/country"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="200dp"
+            android:textSize="32dp"
+            android:text="Country"
+            android:fontFamily="@font/chivomonomedium"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/gdgname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/city" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
+        android:backgroundTint="#F7F2FA"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/oldgdglistitem"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/cardview"
+        tools:listitem="@layout/oldgdglistitem">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp" />
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

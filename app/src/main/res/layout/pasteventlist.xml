@@ -5,9 +5,11 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="450dp"
         android:layout_height="400dp"
+        app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="20dp"
+        android:backgroundTint="#F7F2FA"
         android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,6 +26,7 @@
                 android:fontFamily="@font/montserratmedium"
                 android:textAlignment="center"
                 android:textSize="32dp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

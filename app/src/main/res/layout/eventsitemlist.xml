@@ -4,12 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_width="450dp"
+    android:layout_margin="20dp"
+    android:layout_height="400dp"
     android:elevation="10dp"
-    android:padding="10dp"
-    app:cardCornerRadius="50dp"
+    app:cardCornerRadius="20dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -17,19 +16,28 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="450dp"
-        android:layout_height="450dp"
-        android:layout_margin="10dp"
-        android:padding="10dp">
+        android:background="@drawable/oldcardviewitem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/backgroundImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/eventTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:textColor="@color/black"
             android:fontFamily="@font/montserratmedium"
             android:hint="EventTitle"
             android:textSize="30dp"
+            android:textStyle="bold"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,9 +49,12 @@
             android:id="@+id/GDGname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/montserratmedium"
             android:hint="GDG Name"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             android:textAlignment="viewEnd"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -51,22 +62,26 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eventTitle"
-            app:layout_constraintVertical_bias="0.64" />
+            app:layout_constraintVertical_bias="0.289" />
 
         <TextView
             android:id="@+id/city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
             android:fontFamily="@font/montserratmedium"
             android:hint="City"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             android:textAlignment="viewEnd"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.03"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/GDGname" />
+            app:layout_constraintTop_toBottomOf="@+id/GDGname"
+            app:layout_constraintVertical_bias="0.09" />
 
         <!--            <TextView-->
         <!--                android:id="@+id/tags"-->

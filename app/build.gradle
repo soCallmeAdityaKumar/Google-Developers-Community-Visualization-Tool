@@ -100,4 +100,7 @@ dependencies {
 
     implementation group: 'com.jcraft', name: 'jsch', version: '0.1.54'
 
+    //circular ImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
 }
