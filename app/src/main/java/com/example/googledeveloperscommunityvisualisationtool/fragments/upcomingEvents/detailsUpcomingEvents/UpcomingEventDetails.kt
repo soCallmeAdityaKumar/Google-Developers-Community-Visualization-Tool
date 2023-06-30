@@ -73,7 +73,7 @@ class UpcomingEventDetails : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             CoroutineScope(Dispatchers.IO).launch {
-                viewModel.getResponseModel(url.upcomingeventsUrl)
+                viewModel.getResponseModel(url.upcomingeventsUrl,requireContext())
                 Log.d("eventdetails","after getResponse")
             }
             Log.d("eventdetails","before fetching")
