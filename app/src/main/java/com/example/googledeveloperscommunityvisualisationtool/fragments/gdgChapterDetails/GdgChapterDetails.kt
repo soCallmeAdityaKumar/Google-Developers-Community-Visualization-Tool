@@ -1,6 +1,8 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails
 
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -46,8 +48,8 @@ class GdgChapterDetails : Fragment() {
     lateinit var pastEventsList:List<events>
     lateinit var tourGDG:TourGDGThread
     lateinit var upcomingEventlist:List<events>
-    lateinit var eventsAdapterpast: EventsAdapter
-    lateinit var eventsAdapterupcoming: EventsAdapter
+    lateinit var eventsAdapterpast: pastEventAdapter
+    lateinit var upcoEventsAdapterupcoming: UpcoEventsAdapter
     lateinit var binding:FragmentGdgChapterDetailsBinding
     lateinit var gdgViewModel:GdgViewModel
     lateinit var gdgDetails: GDGDetails
@@ -87,8 +89,8 @@ class GdgChapterDetails : Fragment() {
 
          upcomingEventlist= listOf()
          upcomingEventsRecycler.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
-         eventsAdapterupcoming=EventsAdapter(upcomingEventlist)
-         upcomingEventsRecycler.adapter=eventsAdapterupcoming
+         upcoEventsAdapterupcoming=UpcoEventsAdapter(upcomingEventlist)
+         upcomingEventsRecycler.adapter=upcoEventsAdapterupcoming
          upcomingEventsRecycler.visibility=View.GONE
 
          noUpcomingEventTextView=binding.NoUpcomingView
@@ -96,7 +98,7 @@ class GdgChapterDetails : Fragment() {
 
          pastEventsList= listOf()
          pasteventsRecycler.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
-         eventsAdapterpast= EventsAdapter(pastEventsList)
+         eventsAdapterpast= pastEventAdapter(pastEventsList)
          pasteventsRecycler.adapter=eventsAdapterpast
 
          starttourGdgButton=binding.StarttourGdgButton
@@ -178,17 +180,34 @@ class GdgChapterDetails : Fragment() {
             pastEventsList=coneverttoeventsbypast(gdgDetails.pastEventsList)
 
             upcomingEventlist=coneverttoeventsbyupcoming(gdgDetails.upcomingEventsList)
+            Log.d("upcomingeventinactivechapter",gdgDetails.upcomingEventsList.size.toString())
             if (upcomingEventlist.size!=0){
+                upcoEventsAdapterupcoming.refreshData(upcomingEventlist)
+                upcoEventsAdapterupcoming.setOnItemClickListener(object :UpcoEventsAdapter.onItemClickListener{
+                    override fun onItemClick(position: Int) {
+                        val uri= Uri.parse(upcomingEventlist[position].link)
+                        val intent= Intent(Intent.ACTION_VIEW,uri)
+                        startActivity(intent)
+                    }
+
+                })
                 upcomingEventsRecycler.visibility=View.VISIBLE
                 noUpcomingEventTextView.visibility=View.GONE
             }
+            else{
+                noUpcomingEventTextView.visibility=View.VISIBLE
+                upcomingEventsRecycler.visibility=View.GONE
+            }
+
             for(i in upcomingEventlist){
                 Log.d("hello",i.toString())
             }
             eventsAdapterpast.refreshData(pastEventsList)
-            eventsAdapterupcoming.refreshData(upcomingEventlist)
+
             organizerAdapter.refreshData(organizerList)
             contentLoading.visibility=View.GONE
+
+
         }
 
 

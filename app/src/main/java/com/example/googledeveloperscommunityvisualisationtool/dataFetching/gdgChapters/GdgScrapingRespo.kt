@@ -67,7 +67,7 @@ class GdgScrapingRespo {
         val pastEventsList = doc.getElementById("past-events-container")?.getElementsByTag("a")
         for (event in 0 until pastEventsList!!.size) {
             val link =
-                gdgURL.dropLast(1) + pastEventsList[event].getElementsByClass("vertical-box-container __bds-thumbnail-roundness")
+                "https://gdg.community.dev" + pastEventsList[event].getElementsByClass("vertical-box-container __bds-thumbnail-roundness")
                     .attr("href")
             val date =
                 pastEventsList[event].getElementsByClass("vertical-box--event-date").text()
@@ -82,20 +82,20 @@ class GdgScrapingRespo {
         }
 
 
-        val upcomingeventsList = doc.getElementsByClass("row event")
+        val upcomingeventsList = doc.getElementsByClass("row event ")
+
         for (upcomEvent in 0 until upcomingeventsList.size) {
             val link =
-                gdgURL.dropLast(1) + upcomingeventsList[upcomEvent].getElementsByClass("btn btn-primary purchase-ticket")
+                "https://gdg.community.dev" + upcomingeventsList[upcomEvent].getElementsByClass("btn btn-primary purchase-ticket")
                     .attr("href")
             val date =
                 upcomingeventsList[upcomEvent].getElementsByClass("date general-body--color")
                     .text()
             val title =
-                upcomingeventsList[upcomEvent].getElementsByClass("general-body--color").text()
+                upcomingeventsList[upcomEvent].getElementsByTag("h4").text()
             val description =
                 upcomingeventsList[upcomEvent].getElementsByClass("description general-body--color")
                     .text()
-
             upcomingEventsList.add(UpcomingEvents(title, date, link, description))
         }
 

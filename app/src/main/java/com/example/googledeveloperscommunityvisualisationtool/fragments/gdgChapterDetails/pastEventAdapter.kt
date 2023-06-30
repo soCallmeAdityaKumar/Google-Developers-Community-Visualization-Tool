@@ -5,7 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.googledeveloperscommunityvisualisationtool.databinding.PasteventlistBinding
 
-class EventsAdapter(var Events:List<events>):RecyclerView.Adapter<EventsAdapter.myViewHolder>() {
+class pastEventAdapter(var Events:List<events>):RecyclerView.Adapter<pastEventAdapter.myViewHolder>() {
+
     class myViewHolder(val binding: PasteventlistBinding) : RecyclerView.ViewHolder(binding.root) {
 
     }
@@ -23,9 +24,9 @@ class EventsAdapter(var Events:List<events>):RecyclerView.Adapter<EventsAdapter.
     override fun onBindViewHolder(holder: myViewHolder, position: Int) {
         with(holder) {
             with(Events[position]) {
-                binding.title.text = this.title.toString()
-                binding.date.text = this.date.toString()
-                binding.description.text = this.typeORdescription.toString()
+                binding.title.text = this.title
+                binding.date.text = this.date
+                binding.description.text=this.typeORdescription
             }
         }
     }
