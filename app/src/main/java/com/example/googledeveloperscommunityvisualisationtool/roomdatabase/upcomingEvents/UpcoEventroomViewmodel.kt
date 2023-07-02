@@ -23,4 +23,15 @@ class UpcoEventroomViewmodel(context: Context):ViewModel() {
             repo.addEventsRepo(event)
         }
     }
+
+    fun deleteevent(upcomingEventEntity: UpcomingEventEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.deleteevent(upcomingEventEntity)
+        }
+    }
+    fun deleteAllevent(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.deleteAllevent()
+        }
+    }
 }

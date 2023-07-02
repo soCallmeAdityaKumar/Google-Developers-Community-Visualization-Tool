@@ -39,7 +39,7 @@ class UpcoEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter
         with(holder){
             with(eventList[position]){
                 binding.eventTitle.text=this.title.toString()
-                binding.GDGname.text=this.chapter?.title.toString()
+                binding.GDGname.text=this.chapter.title
                 binding.city.text=this.city.toString()
                 binding.backgroundImageView.setBackgroundResource(listofDrawable[getDrawableCards()])
                 var tag=""

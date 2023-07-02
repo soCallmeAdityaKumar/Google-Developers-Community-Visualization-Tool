@@ -19,30 +19,37 @@ class GdgScrapingRespo {
     private  lateinit var gdgDetails: GDGDetails
 
     fun getGdgChapters(){
-        Log.d("home","inside the get chapter repo")
-        val doc = Jsoup.connect(baseUrl).get()
-        Log.d("home",doc.body().toString())
-        Log.d("value",doc.body().getElementsByTag("script")[1].toString())
-        var html=doc.body().getElementsByTag("script")[1].html().replace("var localChapters = ","")
-        html="$html"
-        val obj= JSONArray(html)
-        for(i in 0 until obj.length()){
-            val avatar=obj.getJSONObject(i).getString("avatar")
-            val banner= Banner(obj.getJSONObject(i).getString("banner"))
-            val city=obj.getJSONObject(i).getString("city")
-            val cityName=obj.getJSONObject(i).getString("city_name")
-            val country=obj.getJSONObject(i).getString("country")
-            val longitude:Double=  obj.getJSONObject(i).optDouble("latitude",0.0)
-            val latitude =  obj.getJSONObject(i).optDouble("latitude",0.0)
-            val url=obj.getJSONObject(i).getString("url")
+        try {
+            Log.d("home","inside the get chapter repo")
+            val doc = Jsoup.connect(baseUrl).url(baseUrl).get()
+            Log.d("home",doc.body().toString())
+            Log.d("value",doc.body().getElementsByTag("script")[1].toString())
+            var html=doc.body().getElementsByTag("script")[1].html().replace("var localChapters = ","")
+            html="$html"
+            val obj= JSONArray(html)
+            for(i in 0 until obj.length()){
+                val avatar=obj.getJSONObject(i).getString("avatar")
+                val banner= Banner(obj.getJSONObject(i).getString("banner"))
+                val city=obj.getJSONObject(i).getString("city")
+                val cityName=obj.getJSONObject(i).getString("city_name")
+                val country=obj.getJSONObject(i).getString("country")
+                val longitude:Double=  obj.getJSONObject(i).optDouble("latitude",0.0)
+                val latitude =  obj.getJSONObject(i).optDouble("latitude",0.0)
+                val url=obj.getJSONObject(i).getString("url")
 //            Log.d("latitude",longitude.toString())
 //            Log.d("longitude",latitude.toString())
 
-            val gdgDataClass=
-                GdgDataClass(avatar,banner,city,cityName,country, latitude,longitude,url)
+                val gdgDataClass=
+                    GdgDataClass(avatar,banner,city,cityName,country, latitude,longitude,url)
 //            Log.d("home",gdgGroupDataClassItem.toString())
-            gdgChapters.add(gdgDataClass)
+                gdgChapters.add(gdgDataClass)
+            }
+
         }
+        catch (e:Exception){
+            Log.d("GDGScrapingUrl",e.message.toString())
+        }
+
 //        Log.d("gdgChapters",gdgChapters.size.toString())
     }
 

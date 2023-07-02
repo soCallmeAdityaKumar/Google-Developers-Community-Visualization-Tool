@@ -10,4 +10,11 @@ class UpcoEventroomRepo(private val dao: upcomingEventDao)
     {
         dao.addEvents(upcomingEventEntity)
     }
+
+    suspend fun deleteevent(upcomingEventEntity: UpcomingEventEntity){
+        dao.deleteevent(upcomingEventEntity)
+    }
+    suspend fun deleteAllevent(){
+        dao.deleteallevents()
+    }
 }

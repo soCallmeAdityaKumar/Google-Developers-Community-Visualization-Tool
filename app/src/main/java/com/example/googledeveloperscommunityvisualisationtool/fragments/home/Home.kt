@@ -113,7 +113,7 @@ class Home : Fragment() {
     private fun checkurlDatabase() {
         var flag1=0
         var urlListsize=0
-         chapterDatabaseViewModel.readAllChaptersViewModel.observe(viewLifecycleOwner,Observer{chapterList->
+         chapterDatabaseViewModel.readAllChaptersViewModel.observe(requireActivity(),Observer{chapterList->
              Log.d("coroutines","inside the checkurldatabase")
              if(flag1==0){
                  chapUrlroomViewModel.readAllChapterUrlViewModel.observe(viewLifecycleOwner,Observer { urlList->
