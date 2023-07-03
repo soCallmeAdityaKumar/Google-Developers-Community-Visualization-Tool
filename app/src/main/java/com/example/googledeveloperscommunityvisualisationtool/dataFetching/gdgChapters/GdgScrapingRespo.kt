@@ -22,8 +22,8 @@ class GdgScrapingRespo {
         try {
             Log.d("home","inside the get chapter repo")
             val doc = Jsoup.connect(baseUrl).url(baseUrl).get()
-            Log.d("home",doc.body().toString())
-            Log.d("value",doc.body().getElementsByTag("script")[1].toString())
+//            Log.d("home",doc.body().toString())
+//            Log.d("value",doc.body().getElementsByTag("script")[1].toString())
             var html=doc.body().getElementsByTag("script")[1].html().replace("var localChapters = ","")
             html="$html"
             val obj= JSONArray(html)

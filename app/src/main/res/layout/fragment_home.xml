@@ -195,7 +195,7 @@
             android:layout_margin="20dp"
             app:cardElevation="5dp"
             app:cardCornerRadius="20dp"
-            android:backgroundTint="#F7F2FA"
+
             app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchChaptersView" >

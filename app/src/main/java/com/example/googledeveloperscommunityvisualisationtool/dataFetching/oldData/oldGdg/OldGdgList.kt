@@ -6,11 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.car.ui.recyclerview.CarUiListItemAdapterAdapterV1.ViewHolderWrapper
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentOldGdgListBinding
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.OldGDGEntity
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.oldGDGroomViewModel
@@ -28,6 +31,8 @@ class OldGdgList : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var gdglist:List<oldGdgDataItem>
     private lateinit var oldGdgDatabaseViewModel:oldGDGroomViewModel
+    lateinit var progressBar: ProgressBar
+    lateinit var recyclerViewcardView:CardView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +40,13 @@ class OldGdgList : Fragment() {
     ): View? {
         binding= FragmentOldGdgListBinding.inflate(layoutInflater,container,false)
         val view=binding.root
+
+        progressBar=binding.progressBar
+        recyclerViewcardView=binding.recyclerViewCardView
+
+        progressBar.visibility=View.VISIBLE
+        recyclerViewcardView.visibility=View.GONE
+
         recyclerView=binding.recyclerView2
         oldgdgAdapter= oldgdgAdapter(listOf())
         recyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
@@ -67,6 +79,9 @@ class OldGdgList : Fragment() {
 
     private fun loadDataFromdatabase() {
         oldGdgDatabaseViewModel.readAllOldGDGViewModel.observe(viewLifecycleOwner, Observer {
+            if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
+            if(recyclerViewcardView.visibility==View.GONE)recyclerViewcardView.visibility=View.VISIBLE
+
             oldgdgAdapter.refreshdata(it)
                 oldgdgAdapter.setOnItemClickListener(object :oldgdgAdapter.onItemClickListener{
                     override fun onItemClick(position: Int) {

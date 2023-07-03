@@ -6,7 +6,7 @@
     android:layout_width="450dp"
     android:padding="1dp"
     android:layout_height="450dp"
-    android:backgroundTint="#F7F2FA"
+    android:backgroundTint="#E8DEF8"
     android:layout_alignParentStart="true"
     android:layout_alignParentTop="true"
     android:layout_marginStart="20dp"
@@ -19,7 +19,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@drawable/oldcardviewitem"
         android:layout_height="match_parent">
 
         <ImageView

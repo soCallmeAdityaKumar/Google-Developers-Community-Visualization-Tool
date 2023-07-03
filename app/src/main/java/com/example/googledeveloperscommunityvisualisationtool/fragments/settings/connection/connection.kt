@@ -2,6 +2,7 @@ package com.example.googledeveloperscommunityvisualisationtool.fragments.setting
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
@@ -20,6 +21,7 @@ import com.example.googledeveloperscommunityvisualisationtool.dialog.CustomDialo
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.model.ActionController
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentConnectionBinding
+import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import java.util.regex.Pattern
 
 
@@ -60,7 +62,7 @@ class connection : Fragment() {
         val hostPort = lgipAddress!!.text.toString()
         val usernameText = lgnameEditText!!.text.toString()
         val passwordText = passwordEditText!!.text.toString()
-//        saveConnectionInfo(hostPort, usernameText, passwordText)
+        saveConnectionInfo(hostPort, usernameText, passwordText)
         if (!isValidHostNPort(hostPort)) {
             CustomDialogUtility.showDialog(
                 requireActivity(),
@@ -98,10 +100,10 @@ class connection : Fragment() {
                     requireActivity(),
                     resources.getString(R.string.activity_connection_error_connect)
                 )
-//                val editor =
-//                    getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE).edit()
-//                editor.putBoolean(ConstantPrefs.IS_CONNECTED.name, false)
-//                editor.apply()
+                val editor =
+                    activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)?.edit()
+                editor?.putBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+                editor?.apply()
                 connectingTextView!!.visibility = View.INVISIBLE
                 connectButton!!.visibility = View.VISIBLE
                 connectButton!!.text = resources.getString(R.string.button_try_again)
@@ -110,14 +112,23 @@ class connection : Fragment() {
                     requireActivity(),
                     resources.getString(R.string.activity_connection_success)
                 )
-//                val editor =
-//                    getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE).edit()
-//                editor.putBoolean(ConstantPrefs.IS_CONNECTED.name, true)
-//                editor.apply()
+                val editor =
+                    activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)?.edit()
+                editor?.putBoolean(ConstantPrefs.IS_CONNECTED.name, true)
+                editor?.apply()
                 changeToNewView()
                 ActionController.instance?.sendBalloonWithLogos(requireActivity())
             }
         }, 2000)
+    }
+
+    private fun saveConnectionInfo(hostPort: String, usernameText: String, passwordText: String) {
+        val editor = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)?.edit()
+        editor?.putString(ConstantPrefs.URI_TEXT.name, hostPort)
+        editor?.putString(ConstantPrefs.USER_NAME.name, usernameText)
+        editor?.putString(ConstantPrefs.USER_PASSWORD.name, passwordText)
+        editor?.putBoolean(ConstantPrefs.TRY_TO_RECONNECT.name, true)
+        editor?.apply()
     }
 
 

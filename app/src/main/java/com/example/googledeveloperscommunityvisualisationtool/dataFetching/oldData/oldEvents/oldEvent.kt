@@ -6,11 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.HorizontalScrollView
+import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.car.ui.recyclerview.CarUiListItemAdapterAdapterV1.ViewHolderWrapper
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldEvents.oldEventsDataClass.Event
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldEvents.oldEventsDataClass.Organizer
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentOldEventBinding
@@ -33,12 +37,20 @@ class oldEvent : Fragment() {
     lateinit var organizerList: List<Organizer>
     lateinit var EventAdapter:oldEventAdapter
     lateinit var organizerAdapter:oldGdgOrganAdap
+    lateinit var progressBar: ProgressBar
+    lateinit var scrollView:ScrollView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding= FragmentOldEventBinding.inflate(inflater,container,false)
         val view=binding.root
+
+        progressBar=binding.progressBar
+        scrollView=binding.scrollView
+
+        progressBar.visibility=View.VISIBLE
+        scrollView.visibility=View.GONE
 
         gdgName=binding.gdgName
         gdgName.text=endpoint.chaptername.name
@@ -83,6 +95,8 @@ class oldEvent : Fragment() {
                 Log.d("oldevent",eventList.size.toString())
                 organizerList=gdgList.organizers
                 Log.d("oldevent",organizerList.size.toString())
+                if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
+                if(scrollView.visibility==View.GONE)scrollView.visibility=View.VISIBLE
                 organizerAdapter.refreshdata(organizerList)
             }
         }

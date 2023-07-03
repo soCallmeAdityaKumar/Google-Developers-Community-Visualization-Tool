@@ -9,7 +9,6 @@ import com.example.googledeveloperscommunityvisualisationtool.databinding.Events
 import kotlin.random.Random
 
 class UpcoEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter<UpcoEventsAdapter.MyViewHolder>() {
-    var listofDrawable= listOf(R.drawable.onecard, R.drawable.twocard, R.drawable.threecard, R.drawable.fourcard)
     private lateinit var mListener:onItemClickListener
     interface  onItemClickListener {
         fun onItemClick(position: Int)
@@ -41,7 +40,6 @@ class UpcoEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter
                 binding.eventTitle.text=this.title.toString()
                 binding.GDGname.text=this.chapter.title
                 binding.city.text=this.city.toString()
-                binding.backgroundImageView.setBackgroundResource(listofDrawable[getDrawableCards()])
                 var tag=""
                 for (i in 0 until this.tags!!.size){
                     tag += this.tags[i]
@@ -52,10 +50,6 @@ class UpcoEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter
             }
         }
 
-    private fun getDrawableCards(): Int {
-        val rand= Random.nextInt(listofDrawable.size)
-        return rand
-    }
     fun refreshData(eventsList:List<Result>){
         this.eventList=eventsList
         notifyDataSetChanged()

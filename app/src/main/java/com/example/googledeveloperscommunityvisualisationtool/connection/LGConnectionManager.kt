@@ -12,11 +12,11 @@ import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingDeque
 
 class LGConnectionManager private constructor() : Runnable {
-    var user = "lg"
+    var user = "lg1"
         private set
-    var password = "1234"
+    var password = "lg"
         private set
-    var hostname = "192.168.20.28"
+    var hostname = "192.168.153.3"
         private set
     var port = 22
         private set

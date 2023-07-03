@@ -1,19 +1,25 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails
 
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.Display.Mode
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavType
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,10 +35,14 @@ import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPr
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.connection.LGConnectionTest.testPriorConnection
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentGdgChapterDetailsBinding
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.reflect.Type
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -56,10 +66,14 @@ class GdgChapterDetails : Fragment() {
     lateinit var member:TextView
     lateinit var organizerAdapter:OrganizersAdapter
     lateinit var organizerList:List<Organizers>
-    lateinit var contentLoading:ProgressBar
     lateinit var noUpcomingEventTextView:TextView
     lateinit var starttourGdgButton:Button
     lateinit var stoptourGgdButton:Button
+    lateinit var sharedPref:SharedPreferences
+    lateinit var editor:SharedPreferences.Editor
+    lateinit var progressBar: ProgressBar
+    lateinit var scrollView: ScrollView
+
      var handler=Handler()
 
 
@@ -71,7 +85,14 @@ class GdgChapterDetails : Fragment() {
         // Inflate the layout for this fragment
          binding=FragmentGdgChapterDetailsBinding.inflate(layoutInflater,container, false)
          val view=binding.root
-         contentLoading=binding.contentLoadingProgressBar
+
+         progressBar=binding.progressBar
+         scrollView=binding.scrollView
+
+         progressBar.visibility=View.VISIBLE
+         scrollView.visibility=View.GONE
+
+
          gdgName=binding.gdgname
          cityName=binding.cityname
          countryName=binding.countryname
@@ -154,7 +175,6 @@ class GdgChapterDetails : Fragment() {
         val gdgChapterRepo=GdgScrapingRespo()
         gdgViewModel = ViewModelProvider(this, GdgChapModelFactory(gdgChapterRepo, requireContext())).get(GdgViewModel::class.java)
 
-        contentLoading.visibility=View.VISIBLE
         Log.d("content","content visible")
 
 
@@ -166,8 +186,24 @@ class GdgChapterDetails : Fragment() {
     private suspend fun getDetails() {
         val job=CoroutineScope(Dispatchers.IO).launch {
             gdgViewModel.getCompleteGDGdetails(args.chapter.url)
-
+//            sharedPref=activity?.getSharedPreferences(args.chapter.gdgName+"sharedpref",Context.MODE_PRIVATE)!!
+//            editor=sharedPref.edit()
         }
+
+//        if(sharedPref.contains(args.chapter.gdgName+"sharedpref")){
+//            gdgName.text=sharedPref.getString("gdgname",null)
+//            cityName.text=sharedPref.getString("cityname",null)
+//            countryName.text=sharedPref.getString("countryname",null)
+//            aboutGdg.text=sharedPref.getString("aboutgdg",null)
+//            member.text=sharedPref.getString("member",null)
+//            val organizerstring=sharedPref.getString("organzierslist",null)
+//            val organizerstype= TypeToken<ArrayList<Organizers>>() {
+//
+//            }.type
+//            organizerList=Gson().fromJson(organizerstring,organizerstype)
+
+
+
         job.join()
         withContext(Dispatchers.Main){
             gdgDetails=gdgViewModel.getdetails()
@@ -178,10 +214,27 @@ class GdgChapterDetails : Fragment() {
             member.text=args.chapter.membersNumber
             organizerList=gdgDetails.orgnaizersList
             pastEventsList=coneverttoeventsbypast(gdgDetails.pastEventsList)
-
             upcomingEventlist=coneverttoeventsbyupcoming(gdgDetails.upcomingEventsList)
+
+//            editor.apply{
+//                putString("gdgname",gdgDetails.gdgName)
+//                putString("cityname",gdgDetails.gdgName)
+//                putString("countryname",gdgDetails.gdgName)
+//                putString("aboutgdg",gdgDetails.gdgName)
+//                putString("member",gdgDetails.gdgName)
+//                val gson=Gson()
+//                val stringorganizer=gson.toJson(organizerList)
+//                val stringpastevent=gson.toJson(pastEventsList)
+//                val stringupcoming=gson.toJson(upcomingEventlist)
+//                putString("organzierslist",stringorganizer)
+//                putString("organzierslist",stringpastevent)
+//                putString("upcomingeventlist",stringupcoming)
+//                apply()
+//            }
+
             Log.d("upcomingeventinactivechapter",gdgDetails.upcomingEventsList.size.toString())
             if (upcomingEventlist.size!=0){
+
                 upcoEventsAdapterupcoming.refreshData(upcomingEventlist)
                 upcoEventsAdapterupcoming.setOnItemClickListener(object :UpcoEventsAdapter.onItemClickListener{
                     override fun onItemClick(position: Int) {
@@ -205,7 +258,9 @@ class GdgChapterDetails : Fragment() {
             eventsAdapterpast.refreshData(pastEventsList)
 
             organizerAdapter.refreshData(organizerList)
-            contentLoading.visibility=View.GONE
+            if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
+            if(scrollView.visibility==View.GONE)scrollView.visibility=View.VISIBLE
+
 
 
         }

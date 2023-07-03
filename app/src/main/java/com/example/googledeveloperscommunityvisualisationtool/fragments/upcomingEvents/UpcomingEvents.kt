@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -43,6 +44,10 @@ class UpcomingEvents : Fragment() {
     lateinit var lastweekadapter:UpcoEventsAdapter
      var lastweekeventslist= mutableListOf<Result>()
     lateinit var adapter: UpcoEventsAdapter
+    lateinit var secondcardView:CardView
+    lateinit var fourthCardView:CardView
+    lateinit var thirdCardView:CardView
+    lateinit var fifthCardView: CardView
     lateinit var progressBar: ProgressBar
     lateinit var refreshLayout: SwipeRefreshLayout
     lateinit var lastweekroomViewModel:lastweekroommodel
@@ -51,12 +56,24 @@ class UpcomingEvents : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View
     {
+
         binding=FragmentUpcomingEventsBinding.inflate(layoutInflater,container,false)
         val view= binding.root
 
         refreshLayout=binding.refreshlayout
 
         progressBar=binding.progressBar
+        progressBar.visibility=View.VISIBLE
+
+        secondcardView=binding.SecondcardView
+        thirdCardView=binding.ThirdcardView
+        fourthCardView=binding.fourthCardView
+        fifthCardView=binding.fifthfCardView
+
+        thirdCardView.visibility=View.GONE
+        fourthCardView.visibility=View.GONE
+        fifthCardView.visibility=View.GONE
+
 
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         adapter=UpcoEventsAdapter(eventlist)
@@ -98,6 +115,7 @@ class UpcomingEvents : Fragment() {
 
 
     }
+
     override fun onDestroy() {
         super.onDestroy()
         lastweekroomViewModel.readlastweekEventViewModel.removeObserver{}
@@ -115,15 +133,18 @@ class UpcomingEvents : Fragment() {
                 } else {
                     Log.d("events", "inside the checkdatabase else part")
                     if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
-                    val events = convertDataType(it)
-                    adapter.refreshData(events)
+                    if(secondcardView.visibility==View.GONE)secondcardView.visibility=View.VISIBLE
+                    if(fourthCardView.visibility==View.GONE)fourthCardView.visibility=View.VISIBLE
+
+                    eventlist = convertDataType(it).toMutableList()
+                    adapter.refreshData(eventlist)
                     refreshLayout.setOnRefreshListener {
                         checkexistingevent(it.toMutableList())
                         refreshLayout.isRefreshing=false
                     }
                     adapter.setOnItemClickListener(object:UpcoEventsAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {
-                            val action=UpcomingEventsDirections.actionUpcomingEventsToUpcomingEventDetails(events[position].url)
+                            val action=UpcomingEventsDirections.actionUpcomingEventsToUpcomingEventDetails(eventlist[position].url)
                             findNavController().navigate(action)
                         }
                     })
@@ -135,11 +156,13 @@ class UpcomingEvents : Fragment() {
             if(it.isNotEmpty()){
                 Log.d("date","fragment created database size ${it.size} ")
                 val result=convertweekevententityToResult(it)
+                if(thirdCardView.visibility==View.GONE)thirdCardView.visibility=View.VISIBLE
+                if(fifthCardView.visibility==View.GONE)fifthCardView.visibility=View.VISIBLE
                 lastweekadapter.refreshData(result)
                 lastweekadapter.setOnItemClickListener(object :UpcoEventsAdapter.onItemClickListener{
                     override fun onItemClick(position: Int) {
-                        val action=UpcomingEventsDirections.actionUpcomingEventsToUpcomingEventDetails(lastweekeventslist[position].url)
-                        findNavController().navigate(action)
+//                        val action=UpcomingEventsDirections.actionUpcomingEventsToUpcomingEventDetails(lastweekeventslist[position].url)
+//                        findNavController().navigate(action)
                     }
                 })
             }
@@ -187,6 +210,8 @@ class UpcomingEvents : Fragment() {
                             if(it.isNotEmpty()){
                                 Log.d("lastweek","database size ${it.size}")
                                 val result=convertweekevententityToResult(it)
+                                if(thirdCardView.visibility==View.GONE)thirdCardView.visibility=View.VISIBLE
+                                if(fifthCardView.visibility==View.GONE)fifthCardView.visibility=View.VISIBLE
                                 lastweekadapter.refreshData(result)
                                 Log.d("lastweek","lastweekeventslist size->${result.size}")
                             }
@@ -196,7 +221,6 @@ class UpcomingEvents : Fragment() {
         }
         Log.d("lastweek","before deleting the database")
         upcomingDatBaseViewModel.deleteAllevent()
-        eventlist.clear()
         checkDatabase()
     }
     fun convertweekevententityToResult(weekEventEntity: List<weekEventEntity>):List<Result>{
@@ -246,13 +270,14 @@ class UpcomingEvents : Fragment() {
 
             job2.join()
             eventlist = upcoEventViewMod.returnlistViewModel()
-            withContext(Dispatchers.Main){
-                adapter.refreshData(eventlist)
-            }
+//            withContext(Dispatchers.Main){
+//                adapter.refreshData(eventlist)
+//            }
         }
 
         delay(5000)
             job.join()
+        Log.d("upcomingevent","before inserttodatabase")
         insertToDatabase()
         withContext(Dispatchers.Main){
             checkDatabase()

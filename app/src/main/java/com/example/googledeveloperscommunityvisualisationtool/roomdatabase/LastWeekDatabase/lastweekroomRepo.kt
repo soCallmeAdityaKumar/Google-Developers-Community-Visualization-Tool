@@ -5,8 +5,8 @@ import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.upcom
 
 class lastweekroomRepo(val dao:lastWeekDao) {
     val readAllEventRepo: LiveData<List<weekEventEntity>> =dao.readlastweekEvent()
-    suspend fun  addEventsRepo(weekEventEntity: weekEventEntity)
+    suspend fun  addEventsRepo(WeekEventEntity: weekEventEntity)
     {
-        dao.addlastweekEvents(weekEventEntity)
+        dao.addlastweekEvents(WeekEventEntity)
     }
 }

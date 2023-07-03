@@ -46,11 +46,17 @@ class Home : Fragment() {
     private lateinit var adapter: GdgChaptersAdapter
     private lateinit var searchView:SearchView
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d("gdgchapter","onAttach() called")
 
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("home","onCreateView() called")
+
 
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         val view = binding.root
@@ -97,8 +103,14 @@ class Home : Fragment() {
         chapterDatabaseViewModel=ViewModelProvider(requireActivity(),ChapViewModelFact(requireContext())).get(ChapterViewModel::class.java)
         Log.d("coroutines", "before checkurldatabase")
 
-        checkurlDatabase()
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("home","onResume() called")
+        checkurlDatabase()
 
     }
 
@@ -177,15 +189,6 @@ class Home : Fragment() {
             getChapterFromDatabase()
 
         }
-
-//        CoroutineScope(Dispatchers.Main).launch {
-//            Log.d("coroutines","job4 is ${job4.isActive}||${job4.isCompleted}||${job4.isCancelled}")
-//            delay(3000)
-//            job4.cancelAndJoin()
-//            Log.d("coroutines","job4 is ${job4.isActive}||${job4.isCompleted}||${job4.isCancelled}")
-//            Log.d("coroutines","calling getChapterFrom Database")
-//            getChapterFromDatabase()
-//        }
 
     }
 

@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,6 +35,8 @@ class UpcomingEventDetails : Fragment() {
     lateinit var gdgName:TextView
     lateinit var dateAndTime:TextView
     lateinit var desc:TextView
+    lateinit var progressBar: ProgressBar
+    lateinit var scrollView:ScrollView
     lateinit var rsvp:TextView
     lateinit var organizerList:List<Organizers>
     lateinit var memberrecyclerView:RecyclerView
@@ -44,6 +48,13 @@ class UpcomingEventDetails : Fragment() {
     ): View? {
         binding= FragmentUpcomingEventDetailsBinding.inflate(layoutInflater,container,false)
         val view=binding.root
+
+        progressBar=binding.progressBar
+        scrollView=binding.scrollview
+
+        progressBar.visibility=View.VISIBLE
+        scrollView.visibility=View.GONE
+
 
         eventTitle=binding.eventsName
         address=binding.address
@@ -99,6 +110,8 @@ class UpcomingEventDetails : Fragment() {
                     rsvp.text=eventData.rsvp
                 }
                 organizerList=eventData.mentors.toList()
+                if(scrollView.visibility==View.GONE)scrollView.visibility=View.VISIBLE
+                if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
                 organizersAdapter.refreshData(organizerList)
             }
 
