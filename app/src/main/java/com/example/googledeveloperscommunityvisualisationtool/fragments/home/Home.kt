@@ -2,6 +2,7 @@ package com.example.googledeveloperscommunityvisualisationtool.fragments.home
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -31,6 +32,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.eazegraph.lib.charts.PieChart
+import org.eazegraph.lib.models.PieModel
 import java.util.Locale
 
 class Home : Fragment() {
@@ -44,7 +47,9 @@ class Home : Fragment() {
     private lateinit var chapUrlroomViewModel: ChapUrlroomViewModel
     private lateinit var chapterDatabaseViewModel:ChapterViewModel
     private lateinit var adapter: GdgChaptersAdapter
+    private lateinit var mostChaptersCountry:MutableMap<String?,Int?>
     private lateinit var searchView:SearchView
+    private lateinit var pieChart: PieChart
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -58,11 +63,14 @@ class Home : Fragment() {
         Log.d("home","onCreateView() called")
 
 
+
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         val view = binding.root
 
 
         progressBar=binding.progressBar
+
+        pieChart=binding.PieChart
 
         newadapterlist = mutableListOf()
         adapter = GdgChaptersAdapter(newadapterlist)
@@ -73,9 +81,7 @@ class Home : Fragment() {
 
         searchView=binding.searchChaptersView
 
-
-
-
+        mostChaptersCountry= mutableMapOf()
 
 
         sharedPref = activity?.getSharedPreferences("didShowPrompt", Context.MODE_PRIVATE)!!
@@ -182,6 +188,8 @@ class Home : Fragment() {
                                     details.about
                                 )
                             )
+
+
                             Log.d("gdgddetails","gdgdetials response added to database")
                         }
                     }
@@ -192,13 +200,41 @@ class Home : Fragment() {
 
     }
 
+    private fun setDataToPie() {
+        var i=0
+        val colorList= listOf<String>("#FFA726","#66BB6A","#EF5350","#29B6F6")
+        Log.d("size",mostChaptersCountry.size.toString())
+        mostChaptersCountry.forEach { (k, v) ->
+            Log.d("mostChaptersCountry","$k->$v")
+        }
+        mostChaptersCountry
+        Log.d("size","after-${mostChaptersCountry.size.toString()}")
+        mostChaptersCountry.forEach { (k, v) ->
+            pieChart.addPieSlice(PieModel(k, v!!.toFloat(),Color.parseColor(colorList[i])))
+            i++
+        }
+    }
+
+    fun <K> increment(map: MutableMap<K, Int?>, key: K) {
+        when (val count = map[key])
+        {
+            null -> map[key] = 1
+            else -> map[key] = count + 1
+        }
+    }
+
     private fun getChapterFromDatabase() {
         CoroutineScope(Dispatchers.Main).launch{
             chapterDatabaseViewModel.readAllChaptersViewModel.observe(requireActivity(),Observer {it->
                 adapterlist=it
                 adapter.refreshData(adapterlist)
+
+
+
                 if (progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
                 newadapterlist=adapterlist.toMutableList()
+                //store or increase count in mostChaptersCountry
+
                 searchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         return false
@@ -223,6 +259,12 @@ class Home : Fragment() {
                     }
                 })
 
+                for (i in 0 until adapterlist.size){
+                    increment(mostChaptersCountry,adapterlist[i].country)
+
+                }
+                mostChaptersCountry.toList().sortedBy { (k,v)->v }.toMap()
+                setDataToPie()
                 adapter.setOnItemClickListener(object :GdgChaptersAdapter.onItemClickListener{
                     override fun onItemClick(position: Int) {
                         val action= HomeDirections.actionHomeToGdgChapterDetails(newadapterlist[position])

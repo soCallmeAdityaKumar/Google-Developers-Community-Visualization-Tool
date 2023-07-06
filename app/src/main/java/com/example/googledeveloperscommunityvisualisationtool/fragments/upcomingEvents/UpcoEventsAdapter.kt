@@ -3,6 +3,7 @@ package com.example.googledeveloperscommunityvisualisationtool.fragments.upcomin
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.Result
 import com.example.googledeveloperscommunityvisualisationtool.databinding.EventsitemlistBinding
@@ -40,6 +41,18 @@ class UpcoEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter
                 binding.eventTitle.text=this.title.toString()
                 binding.GDGname.text=this.chapter.title
                 binding.city.text=this.city.toString()
+                if(this.picture.thumbnail_url!!.isNotEmpty()){
+                    Glide.with(binding.root)
+                        .load(this.picture.thumbnail_url)
+                        .centerCrop()
+                        .into(binding.eventLogo)
+                }else{
+                    Glide.with(binding.root)
+                        .load(R.drawable.gdglogo)
+                        .centerCrop()
+                        .into(binding.eventLogo)
+                }
+
                 var tag=""
                 for (i in 0 until this.tags!!.size){
                     tag += this.tags[i]

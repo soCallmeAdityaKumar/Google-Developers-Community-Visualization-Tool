@@ -1,7 +1,10 @@
 package com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.EventTypeLogo
+import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.Picture
 
 @Entity(tableName = "last_week_event")
 data class weekEventEntity(
@@ -21,6 +24,8 @@ data class weekEventEntity(
     val event_type_title: String,
     @PrimaryKey
     val id: Int,
+    @Embedded
+    val picture: Picture,
     val start_date: String,
     val tags: String,
     val title: String,

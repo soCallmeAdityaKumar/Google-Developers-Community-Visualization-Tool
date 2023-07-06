@@ -1,6 +1,7 @@
 package com.example.googledeveloperscommunityvisualisationtool
 
 import android.content.SharedPreferences
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.GravityCompat
@@ -19,6 +20,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var prefEdit:SharedPreferences.Editor
     private lateinit var navController: NavController
     private lateinit var drawerLayout:DrawerLayout
+    var storedgdgData=0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

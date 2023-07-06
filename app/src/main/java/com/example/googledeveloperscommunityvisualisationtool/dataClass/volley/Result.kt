@@ -8,7 +8,7 @@ data class Result(
 //    val event_type_logo: EventTypeLogo,
       val event_type_title: String,
       val id: Int,
-//    val picture: Picture?,
+    val picture: Picture,
 //    val relative_url: String,
 //    val result_type: String,
       val start_date: String,

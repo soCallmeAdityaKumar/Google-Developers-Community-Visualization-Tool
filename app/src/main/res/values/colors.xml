@@ -10,6 +10,11 @@
     <color name="textColorClick">#000000</color>
     <color name="colorPrimary">#3B79AE</color>
     <color name="textColorPrimary">#F2F2F2</color>
+    <color name="AppbackgroundColor">#FFEBDFD7</color>
 
-
+    //PieChart
+    <color name="R">#FFA726</color>
+    <color name="Python">#66BB6A</color>
+    <color name="CPP">#EF5350</color>
+    <color name="Java">#29B6F6</color>
 </resources>

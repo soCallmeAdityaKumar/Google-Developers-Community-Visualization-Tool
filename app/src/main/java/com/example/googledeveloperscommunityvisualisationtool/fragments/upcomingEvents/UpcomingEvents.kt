@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,10 +46,9 @@ class UpcomingEvents : Fragment() {
     lateinit var lastweekadapter:UpcoEventsAdapter
      var lastweekeventslist= mutableListOf<Result>()
     lateinit var adapter: UpcoEventsAdapter
-    lateinit var secondcardView:CardView
-    lateinit var fourthCardView:CardView
-    lateinit var thirdCardView:CardView
-    lateinit var fifthCardView: CardView
+    lateinit var secondcardViewTextView:TextView
+    lateinit var thirdCardViewTextView: TextView
+    lateinit var upcomingRecyclerView:RecyclerView
     lateinit var progressBar: ProgressBar
     lateinit var refreshLayout: SwipeRefreshLayout
     lateinit var lastweekroomViewModel:lastweekroommodel
@@ -65,16 +66,15 @@ class UpcomingEvents : Fragment() {
         progressBar=binding.progressBar
         progressBar.visibility=View.VISIBLE
 
-        secondcardView=binding.SecondcardView
-        thirdCardView=binding.ThirdcardView
-        fourthCardView=binding.fourthCardView
-        fifthCardView=binding.fifthfCardView
 
-        thirdCardView.visibility=View.GONE
-        fourthCardView.visibility=View.GONE
-        fifthCardView.visibility=View.GONE
+        secondcardViewTextView=binding.secondcardviewTextView
+        thirdCardViewTextView=binding.thirdcardviewTextView
 
+        secondcardViewTextView.visibility=View.GONE
+        thirdCardViewTextView.visibility=View.GONE
 
+        upcomingRecyclerView=binding.recyclerView
+        upcomingRecyclerView.visibility=View.GONE
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         adapter=UpcoEventsAdapter(eventlist)
         binding.recyclerView.adapter = adapter
@@ -86,6 +86,7 @@ class UpcomingEvents : Fragment() {
 
 //        lastweekeventslist= mutableListOf()
         lastweekRecyclerView=binding.lastweekRecyclerview
+        lastweekRecyclerView.visibility=View.GONE
         lastweekRecyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         lastweekadapter=UpcoEventsAdapter(lastweekeventslist)
         lastweekRecyclerView.adapter=lastweekadapter
@@ -133,8 +134,8 @@ class UpcomingEvents : Fragment() {
                 } else {
                     Log.d("events", "inside the checkdatabase else part")
                     if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
-                    if(secondcardView.visibility==View.GONE)secondcardView.visibility=View.VISIBLE
-                    if(fourthCardView.visibility==View.GONE)fourthCardView.visibility=View.VISIBLE
+                    if(secondcardViewTextView.visibility==View.GONE)secondcardViewTextView.visibility=View.VISIBLE
+                    if(upcomingRecyclerView.visibility==View.GONE)upcomingRecyclerView.visibility=View.VISIBLE
 
                     eventlist = convertDataType(it).toMutableList()
                     adapter.refreshData(eventlist)
@@ -156,8 +157,8 @@ class UpcomingEvents : Fragment() {
             if(it.isNotEmpty()){
                 Log.d("date","fragment created database size ${it.size} ")
                 val result=convertweekevententityToResult(it)
-                if(thirdCardView.visibility==View.GONE)thirdCardView.visibility=View.VISIBLE
-                if(fifthCardView.visibility==View.GONE)fifthCardView.visibility=View.VISIBLE
+                if(thirdCardViewTextView.visibility==View.GONE)thirdCardViewTextView.visibility=View.VISIBLE
+                if(lastweekRecyclerView.visibility==View.GONE)lastweekRecyclerView.visibility=View.VISIBLE
                 lastweekadapter.refreshData(result)
                 lastweekadapter.setOnItemClickListener(object :UpcoEventsAdapter.onItemClickListener{
                     override fun onItemClick(position: Int) {
@@ -196,6 +197,7 @@ class UpcomingEvents : Fragment() {
                     events[i].description_short,
                     events[i].event_type_title,
                     events[i].id,
+                    events[i].picture,
                     events[i].start_date,
                     events[i].tags,
                     events[i].title,
@@ -210,8 +212,8 @@ class UpcomingEvents : Fragment() {
                             if(it.isNotEmpty()){
                                 Log.d("lastweek","database size ${it.size}")
                                 val result=convertweekevententityToResult(it)
-                                if(thirdCardView.visibility==View.GONE)thirdCardView.visibility=View.VISIBLE
-                                if(fifthCardView.visibility==View.GONE)fifthCardView.visibility=View.VISIBLE
+                                if(thirdCardViewTextView.visibility==View.GONE)thirdCardViewTextView.visibility=View.VISIBLE
+                                if(lastweekRecyclerView.visibility==View.GONE)lastweekRecyclerView.visibility=View.VISIBLE
                                 lastweekadapter.refreshData(result)
                                 Log.d("lastweek","lastweekeventslist size->${result.size}")
                             }
@@ -239,7 +241,7 @@ class UpcomingEvents : Fragment() {
             result.add(
                 Result(
                     Chapter(weekEventEntity[k].Chapter_location,weekEventEntity[k].city,weekEventEntity[k].Country,weekEventEntity[k].Country_name,weekEventEntity[k].description_short,weekEventEntity[k].id,weekEventEntity[k].Relative_url,weekEventEntity[k].State,weekEventEntity[k].Timezone,weekEventEntity[k].ChapterTitle,weekEventEntity[k].url),
-                    weekEventEntity[k].city,weekEventEntity[k].Description,weekEventEntity[k].event_type_title,weekEventEntity[k].id,weekEventEntity[k].start_date,tags,weekEventEntity[k].title,weekEventEntity[k].url)
+                    weekEventEntity[k].city,weekEventEntity[k].Description,weekEventEntity[k].event_type_title,weekEventEntity[k].id,weekEventEntity[k].picture,weekEventEntity[k].start_date,tags,weekEventEntity[k].title,weekEventEntity[k].url)
             )
         }
         return result.toList()
@@ -307,11 +309,13 @@ class UpcomingEvents : Fragment() {
                 events.chapter.relative_url,
                 events.chapter.state,
                 events.chapter.timezone,
-                events.chapter.title,events.chapter.url,
+                events.chapter.title,
+                events.chapter.url,
                 events.city,
                 events.description_short,
                 events.event_type_title,
                 events.id,
+                events.picture,
                 events.start_date,
                 alltags,
                 events.title,
@@ -356,6 +360,7 @@ class UpcomingEvents : Fragment() {
                     event.description_short,
                     event.event_type_title,
                     event.id,
+                    event.picture,
                     event.start_date,
                     tags,
                     event.title,

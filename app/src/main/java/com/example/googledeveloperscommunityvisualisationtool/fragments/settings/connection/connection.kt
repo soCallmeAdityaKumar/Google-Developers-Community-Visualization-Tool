@@ -4,7 +4,9 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
@@ -47,11 +49,12 @@ class connection : Fragment() {
 
         lgipAddress=binding.IpAddressEditText
         passwordEditText=binding.LgPassword
-        lgnameEditText=binding.IpAddressEditText
+        lgnameEditText=binding.LgNameEditText
         connectButton=binding.ConnectLGButton
         connectingTextView=binding.ConnectingTextView
 
         connectButton.setOnClickListener { connectionTest() }
+
 
 
 
@@ -72,6 +75,7 @@ class connection : Fragment() {
         }
         val dialog = CustomDialogUtility.getDialog(requireActivity(), resources.getString(R.string.connecting))
         dialog.setCanceledOnTouchOutside(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
         changeButtonTextConnecting()
         createLgCommand(hostPort, usernameText, passwordText, dialog)

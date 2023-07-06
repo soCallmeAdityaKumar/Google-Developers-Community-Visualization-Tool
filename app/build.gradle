@@ -103,4 +103,10 @@ dependencies {
     //circular ImageView
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    //Blur View
+//    implementation 'io.alterac.blurkit:blurkit:1.1.0'
+
+    // Chart and graph library
+    implementation 'com.github.blackfizz:eazegraph:1.2.5l@aar'
+    implementation 'com.nineoldandroids:library:2.4.0'
 }

@@ -6,6 +6,8 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.Chapter
+import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.EventTypeLogo
+import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.Picture
 import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.Result
 import org.json.JSONObject
 
@@ -37,7 +39,8 @@ class UpcomEventRepo(val context: Context) {
                  //for chapters
                  val chapterLocation =
                      result.getJSONObject("chapter").getString("chapter_location")
-                 val chapterCity = result.getJSONObject("chapter").getString("city")
+                 val chapterCity =
+                     result.getJSONObject("chapter").getString("city")
                  val chapterCountry =
                      result.getJSONObject("chapter").getString("country")
                  val chapterCountryName =
@@ -88,12 +91,14 @@ class UpcomEventRepo(val context: Context) {
                      tags.add(result.getJSONArray("tags").getString(j))
                  }
                  val url = result.getString("url")
+                 val thumbnail_url=result.getJSONObject("picture").optString("thumbnail_url","")
                  val upcomingevent = Result(
                      chapter,
                      city,
                      description,
                      eventTypeTitle,
                      id,
+                     Picture(thumbnail_url),
                      startData,
                      tags,
                      title,

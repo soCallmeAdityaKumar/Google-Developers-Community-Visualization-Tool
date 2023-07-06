@@ -2,6 +2,8 @@ package com.example.googledeveloperscommunityvisualisationtool.dialog
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -34,18 +36,16 @@ object CustomDialogUtility {
     @JvmStatic
     fun getDialog(fragment: FragmentActivity, message: String?): Dialog {
         val builder = AlertDialog.Builder(fragment)
-        @SuppressLint("InflateParams") val v =
-            fragment.layoutInflater.inflate(R.layout.dialog_fragment, null)
-        v.background.alpha = 220
+        @SuppressLint("InflateParams") val v = fragment.layoutInflater.inflate(R.layout.dialog_fragment, null)
         val ok = v.findViewById<Button>(R.id.ok)
         ok.visibility = View.GONE
         val textMessage = v.findViewById<TextView>(R.id.message)
         textMessage.text = message
-        textMessage.textSize = 23f
         textMessage.gravity = View.TEXT_ALIGNMENT_CENTER
         builder.setView(v)
         val dialog: Dialog = builder.create()
         dialog.setCanceledOnTouchOutside(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         return dialog
     }
 }

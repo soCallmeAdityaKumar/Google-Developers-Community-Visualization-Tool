@@ -1,5 +1,6 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails
 
+import android.app.Activity
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
@@ -7,6 +8,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.CalendarContract.Events
 import android.util.Log
 import android.view.Display.Mode
 import androidx.fragment.app.Fragment
@@ -23,6 +25,7 @@ import androidx.navigation.NavType
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgChapModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgScrapingRespo
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgViewModel
@@ -33,6 +36,7 @@ import com.example.googledeveloperscommunityvisualisationtool.fragments.home.Pas
 import com.example.googledeveloperscommunityvisualisationtool.fragments.home.UpcomingEvents
 import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.connection.LGConnectionTest.testPriorConnection
+import com.example.googledeveloperscommunityvisualisationtool.databinding.ActivityMainBinding
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentGdgChapterDetailsBinding
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
 import com.google.gson.Gson
@@ -93,11 +97,13 @@ class GdgChapterDetails : Fragment() {
          scrollView.visibility=View.GONE
 
 
+
          gdgName=binding.gdgname
          cityName=binding.cityname
          countryName=binding.countryname
          aboutGdg=binding.aboutgdg
          member=binding.memebers
+
 
          organizerRecyclerView=binding.orgainzersrecycler
          upcomingEventsRecycler=binding.upcomingrecyclerview
@@ -172,6 +178,7 @@ class GdgChapterDetails : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         val gdgChapterRepo=GdgScrapingRespo()
         gdgViewModel = ViewModelProvider(this, GdgChapModelFactory(gdgChapterRepo, requireContext())).get(GdgViewModel::class.java)
 
@@ -184,85 +191,131 @@ class GdgChapterDetails : Fragment() {
     }
 
     private suspend fun getDetails() {
+        val store=(activity as MainActivity)
+        val gson = Gson()
+        sharedPref=activity?.getSharedPreferences(args.chapter.gdgName,Context.MODE_PRIVATE)!!
+        editor=sharedPref.edit()
         val job=CoroutineScope(Dispatchers.IO).launch {
             gdgViewModel.getCompleteGDGdetails(args.chapter.url)
-//            sharedPref=activity?.getSharedPreferences(args.chapter.gdgName+"sharedpref",Context.MODE_PRIVATE)!!
-//            editor=sharedPref.edit()
         }
 
-//        if(sharedPref.contains(args.chapter.gdgName+"sharedpref")){
-//            gdgName.text=sharedPref.getString("gdgname",null)
-//            cityName.text=sharedPref.getString("cityname",null)
-//            countryName.text=sharedPref.getString("countryname",null)
-//            aboutGdg.text=sharedPref.getString("aboutgdg",null)
-//            member.text=sharedPref.getString("member",null)
-//            val organizerstring=sharedPref.getString("organzierslist",null)
-//            val organizerstype= TypeToken<ArrayList<Organizers>>() {
-//
-//            }.type
-//            organizerList=Gson().fromJson(organizerstring,organizerstype)
+        if(sharedPref.getString("gdgname",null)==args.chapter.gdgName) {
+            Log.d("storedargs",args.chapter.gdgName)
+            Log.d("stored",sharedPref.getString("gdgname",null).toString())
+            gdgName.text = sharedPref.getString("gdgname", null)
+            cityName.text = sharedPref.getString("cityname", null)
+            countryName.text = sharedPref.getString("countryname", null)
+            aboutGdg.text = sharedPref.getString("aboutgdg", null)
+            member.text = sharedPref.getString("member", null)
+            val orgaizersString= sharedPref.getString("organzierslist",null)
+            val pasteventsString= sharedPref.getString("pasteventslist",null)!!.replace(Regex("&quot;"),"")
+            val upcomingeventsString= sharedPref.getString("upcomingeventlist",null)
 
 
+            val organizerlistType=object :TypeToken<List<Organizers>>() {}.type
+            val eventlistType=object :TypeToken<List<events>>() {}.type
 
-        job.join()
-        withContext(Dispatchers.Main){
-            gdgDetails=gdgViewModel.getdetails()
-            gdgName.text=gdgDetails.gdgName
-            cityName.text=args.chapter.city_name
-            countryName.text=args.chapter.country
-            aboutGdg.text=args.chapter.about
-            member.text=args.chapter.membersNumber
-            organizerList=gdgDetails.orgnaizersList
-            pastEventsList=coneverttoeventsbypast(gdgDetails.pastEventsList)
-            upcomingEventlist=coneverttoeventsbyupcoming(gdgDetails.upcomingEventsList)
+            pastEventsList=gson.fromJson(pasteventsString,eventlistType)
+            upcomingEventlist=gson.fromJson(upcomingeventsString,eventlistType)
 
-//            editor.apply{
-//                putString("gdgname",gdgDetails.gdgName)
-//                putString("cityname",gdgDetails.gdgName)
-//                putString("countryname",gdgDetails.gdgName)
-//                putString("aboutgdg",gdgDetails.gdgName)
-//                putString("member",gdgDetails.gdgName)
-//                val gson=Gson()
-//                val stringorganizer=gson.toJson(organizerList)
-//                val stringpastevent=gson.toJson(pastEventsList)
-//                val stringupcoming=gson.toJson(upcomingEventlist)
-//                putString("organzierslist",stringorganizer)
-//                putString("organzierslist",stringpastevent)
-//                putString("upcomingeventlist",stringupcoming)
-//                apply()
-//            }
+            organizerList=gson.fromJson(orgaizersString,organizerlistType)
 
-            Log.d("upcomingeventinactivechapter",gdgDetails.upcomingEventsList.size.toString())
-            if (upcomingEventlist.size!=0){
-
-                upcoEventsAdapterupcoming.refreshData(upcomingEventlist)
-                upcoEventsAdapterupcoming.setOnItemClickListener(object :UpcoEventsAdapter.onItemClickListener{
-                    override fun onItemClick(position: Int) {
-                        val uri= Uri.parse(upcomingEventlist[position].link)
-                        val intent= Intent(Intent.ACTION_VIEW,uri)
-                        startActivity(intent)
-                    }
-
-                })
-                upcomingEventsRecycler.visibility=View.VISIBLE
-                noUpcomingEventTextView.visibility=View.GONE
-            }
-            else{
-                noUpcomingEventTextView.visibility=View.VISIBLE
-                upcomingEventsRecycler.visibility=View.GONE
-            }
-
-            for(i in upcomingEventlist){
-                Log.d("hello",i.toString())
-            }
-            eventsAdapterpast.refreshData(pastEventsList)
+            Log.d("stored",pastEventsList.size.toString())
+            Log.d("stored",pastEventsList[0].toString())
 
             organizerAdapter.refreshData(organizerList)
-            if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
-            if(scrollView.visibility==View.GONE)scrollView.visibility=View.VISIBLE
+            eventsAdapterpast.refreshData(pastEventsList)
+
+            withContext(Dispatchers.Main){
+                if(upcomingEventlist.size!=0){
+                    upcoEventsAdapterupcoming.refreshData(upcomingEventlist)
+                    upcoEventsAdapterupcoming.setOnItemClickListener(object :
+                        UpcoEventsAdapter.onItemClickListener {
+                        override fun onItemClick(position: Int) {
+                            val uri = Uri.parse(upcomingEventlist[position].link)
+                            val intent = Intent(Intent.ACTION_VIEW, uri)
+                            startActivity(intent)
+                        }
+
+                    })
+                    upcomingEventsRecycler.visibility = View.VISIBLE
+                    noUpcomingEventTextView.visibility = View.GONE
+                }else{
+                    noUpcomingEventTextView.visibility = View.VISIBLE
+                    upcomingEventsRecycler.visibility = View.GONE
+                }
+            if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
+            if (scrollView.visibility == View.GONE) scrollView.visibility = View.VISIBLE
+            }
+        }
+        else {
+            job.join()
+            withContext(Dispatchers.Main) {
+
+                gdgDetails = gdgViewModel.getdetails()
+                gdgName.text = gdgDetails.gdgName
+                cityName.text = args.chapter.city_name
+                countryName.text = args.chapter.country
+                aboutGdg.text = args.chapter.about
+                member.text = args.chapter.membersNumber
+                organizerList = gdgDetails.orgnaizersList
+                pastEventsList = coneverttoeventsbypast(gdgDetails.pastEventsList)
+                upcomingEventlist = coneverttoeventsbyupcoming(gdgDetails.upcomingEventsList)
 
 
+                if (store.storedgdgData<2) {
+                    store.storedgdgData+=1
+                    editor.apply {
+                        putString("gdgname", gdgDetails.gdgName)
+                        putString("cityname", args.chapter.city_name)
+                        putString("countryname", args.chapter.country)
+                        Log.d("store", "stored - ${gdgDetails.gdgName}")
+                        putString("aboutgdg", gdgDetails.about)
+                        putString("member", gdgDetails.membersNumber)
 
+                        val stringorganizer = gson.toJson(organizerList)
+                        val stringpastevent = gson.toJson(pastEventsList)
+                        val stringupcoming = gson.toJson(upcomingEventlist)
+
+
+                        putString("organzierslist", stringorganizer)
+                        putString("pasteventslist", stringpastevent)
+                        putString("upcomingeventlist", stringupcoming)
+                        apply()
+                    }
+                }
+
+                Log.d("upcomingeventinactivechapter", gdgDetails.upcomingEventsList.size.toString())
+                if (upcomingEventlist.size != 0) {
+
+                    upcoEventsAdapterupcoming.refreshData(upcomingEventlist)
+                    upcoEventsAdapterupcoming.setOnItemClickListener(object :
+                        UpcoEventsAdapter.onItemClickListener {
+                        override fun onItemClick(position: Int) {
+                            val uri = Uri.parse(upcomingEventlist[position].link)
+                            val intent = Intent(Intent.ACTION_VIEW, uri)
+                            startActivity(intent)
+                        }
+
+                    })
+                    upcomingEventsRecycler.visibility = View.VISIBLE
+                    noUpcomingEventTextView.visibility = View.GONE
+                } else {
+                    noUpcomingEventTextView.visibility = View.VISIBLE
+                    upcomingEventsRecycler.visibility = View.GONE
+                }
+
+                for (i in upcomingEventlist) {
+                    Log.d("hello", i.toString())
+                }
+                eventsAdapterpast.refreshData(pastEventsList)
+
+                organizerAdapter.refreshData(organizerList)
+                if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
+                if (scrollView.visibility == View.GONE) scrollView.visibility = View.VISIBLE
+
+
+            }
         }
 
 

@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <androidx.cardview.widget.CardView
+<androidx.cardview.widget.CardView
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="450dp"
     android:padding="1dp"
     android:layout_height="450dp"
-    android:backgroundTint="#E8DEF8"
     android:layout_alignParentStart="true"
     android:layout_alignParentTop="true"
     android:layout_marginStart="20dp"
-    android:background="@drawable/oldcardviewitem"
+    android:backgroundTint="#4FFFFFFF"
     android:layout_marginTop="20dp"
     android:layout_marginEnd="20dp"
-    app:cardElevation="5dp"
+    android:background="@drawable/glass_background"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/transparent"
+    app:strokeWidth="1dp"
     android:layout_marginBottom="20dp"
     app:cardCornerRadius="20dp">
 
@@ -30,12 +32,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/gdgImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="11dp"
+            app:layout_constraintBottom_toTopOf="@+id/GdgNameTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/GdgNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginBottom="184dp"
             android:fontFamily="@font/staatlichesregular"
             android:hint="GDG Ahemdabad"
             android:textColor="@color/black"
@@ -44,7 +57,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gdgImage"
             app:layout_constraintVertical_bias="0.535" />
 
         <TextView

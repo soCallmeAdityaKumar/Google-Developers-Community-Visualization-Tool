@@ -1,51 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:id="@+id/pop_up_window_root"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/backgroundDialog"
+    android:layout_width="350dp"
+    android:layout_height="400dp"
+    android:layout_margin="20dp"
+    app:cardCornerRadius="20dp"
+    android:background="@drawable/oldcardviewitem"
+    app:cardElevation="5dp"
     android:padding="8dp">
 
-    <TextView
-        android:id="@+id/message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/textColorClick"
-        android:textSize="20sp"
-        android:layout_gravity="center_horizontal"
-        android:textAlignment="center"
-        android:padding="5dp"/>
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
+        android:background="@drawable/oldcardviewitem"
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/ok"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/textColorPrimary"
-            android:text="OK"
-            android:padding="5dp"
-            android:layout_gravity="center_horizontal"
-            tools:ignore="ButtonStyle" />
-
-        <Button
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
             android:layout_marginStart="20dp"
-            android:textColor="@color/textColorPrimary"
-            android:text="Cancel"
+            android:layout_marginEnd="20dp"
             android:padding="5dp"
+            android:textAlignment="center"
+            android:fontFamily="@font/robotoslabmedium"
+            android:textColor="@color/textColorClick"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.19999999" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ok"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
-            android:visibility="gone"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="OK"
+            app:cornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/message"
             tools:ignore="ButtonStyle" />
 
-    </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp"
+            android:text="Cancel"
+            android:textColor="@color/textColorPrimary"
+            app:cornerRadius="20dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/message" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>

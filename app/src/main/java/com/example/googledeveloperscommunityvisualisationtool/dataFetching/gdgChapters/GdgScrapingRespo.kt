@@ -1,5 +1,6 @@
 package com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters
 
+import android.text.TextUtils.replace
 import android.util.Log
 import com.example.googledeveloperscommunityvisualisationtool.dataClass.gdgGroupClasses.Banner
 import com.example.googledeveloperscommunityvisualisationtool.dataClass.gdgGroupClasses.GdgDataClass
@@ -23,13 +24,13 @@ class GdgScrapingRespo {
             Log.d("home","inside the get chapter repo")
             val doc = Jsoup.connect(baseUrl).url(baseUrl).get()
 //            Log.d("home",doc.body().toString())
-//            Log.d("value",doc.body().getElementsByTag("script")[1].toString())
+            Log.d("value",doc.body().getElementsByTag("script")[1].toString())
             var html=doc.body().getElementsByTag("script")[1].html().replace("var localChapters = ","")
             html="$html"
             val obj= JSONArray(html)
             for(i in 0 until obj.length()){
                 val avatar=obj.getJSONObject(i).getString("avatar")
-                val banner= Banner(obj.getJSONObject(i).getString("banner"))
+                var thumbnailUrl= obj.getJSONObject(i).getString("banner").drop(10).dropLast(2).replace(Regex("</.*:?\n<p></p>>"), "").replace(Regex("\\\\"),"")
                 val city=obj.getJSONObject(i).getString("city")
                 val cityName=obj.getJSONObject(i).getString("city_name")
                 val country=obj.getJSONObject(i).getString("country")
@@ -38,9 +39,14 @@ class GdgScrapingRespo {
                 val url=obj.getJSONObject(i).getString("url")
 //            Log.d("latitude",longitude.toString())
 //            Log.d("longitude",latitude.toString())
+                if(thumbnailUrl.isNotEmpty()){
+                    thumbnailUrl
+                    thumbnailUrl="https://res.cloudinary.com/startup-grind/image/upload/c_fit,dpr_2,f_auto,g_center,h_400,q_auto:good,w_400/v1/gcs"+thumbnailUrl
+                }
 
                 val gdgDataClass=
-                    GdgDataClass(avatar,banner,city,cityName,country, latitude,longitude,url)
+                    GdgDataClass(avatar,
+                        Banner(thumbnailUrl),city,cityName,country, latitude,longitude,url)
 //            Log.d("home",gdgGroupDataClassItem.toString())
                 gdgChapters.add(gdgDataClass)
             }

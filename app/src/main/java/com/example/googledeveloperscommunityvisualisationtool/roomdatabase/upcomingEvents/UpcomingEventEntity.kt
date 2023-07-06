@@ -1,7 +1,10 @@
 package com.example.googledeveloperscommunityvisualisationtool.roomdatabase.upcomingEvents
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.EventTypeLogo
+import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.Picture
 
 @Entity(tableName = "upcoming_event_entity")
 data class UpcomingEventEntity
@@ -22,6 +25,8 @@ data class UpcomingEventEntity
     val event_type_title: String,
     @PrimaryKey
     val id: Int,
+    @Embedded
+    val picture: Picture,
     val start_date: String,
     val tags: String,
     val title: String,

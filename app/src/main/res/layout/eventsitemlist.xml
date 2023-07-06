@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
- <androidx.cardview.widget.CardView
+ <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="450dp"
-    android:layout_margin="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginStart="10dp"
     android:layout_height="400dp"
-    app:cardElevation="5dp"
-    android:backgroundTint="#E8DEF8"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    android:elevation="200dp"
+    android:backgroundTint="#4FFFFFFF"
     app:cardCornerRadius="20dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
@@ -28,73 +31,72 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/eventLogo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_margin="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.84000003" />
+
         <TextView
             android:id="@+id/eventTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:textColor="@color/black"
             android:fontFamily="@font/montserratmedium"
             android:hint="EventTitle"
+            android:textAlignment="center"
+            android:textColor="@color/black"
             android:textSize="30dp"
             android:textStyle="bold"
-            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.25" />
+            app:layout_constraintVertical_bias="0.083" />
 
         <TextView
             android:id="@+id/GDGname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
             android:fontFamily="@font/montserratmedium"
             android:hint="GDG Name"
-            android:textStyle="bold"
-            android:textColor="@color/black"
             android:textAlignment="viewEnd"
+            android:textColor="@color/black"
             android:textSize="20dp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/eventTitle"
-            app:layout_constraintVertical_bias="0.289" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.65999997" />
 
         <TextView
             android:id="@+id/city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
+            android:layout_margin="20dp"
             android:fontFamily="@font/montserratmedium"
             android:hint="City"
-            android:textStyle="bold"
-            android:textColor="@color/black"
             android:textAlignment="viewEnd"
+            android:textColor="@color/black"
             android:textSize="20dp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/GDGname"
-            app:layout_constraintVertical_bias="0.09" />
-
-        <!--            <TextView-->
-        <!--                android:id="@+id/tags"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_below="@+id/eventTitle"-->
-        <!--                android:layout_alignParentStart="true"-->
-        <!--                android:layout_marginTop="20dp"-->
-        <!--                android:hint="Tags"-->
-        <!--                android:textAlignment="viewStart"-->
-        <!--                android:textSize="20dp" />-->
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 

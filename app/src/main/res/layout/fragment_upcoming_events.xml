@@ -34,9 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraintLayout3"
@@ -45,153 +43,61 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/constraintLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/SecondcardView"
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/secondcardviewTextView"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="20dp"
-                                app:cardCornerRadius="20dp"
-                                app:cardElevation="5dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
-
-                                <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="@drawable/cardview">
-
-                                    <TextView
-                                        android:id="@+id/secondcardviewTextView"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_margin="10dp"
-                                        android:fontFamily="@font/montserratmedium"
-                                        android:textAlignment="viewStart"
-                                        android:textSize="32dp"
-                                        android:textStyle="bold"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent" />
-
-                                    <ImageView
-                                        android:id="@+id/SecondCardImageView"
-                                        android:layout_width="40dp"
-                                        android:layout_height="40dp"
-                                        android:layout_marginEnd="20dp"
-                                        android:src="@drawable/forwardarrow"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent" />
-                                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                            </androidx.cardview.widget.CardView>
-
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/fourthCardView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="20dp"
-                                app:cardCornerRadius="20dp"
-                                app:cardElevation="5dp"
+                                android:layout_marginStart="40dp"
+                                android:layout_marginTop="20dp"
+                                android:fontFamily="@font/montserratmedium"
+                                android:text="Upcoming Events"
+                                android:textAlignment="viewStart"
+                                android:textColor="@color/black"
+                                android:textSize="32dp"
+                                android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/SecondcardView"
-                                app:layout_constraintVertical_bias="1.0">
-
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/recyclerView"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_margin="20dp" />
-                            </androidx.cardview.widget.CardView>
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.0" />
 
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="20dp"
+                                app:layout_constraintTop_toBottomOf="@+id/secondcardviewTextView" />
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/constraintLayout2"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/thirdcardviewTextView"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="40dp"
+                            android:layout_marginTop="20dp"
+                            android:fontFamily="@font/montserratmedium"
+                            android:text="Last Week Events"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/black"
+                            android:textSize="32dp"
+                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+                            app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+                            app:layout_constraintVertical_bias="0.0" />
 
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/ThirdcardView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="20dp"
-                                app:cardCornerRadius="20dp"
-                                app:cardElevation="5dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
 
-                                <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="@drawable/cardview">
-
-                                    <TextView
-                                        android:id="@+id/thirdcardviewTextView"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_margin="10dp"
-                                        android:fontFamily="@font/montserratmedium"
-                                        android:textAlignment="viewStart"
-                                        android:textSize="32dp"
-                                        android:textStyle="bold"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent" />
-
-                                    <ImageView
-                                        android:id="@+id/ThirdCardImageView"
-                                        android:layout_width="40dp"
-                                        android:layout_height="40dp"
-                                        android:layout_marginEnd="20dp"
-                                        android:src="@drawable/forwardarrow"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent" />
-                                </androidx.constraintlayout.widget.ConstraintLayout>
-                            </androidx.cardview.widget.CardView>
-
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/fifthfCardView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="20dp"
-                                app:cardCornerRadius="20dp"
-                                app:cardElevation="5dp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/ThirdcardView">
-
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/lastweekRecyclerview"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="20dp" />
-                            </androidx.cardview.widget.CardView>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/lastweekRecyclerview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="20dp"
+                            app:layout_constraintTop_toBottomOf="@+id/thirdcardviewTextView"
+                            tools:layout_editor_absoluteX="20dp" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
             </FrameLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
