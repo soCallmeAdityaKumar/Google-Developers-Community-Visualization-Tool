@@ -35,7 +35,7 @@ class GdgScrapingRespo {
                 val cityName=obj.getJSONObject(i).getString("city_name")
                 val country=obj.getJSONObject(i).getString("country")
                 val longitude:Double=  obj.getJSONObject(i).optDouble("latitude",0.0)
-                val latitude =  obj.getJSONObject(i).optDouble("latitude",0.0)
+                val latitude =  obj.getJSONObject(i).optDouble("longitude",0.0)
                 val url=obj.getJSONObject(i).getString("url")
 //            Log.d("latitude",longitude.toString())
 //            Log.d("longitude",latitude.toString())

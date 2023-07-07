@@ -39,9 +39,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:textColor="@color/black"
         android:textSize="62dp"
-            android:fontFamily="@font/chivomonomedium"
+        android:textStyle="bold"
+        android:fontFamily="@font/montserratmedium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
@@ -52,7 +55,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
-        android:textSize="20dp"
+        android:textSize="26dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         android:fontFamily="@font/montserratmedium"
         android:textAlignment="viewEnd"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,7 +71,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:fontFamily="@font/montserratmedium"
-        android:textSize="20dp"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gdgname" />
 
@@ -75,28 +82,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:textSize="20dp"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         android:fontFamily="@font/montserratmedium"
         app:layout_constraintStart_toEndOf="@+id/cityname"
         app:layout_constraintTop_toBottomOf="@+id/gdgname" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/StarttourGdgButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
+            android:elevation="20dp"
             android:text="Start Tour GDG"
+            android:fontFamily="@font/montserratmedium"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:strokeWidth="1dp"
+            android:backgroundTint="@color/white"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/countryname"
             app:layout_constraintTop_toBottomOf="@+id/memebers" />
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/StoptourGdgButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:text="Stop Tour GDG"
+            app:strokeWidth="1dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/montserratmedium"
+            android:textColor="@color/black"
+            android:background="@color/white"
             android:layout_marginEnd="20dp"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -106,13 +126,17 @@
 
 
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/aboutgdgcardview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="20dp"
             android:layout_margin="20dp"
-            android:backgroundTint="#F7F2FA"
+            android:backgroundTint="#4FFFFFFF"
+            android:background="@drawable/glass_background"
+            app:strokeWidth="1dp"
+            app:cardElevation="0dp"
+            android:elevation="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cityname">
@@ -147,18 +171,21 @@
                     app:layout_constraintTop_toBottomOf="@+id/aboutgdgtextview" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
 
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/organizercardview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             app:cardCornerRadius="20dp"
-            app:cardElevation="5dp"
-            android:backgroundTint="#F7F2FA"
+            android:backgroundTint="#4FFFFFFF"
+            android:background="@drawable/glass_background"
+            app:strokeWidth="1dp"
+            app:cardElevation="0dp"
+            android:elevation="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/aboutgdgcardview">
@@ -191,15 +218,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/organizerslisttextview" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/upcomingcardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="5dp"
             app:cardCornerRadius="20dp"
             android:layout_margin="20dp"
-            android:backgroundTint="#F7F2FA"
+            android:backgroundTint="#4FFFFFFF"
+            android:background="@drawable/glass_background"
+            app:strokeWidth="1dp"
+            app:cardElevation="0dp"
+            android:elevation="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintTop_toBottomOf="@+id/organizercardview"
@@ -248,13 +278,17 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             app:cardCornerRadius="20dp"
-            android:backgroundTint="#F7F2FA"
+            android:backgroundTint="#4FFFFFFF"
+            android:background="@drawable/glass_background"
+            app:strokeWidth="1dp"
+            app:cardElevation="0dp"
+            android:elevation="200dp"
             app:layout_constraintTop_toBottomOf="@id/upcomingcardView"
             app:layout_constraintStart_toStartOf="parent">
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -283,7 +317,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/pasteventstextview" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
 
 

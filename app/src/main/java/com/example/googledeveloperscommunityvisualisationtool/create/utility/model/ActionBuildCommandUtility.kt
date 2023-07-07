@@ -61,27 +61,30 @@ object ActionBuildCommandUtility {
      */
     @JvmStatic
     fun buildCommandBalloonWithLogos(): String {
-        val startCommand = """echo '<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2"
-xmlns:atom="http://www.w3.org/2005/Atom" 
- xmlns:gx="http://www.google.com/kml/ext/2.2"> 
-<Document id="slave_3">
- <Folder> 
- <name>Logos</name> 
-  <ScreenOverlay>
-  <name>Logo</name> 
-  <Icon> 
-   <href>http://lg1:81/resources/logos.png</href> 
-  </Icon> 
-  <overlayXY x="0" y="1" xunits="fraction" yunits="fraction"/> 
-  <screenXY x="0.02" y="0.95" xunits="fraction" yunits="fraction"/> 
-  <rotationXY x="0" y="0" xunits="fraction" yunits="fraction"/> 
-  <size x="0.4" y="0.2" xunits="fraction" yunits="fraction"/> 
-  </ScreenOverlay> 
- </Folder> 
-</Document> 
-</kml>
-' > ${BASE_PATH}kml/slave_4.kml"""
+        val startCommand = "echo '"+
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<kml xmlns=\"http://www.opengis.net/kml/2.2\"\n" +
+                "xmlns:atom=\"http://www.w3.org/2005/Atom\" \n" +
+                " xmlns:gx=\"http://www.google.com/kml/ext/2.2\"> \n" +
+                "<Document id=\"slave_3\">\n" +
+                " <Folder> \n" +
+                " <name>Logos</name> \n" +
+                "  <ScreenOverlay>\n" +
+                "  <name>Logo</name> \n" +
+                "  <Icon> \n" +
+                "   <href>http://lg1:81/resources/logos.png</href> \n" +
+                "  </Icon> \n" +
+                "  <overlayXY x=\"0\" y=\"1\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
+                "  <screenXY x=\"0.02\" y=\"0.95\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
+                "  <rotationXY x=\"0\" y=\"0\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
+                "  <size x=\"0.4\" y=\"0.2\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
+                "  </ScreenOverlay> \n" +
+                " </Folder> \n" +
+                "</Document> \n" +
+                "</kml>\n" +
+                "' > " +
+                BASE_PATH +
+                "kml/slave_4.kml"
         Log.w(TAG_DEBUG, "Command: $startCommand")
         return startCommand
     }
@@ -95,57 +98,61 @@ xmlns:atom="http://www.w3.org/2005/Atom"
     fun buildCommandBalloonTest(balloon: Balloon): String {
         val poi = balloon.poi
         val TEST_PLACE_MARK_ID = "testPlaceMark12345"
-        val startCommand = """echo '<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2"
- xmlns:gx="http://www.google.com/kml/ext/2.2">
-
- <Document>
- <Placemark id="$TEST_PLACE_MARK_ID">
-    <name>${balloon.poi!!.poiLocation!!.name}</name>
-    <description>
-<![CDATA[
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-  </head>
-  <body>
-    <div class="p-lg-5" align="center">
-
-"""
+        val startCommand = "echo'"+
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<kml xmlns=\"http://www.opengis.net/kml/2.2\"\n" +
+                " xmlns:gx=\"http://www.google.com/kml/ext/2.2\">\n" +
+                "\n" +
+                " <Document>\n" +
+                " <Placemark id=\"" + TEST_PLACE_MARK_ID + "\">\n" +
+                "    <name>" + balloon.poi?.poiLocation?.name + "</name>\n" +
+                "    <description>\n" +
+                "<![CDATA[\n" +
+                "  <head>\n" +
+                "    <!-- Required meta tags -->\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
+                "\n" +
+                "    <!-- Bootstrap CSS -->\n" +
+                "    <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\" integrity=\"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm\" crossorigin=\"anonymous\">\n" +
+                "\n" +
+                "  </head>\n" +
+                "  <body>\n" +
+                "    <div class=\"p-lg-5\" align=\"center\">\n" +
+                "\n"
         var description = ""
         if (balloon.description != "") {
-            description = """        <h5>${balloon.description}</h5>
-""" + "        <br>\n"
+            description =  "        <h5>" + balloon.description + "</h5>\n" +
+                    "        <br>\n"
         }
         var imageCommand = ""
         if (balloon.imagePath != null && balloon.imagePath != "") {
-            imageCommand = """        <img src="./resources/${getFileName(balloon.imagePath)}"> 
-""" + "        <br>\n"
+            imageCommand =  "        <img src=\"./resources/" + getFileName(balloon.imagePath) + "\"> \n" +
+                    "        <br>\n"
         }
         var videoCommand = ""
         if (balloon.videoPath != null && balloon.videoPath != "") {
             videoCommand = "<iframe" +
-                    " src=\"" + balloon.videoPath + "\" frameborder=\"0\"" +
-                    " allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen>" + "</iframe>"
+                    " src=\""+ balloon.videoPath + "\" frameborder=\"0\"" +
+                    " allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen>" +
+                    "</iframe>"
         }
-        val endCommand = """    </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  </body>
-]]>    </description>
-    <gx:balloonVisibility>1</gx:balloonVisibility>
-    <Point>
-      <coordinates>${poi!!.poiLocation!!.longitude},${poi.poiLocation!!.latitude}</coordinates>
-    </Point>
-  </Placemark>
-</Document>
-</kml>' > ${BASE_PATH}balloon.kml"""
+        val endCommand = "    </div>\n    <script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>\n" +
+                "    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\" integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\" crossorigin=\"anonymous\"></script>\n" +
+                "    <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\" crossorigin=\"anonymous\"></script>\n" +
+                "  </body>\n" +
+                "]]>" +
+                "    </description>\n" +
+                "    <gx:balloonVisibility>1</gx:balloonVisibility>\n" +
+                "    <Point>\n" +
+                "      <coordinates>" + poi?.poiLocation?.longitude + "," + poi?.poiLocation?.latitude + "</coordinates>\n" +
+                "    </Point>\n" +
+                "  </Placemark>\n" +
+                "</Document>\n" +
+                "</kml>" +
+                "' > " +
+                BASE_PATH +
+                "balloon.kml"
         Log.w(TAG_DEBUG, startCommand + description + imageCommand + videoCommand + endCommand)
         return startCommand + description + imageCommand + videoCommand + endCommand
     }
@@ -183,21 +190,17 @@ xmlns:atom="http://www.w3.org/2005/Atom"
         command.append("echo '").append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
             .append("<kml xmlns=\"http://www.opengis.net/kml/2.2\"> \n")
             .append(
-                """<Document>
-  <name>shape.kml</name>
-  <open>1</open>
-"""
-            )
+                "<Document>\n" +
+                        "  <name>shape.kml</name>\n" +
+                        "  <open>1</open>\n")
             .append(
-                """  <Style id="linestyleExample">
-    <LineStyle>
-      <color>501400FF</color>
-      <width>100</width>
-      <gx:labelVisibility>1</gx:labelVisibility>
-    </LineStyle>
- </Style>
-"""
-            )
+                        "  <Style id=\"linestyleExample\">\n" +
+                        "    <LineStyle>\n" +
+                        "      <color>501400FF</color>\n" +
+                        "      <width>100</width>\n" +
+                        "      <gx:labelVisibility>1</gx:labelVisibility>\n" +
+                        "    </LineStyle>\n" +
+                        " </Style>\n")
             .append("<Placemark>\n").append("<styleUrl>#linestyleExample</styleUrl>\n")
             .append("<name>").append(shape.poi!!.poiLocation!!.name).append("</name>\n")
             .append("<LineString>\n")
@@ -275,46 +278,32 @@ xmlns:atom="http://www.w3.org/2005/Atom"
 
     @JvmStatic
     fun buildCommandTour(actions: List<Action>): String {
-        val startCommand = """echo '<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2"
- xmlns:gx="http://www.google.com/kml/ext/2.2">
-<Document>
-  <name>Tour</name>
-  <open>1</open>
-
-  <gx:Tour>
-    <name>TestTour</name>
-    <gx:Playlist>
-
-"""
+        val startCommand = "echo '" +
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<kml xmlns=\"http://www.opengis.net/kml/2.2\"\n" +
+                " xmlns:gx=\"http://www.google.com/kml/ext/2.2\">\n" +
+                "<Document>\n" +
+                "  <name>Tour</name>\n" +
+                "  <open>1</open>\n\n" +
+                "  <gx:Tour>\n" +
+                "    <name>TestTour</name>\n" +
+                "    <gx:Playlist>\n\n"
 
         //Build the tour
         val folderBalloonShapes = StringBuilder()
-        folderBalloonShapes.append(
-            """  <Folder>
-   <name>Points and Shapes</name>
-
-"""
-        )
-            .append(
-                """   <Style id="linestyleExample">
-    <LineStyle>
-    <color>501400FF</color>
-    <width>100</width>
-    <gx:labelVisibility>1</gx:labelVisibility>
-    </LineStyle>
-   </Style>
-
-"""
-            )
+        folderBalloonShapes.append("  <Folder>\n" +
+                "   <name>Points and Shapes</name>\n\n").append(
+                    "   <Style id=\"linestyleExample\">\n" +
+                    "    <LineStyle>\n" +
+                    "    <color>501400FF</color>\n" +
+                    "    <width>100</width>\n" +
+                    "    <gx:labelVisibility>1</gx:labelVisibility>\n" +
+                    "    </LineStyle>\n" +
+                    "   </Style>\n\n")
         val middleCommand = buildTour(actions, folderBalloonShapes)
-        folderBalloonShapes.append("  </Folder>\n")
+        folderBalloonShapes.append(" </Folder>\n")
         folderBalloonShapes.append(
-            """
-    </Document>
-    </kml> ' > 
-    """.trimIndent()
-        ).append(BASE_PATH).append("Tour.kml")
+            "</Document>\n" + "</kml> ' > ").append(BASE_PATH).append("Tour.kml")
         Log.w(TAG_DEBUG, "FOLDER COMMAND: $folderBalloonShapes")
         val endCommand = """    </gx:Playlist>
   </gx:Tour>
@@ -348,21 +337,19 @@ xmlns:atom="http://www.w3.org/2005/Atom"
     private fun POICommand(poi: POI): String {
         val poiLocation = poi.poiLocation
         val poiCamera = poi.poiCamera
-        val command = """     <gx:FlyTo>
-      <gx:duration>${poiCamera!!.duration}</gx:duration>
-      <gx:flyToMode>bounce</gx:flyToMode>
-      <LookAt>
-       <longitude>${poiLocation!!.longitude}</longitude>
-       <latitude>${poiLocation.latitude}</latitude>
-       <altitude>${poiLocation.altitude}</altitude>
-       <heading>${poiCamera.heading}</heading>
-       <tilt>${poiCamera.tilt}</tilt>
-       <range>${poiCamera.range}</range>
-       <gx:altitudeMode>${poiCamera.altitudeMode}</gx:altitudeMode>
-     </LookAt>
-    </gx:FlyTo>
-
-"""
+        val command =  "     <gx:FlyTo>\n" +
+                "      <gx:duration>" + poiCamera?.duration + "</gx:duration>\n" +
+                "      <gx:flyToMode>bounce</gx:flyToMode>\n" +
+                "      <LookAt>\n" +
+                "       <longitude>" + poiLocation?.longitude + "</longitude>\n" +
+                "       <latitude>" + poiLocation?.latitude + "</latitude>\n" +
+                "       <altitude>" + poiLocation?.altitude + "</altitude>\n" +
+                "       <heading>" + poiCamera?.heading + "</heading>\n" +
+                "       <tilt>" + poiCamera?.tilt + "</tilt>\n" +
+                "       <range>" + poiCamera?.range + "</range>\n" +
+                "       <gx:altitudeMode>" + poiCamera?.altitudeMode + "</gx:altitudeMode>\n" +
+                "     </LookAt>\n" +
+                "    </gx:FlyTo>\n\n"
         Log.w(TAG_DEBUG, "POI COMMAND: $command")
         return command
     }
@@ -443,81 +430,74 @@ xmlns:atom="http://www.w3.org/2005/Atom"
     ): String {
         val poi = balloon.poi
         val TEST_PLACE_MARK_ID = "balloon$position"
-        val animate = """    <gx:AnimatedUpdate>
-    <gx:duration>0</gx:duration>
-     <Update>
-      <targetHref/>
-      <Change>
-       <Placemark targetId="$TEST_PLACE_MARK_ID">
-        <gx:balloonVisibility>1</gx:balloonVisibility>
-       </Placemark>
-      </Change>
-     </Update>
-    </gx:AnimatedUpdate>
-
-"""
-        val startCommand = """    <Placemark id="$TEST_PLACE_MARK_ID">
-     <name>${balloon.poi!!.poiLocation!!.name}</name>
-     <description>
-      <![CDATA[
-      <head>
-      <!-- Required meta tags -->
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-      </head>
-      <body>
-       <div class="p-lg-5" align="center">
-
-"""
+        val animate = "    <gx:AnimatedUpdate>\n" +
+                "    <gx:duration>0</gx:duration>\n" +
+                "     <Update>\n" +
+                "      <targetHref/>\n" +
+                "      <Change>\n" +
+                "       <Placemark targetId=\"" +  TEST_PLACE_MARK_ID  + "\">\n" +
+                "        <gx:balloonVisibility>1</gx:balloonVisibility>\n" +
+                "       </Placemark>\n" +
+                "      </Change>\n" +
+                "     </Update>\n" +
+                "    </gx:AnimatedUpdate>\n\n"
+        val startCommand = "    <Placemark id=\"" + TEST_PLACE_MARK_ID + "\">\n" +
+                "     <name>" + balloon.poi?.poiLocation?.name + "</name>\n" +
+                "     <description>\n" +
+                "      <![CDATA[\n" +
+                "      <head>\n" +
+                "      <!-- Required meta tags -->\n" +
+                "      <meta charset=\"UTF-8\">\n" +
+                "      <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
+                "\n" +
+                "      <!-- Bootstrap CSS -->\n" +
+                "      <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\" integrity=\"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm\" crossorigin=\"anonymous\">\n" +
+                "\n" +
+                "      </head>\n" +
+                "      <body>\n" +
+                "       <div class=\"p-lg-5\" align=\"center\">\n" +
+                "\n"
         var description = ""
         if (balloon.description != "") {
-            description = """       <h5>${balloon.description}</h5>
-""" + "       <br>\n"
+            description = "       <h5>" + balloon.description + "</h5>\n" +
+                    "       <br>\n"
         }
         var imageCommand = ""
         if (balloon.imagePath != null && balloon.imagePath != "") {
-            imageCommand = """       <img src="./resources/${getFileName(balloon.imagePath)}"> 
-""" + "       <br>\n"
+            imageCommand = "       <img src=\"./resources/" + getFileName(balloon.imagePath) + "\"> \n" +
+                    "       <br>\n"
         }
         var videoCommand = ""
         if (balloon.videoPath != null && balloon.videoPath != "") {
             videoCommand = "       <iframe" +
-                    " src=\"" + balloon.videoPath + "\" frameborder=\"0\"" +
-                    " allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen>" + "</iframe>"
+                    " src=\""+ balloon.videoPath + "\" frameborder=\"0\"" +
+                    " allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen>" +
+                    "</iframe>"
         }
-        val endCommand = """       </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-       </body>
-       ]]>
-      </description>
-      <Point>
-       <coordinates>${poi!!.poiLocation!!.longitude},${poi.poiLocation!!.latitude}</coordinates>
-      </Point>
-    </Placemark>
-
-"""
+        val endCommand = "       </div>\n    <script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>\n" +
+                "       <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\" integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\" crossorigin=\"anonymous\"></script>\n" +
+                "       <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\" crossorigin=\"anonymous\"></script>\n" +
+                "       </body>\n" +
+                "       ]]>\n" +
+                "      </description>\n" +
+                "      <Point>\n" +
+                "       <coordinates>" + poi?.poiLocation?.longitude + "," + poi?.poiLocation?.latitude + "</coordinates>\n" +
+                "      </Point>\n" +
+                "    </Placemark>\n\n"
         val wait = commandWait(balloon.duration)
         folderBalloonShapes.append(startCommand + description + imageCommand + videoCommand + endCommand)
         Log.w(TAG_DEBUG, "BALLOON: $folderBalloonShapes")
-        val animateClose = """    <gx:AnimatedUpdate>
-    <gx:duration>0</gx:duration>
-     <Update>
-      <targetHref/>
-      <Change>
-       <Placemark targetId="$TEST_PLACE_MARK_ID">
-        <gx:balloonVisibility>0</gx:balloonVisibility>
-       </Placemark>
-      </Change>
-     </Update>
-    </gx:AnimatedUpdate>
-
-"""
+        val animateClose =  "    <gx:AnimatedUpdate>\n" +
+                "    <gx:duration>0</gx:duration>\n" +
+                "     <Update>\n" +
+                "      <targetHref/>\n" +
+                "      <Change>\n" +
+                "       <Placemark targetId=\"" +  TEST_PLACE_MARK_ID  + "\">\n" +
+                "        <gx:balloonVisibility>0</gx:balloonVisibility>\n" +
+                "       </Placemark>\n" +
+                "      </Change>\n" +
+                "     </Update>\n" +
+                "    </gx:AnimatedUpdate>\n\n"
         return animate + wait + animateClose
     }
 
@@ -527,18 +507,16 @@ xmlns:atom="http://www.w3.org/2005/Atom"
         folderBalloonShapes: StringBuilder
     ): String {
         val TEST_PLACE_MARK_ID = "shape$position"
-        val animate = """    <gx:AnimatedUpdate>
-    <gx:duration>0</gx:duration>
-     <Update>
-      <targetHref/>
-       <Change>
-       <Placemark targetId="$TEST_PLACE_MARK_ID">
-        </Placemark>
-       </Change>
-      </Update>
-    </gx:AnimatedUpdate>
-
-"""
+        val animate = "    <gx:AnimatedUpdate>\n" +
+                "    <gx:duration>0</gx:duration>\n" +
+                "     <Update>\n" +
+                "      <targetHref/>\n" +
+                "       <Change>\n" +
+                "       <Placemark targetId=\"" +  TEST_PLACE_MARK_ID  + "\">\n" +
+                "        </Placemark>\n" +
+                "       </Change>\n" +
+                "      </Update>\n" +
+                "    </gx:AnimatedUpdate>\n\n"
         val command = StringBuilder()
         command.append("     <Placemark id=\"").append(TEST_PLACE_MARK_ID).append("\">\n")
             .append("      <styleUrl>#linestyleExample</styleUrl>\n")

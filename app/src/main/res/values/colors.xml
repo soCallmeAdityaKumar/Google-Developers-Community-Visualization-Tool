@@ -10,7 +10,7 @@
     <color name="textColorClick">#000000</color>
     <color name="colorPrimary">#3B79AE</color>
     <color name="textColorPrimary">#F2F2F2</color>
-    <color name="AppbackgroundColor">#FFEBDFD7</color>
+    <color name="AppbackgroundColor">#B3EBDFD7</color>
 
     //PieChart
     <color name="R">#FFA726</color>

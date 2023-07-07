@@ -20,12 +20,14 @@ import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavType
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.googledeveloperscommunityvisualisationtool.MainActivity
+import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgChapModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgScrapingRespo
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgViewModel
@@ -161,19 +163,18 @@ class GdgChapterDetails : Fragment() {
                 starttourGdgButton!!.visibility = View.INVISIBLE
                 stoptourGgdButton!!.visibility = View.VISIBLE
             }
-//            loadConnectionStatus(sharedPreferences)
+            loadConnectionStatus(sharedPreferences!!)
         }, 1200)
     }
-//    private fun loadConnectionStatus(sharedPreferences: SharedPreferences) {
-//        val isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
-//        if (isConnected) {
-//            connectionStatus!!.background =
-//                ContextCompat.getDrawable(applicationContext, R.drawable.ic_status_connection_green)
-//        } else {
-//            connectionStatus!!.background =
-//                ContextCompat.getDrawable(applicationContext, R.drawable.ic_status_connection_red)
-//        }
-//    }
+    private fun loadConnectionStatus(sharedPreferences: SharedPreferences) {
+        val isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+        val act=activity as MainActivity
+        if (isConnected) {
+            act.binding.appBarMain.connectionStatus.text="Connected"
+        } else {
+            act.binding.appBarMain.connectionStatus.text="Not Connected"
+        }
+    }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

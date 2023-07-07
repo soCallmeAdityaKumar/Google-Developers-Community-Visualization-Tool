@@ -67,14 +67,17 @@
                 app:layout_constraintTop_toBottomOf="@id/gdgName" />
 
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/pasteventscardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:backgroundTint="#F7F2FA"
+                android:backgroundTint="#4FFFFFFF"
+                android:background="@drawable/glass_background"
+                app:strokeWidth="1dp"
+                app:cardElevation="0dp"
+                android:elevation="200dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -108,16 +111,19 @@
                         app:layout_constraintTop_toBottomOf="@+id/eventTextView" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:backgroundTint="#F7F2FA"
+                android:backgroundTint="#4FFFFFFF"
+                android:background="@drawable/glass_background"
+                app:strokeWidth="1dp"
+                app:cardElevation="0dp"
+                android:elevation="200dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -154,7 +160,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/OrganizerTextView" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

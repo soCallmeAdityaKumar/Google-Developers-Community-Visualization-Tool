@@ -42,12 +42,11 @@ class OldGdgList : Fragment() {
         val view=binding.root
 
         progressBar=binding.progressBar
-        recyclerViewcardView=binding.recyclerViewCardView
+        recyclerView=binding.recyclerView2
 
         progressBar.visibility=View.VISIBLE
-        recyclerViewcardView.visibility=View.GONE
+        recyclerView.visibility=View.GONE
 
-        recyclerView=binding.recyclerView2
         oldgdgAdapter= oldgdgAdapter(listOf())
         recyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         recyclerView.adapter=oldgdgAdapter
@@ -80,7 +79,7 @@ class OldGdgList : Fragment() {
     private fun loadDataFromdatabase() {
         oldGdgDatabaseViewModel.readAllOldGDGViewModel.observe(viewLifecycleOwner, Observer {
             if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
-            if(recyclerViewcardView.visibility==View.GONE)recyclerViewcardView.visibility=View.VISIBLE
+            if(recyclerView.visibility==View.GONE)recyclerView.visibility=View.VISIBLE
 
             oldgdgAdapter.refreshdata(it)
                 oldgdgAdapter.setOnItemClickListener(object :oldgdgAdapter.onItemClickListener{

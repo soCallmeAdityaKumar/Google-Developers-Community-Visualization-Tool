@@ -12,6 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import com.example.googledeveloperscommunityvisualisationtool.databinding.ActivityMainBinding
+import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -36,6 +37,8 @@ class MainActivity : AppCompatActivity() {
             binding.drawerlayout.openDrawer(GravityCompat.START)
         }
 
+//        loadConnectionStatus()
+
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             binding.appBarMain.titleactionbar.text = when (destination.id) {
                 R.id.settings -> "SETTINGS"
@@ -56,6 +59,19 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController=findNavController(R.id.fragmentContainerView)
         return navController.navigateUp(appBarConfiguration)|| super.onSupportNavigateUp()
+    }
+    private fun loadConnectionStatus() {
+        val sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
+
+        val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+        if (isConnected!!) {
+            binding.appBarMain.connectionStatus.text="Connected"
+            binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#52b788"))
+        } else {
+            binding.appBarMain.connectionStatus.text="Not Connected"
+            binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#ba181b"))
+
+        }
     }
 
 

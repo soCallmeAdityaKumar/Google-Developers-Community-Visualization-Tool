@@ -22,8 +22,8 @@
         android:backgroundTint="#060606"
         app:itemTextColor="@color/nav_item"
         app:itemIconTint="@color/nav_item"
+        app:itemIconSize="30dp"
         app:menu="@menu/mynav_menu"
-        app:headerLayout="@layout/navigation_header"
         android:padding="20dp"
         />
 </androidx.drawerlayout.widget.DrawerLayout>

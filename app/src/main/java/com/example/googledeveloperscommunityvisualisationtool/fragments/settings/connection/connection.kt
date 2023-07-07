@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.connection.LGCommand
 import com.example.googledeveloperscommunityvisualisationtool.connection.LGConnectionManager
 import com.example.googledeveloperscommunityvisualisationtool.connection.LGConnectionSendFile
@@ -35,6 +36,7 @@ class connection : Fragment() {
     private lateinit var passwordEditText: EditText
     private lateinit var lgnameEditText: EditText
     private lateinit var connectingTextView:TextView
+    private lateinit var buttTryAgain:Button
     var handler=Handler()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,21 +46,31 @@ class connection : Fragment() {
         binding=FragmentConnectionBinding.inflate(layoutInflater, container, false)
         val view=binding.root
 
-        sharedPref= activity?.getSharedPreferences("didShowPrompt", Context.MODE_PRIVATE)!!
-        val prefEdit=sharedPref?.edit()
 
         lgipAddress=binding.IpAddressEditText
         passwordEditText=binding.LgPassword
         lgnameEditText=binding.LgNameEditText
         connectButton=binding.ConnectLGButton
         connectingTextView=binding.ConnectingTextView
+        buttTryAgain=binding.buttTryAgain
 
         connectButton.setOnClickListener { connectionTest() }
 
-
+        buttTryAgain?.setOnClickListener(View.OnClickListener { view: View? ->
+            changeToMainView()
+            val editor = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)!!
+                .edit()
+            editor.putBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+            editor.apply()
+        })
 
 
         return view
+    }
+
+    override fun onResume() {
+        loadSharedData()
+        super.onResume()
     }
 
     private fun connectionTest() {
@@ -71,6 +83,11 @@ class connection : Fragment() {
                 requireActivity(),
                 resources.getString(R.string.activity_connection_host_port_error)
             )
+            val editor = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)!!
+                .edit()
+            editor.putBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+            editor.apply()
+            loadConnectionStatus()
             return
         }
         val dialog = CustomDialogUtility.getDialog(requireActivity(), resources.getString(R.string.connecting))
@@ -108,6 +125,7 @@ class connection : Fragment() {
                     activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)?.edit()
                 editor?.putBoolean(ConstantPrefs.IS_CONNECTED.name, false)
                 editor?.apply()
+                loadConnectionStatus()
                 connectingTextView!!.visibility = View.INVISIBLE
                 connectButton!!.visibility = View.VISIBLE
                 connectButton!!.text = resources.getString(R.string.button_try_again)
@@ -120,6 +138,7 @@ class connection : Fragment() {
                     activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)?.edit()
                 editor?.putBoolean(ConstantPrefs.IS_CONNECTED.name, true)
                 editor?.apply()
+                loadConnectionStatus()
                 changeToNewView()
                 ActionController.instance?.sendBalloonWithLogos(requireActivity())
             }
@@ -131,22 +150,18 @@ class connection : Fragment() {
         editor?.putString(ConstantPrefs.URI_TEXT.name, hostPort)
         editor?.putString(ConstantPrefs.USER_NAME.name, usernameText)
         editor?.putString(ConstantPrefs.USER_PASSWORD.name, passwordText)
-        editor?.putBoolean(ConstantPrefs.TRY_TO_RECONNECT.name, true)
+        editor?.putBoolean(ConstantPrefs.TRY_TO_RECONNECT.name, false)
         editor?.apply()
     }
 
 
         private fun changeToNewView() {
-            connectButton!!.visibility = View.INVISIBLE
+            connectButton!!.visibility = View.VISIBLE
             connectingTextView!!.visibility = View.INVISIBLE
-            lgipAddress!!.visibility = View.INVISIBLE
-            lgnameEditText!!.visibility = View.INVISIBLE
-            passwordEditText!!.visibility = View.INVISIBLE
-//            textUsername!!.visibility = View.INVISIBLE
-//            textPassword!!.visibility = View.INVISIBLE
-//            textInsertUrl!!.visibility = View.INVISIBLE
-//            logo!!.visibility = View.VISIBLE
-//            buttTryAgain!!.visibility = View.VISIBLE
+            lgipAddress!!.visibility = View.VISIBLE
+            lgnameEditText!!.visibility = View.VISIBLE
+            passwordEditText!!.visibility = View.VISIBLE
+
 
     }
 
@@ -170,6 +185,52 @@ class connection : Fragment() {
         connectingTextView!!.visibility = View.VISIBLE
         connectingTextView!!.text = resources.getString(R.string.connecting)
     }
+
+    private fun changeToMainView() {
+        connectButton!!.visibility = View.VISIBLE
+        connectingTextView!!.visibility = View.VISIBLE
+        lgipAddress!!.visibility = View.VISIBLE
+        lgnameEditText!!.visibility = View.VISIBLE
+        passwordEditText!!.visibility = View.VISIBLE
+        buttTryAgain!!.visibility = View.INVISIBLE
+        loadSharedData()
+    }
+
+    private fun loadSharedData() {
+        val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
+        val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+        if (isConnected!!) {
+            changeToNewView()
+        } else {
+            val text = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name, "")
+            val usernameText = sharedPreferences.getString(ConstantPrefs.USER_NAME.name, "")
+            val passwordText = sharedPreferences.getString(ConstantPrefs.USER_PASSWORD.name, "")
+            val isTryToReconnect =
+                sharedPreferences.getBoolean(ConstantPrefs.TRY_TO_RECONNECT.name, false)
+            if (text != "") lgipAddress!!.setText(text)
+            if (usernameText != "") lgnameEditText!!.setText(usernameText)
+            if (passwordText != "") passwordEditText!!.setText(passwordText)
+            if (isTryToReconnect) connectButton!!.text =
+                resources.getString(R.string.button_try_again)
+        }
+    }
+
+    private fun loadConnectionStatus() {
+        val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
+
+        val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+        val act=activity as MainActivity
+        if (isConnected!!) {
+            act.binding.appBarMain.connectionStatus.text="Connected"
+            act.binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#52b788"))
+        } else {
+            act.binding.appBarMain.connectionStatus.text="Not Connected"
+            act.binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#ba181b"))
+
+        }
+    }
+
+
 
     private fun isValidHostNPort(hostPort: String): Boolean {
         return HOST_PORT.matcher(hostPort).matches()

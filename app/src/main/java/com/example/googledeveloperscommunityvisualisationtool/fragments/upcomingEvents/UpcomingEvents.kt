@@ -118,15 +118,16 @@ class UpcomingEvents : Fragment() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         lastweekroomViewModel.readlastweekEventViewModel.removeObserver{}
         upcomingDatBaseViewModel.readAllEventViewModel.removeObserver{}
+        super.onDestroy()
+
     }
 
 
     //if database is empty it will fetch data from the api otherwise refresh the adapter
     private fun checkDatabase() {
-            upcomingDatBaseViewModel.readAllEventViewModel.observe(requireActivity(), Observer {
+            upcomingDatBaseViewModel.readAllEventViewModel.observe(viewLifecycleOwner, Observer {
                 if (it.isEmpty()) {
                     CoroutineScope(Dispatchers.IO).launch {
                         networkCheckAndRun()
