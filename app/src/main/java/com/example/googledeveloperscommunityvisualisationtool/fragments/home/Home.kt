@@ -97,7 +97,6 @@ class Home : Fragment() {
         pieRecyclerView.adapter=pieChartAdapter
 
 
-//        loadConnectionStatus()
 
         sharedPref = activity?.getSharedPreferences("didShowPrompt", Context.MODE_PRIVATE)!!
         val prefEdit = sharedPref?.edit()
@@ -124,6 +123,8 @@ class Home : Fragment() {
         chapterDatabaseViewModel=ViewModelProvider(requireActivity(),ChapViewModelFact(requireContext())).get(ChapterViewModel::class.java)
         Log.d("coroutines", "before checkurldatabase")
 
+        loadConnectionStatus()
+
 
 
     }
@@ -141,23 +142,23 @@ class Home : Fragment() {
         chapterDatabaseViewModel.readAllChaptersViewModel.removeObserver{}
     }
 
-//    private fun loadConnectionStatus() {
-//        val sharedPreferences = activity?.getSharedPreferences(
-//            ConstantPrefs.SHARED_PREFS.name,
-//            Context.MODE_PRIVATE
-//        )
-//
-//        val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
-//        val act=activity as MainActivity
-//        if (isConnected!!) {
-//            act.binding.appBarMain.connectionStatus.text="Connected"
-//            act.binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#52b788"))
-//        } else {
-//            act.binding.appBarMain.connectionStatus.text="Not Connected"
-//            act.binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#ba181b"))
-//
-//        }
-//    }
+    private fun loadConnectionStatus() {
+        val sharedPreferences = activity?.getSharedPreferences(
+            ConstantPrefs.SHARED_PREFS.name,
+            Context.MODE_PRIVATE
+        )
+
+        val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+        val act=activity as MainActivity
+        if (isConnected!!) {
+            act.binding.appBarMain.connectionStatus.text="Connected"
+            act.binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#52b788"))
+        } else {
+            act.binding.appBarMain.connectionStatus.text="Not Connected"
+            act.binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#ba181b"))
+
+        }
+    }
 
 
     //Check if chapter_url database is empty then fetch data and if
