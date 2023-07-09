@@ -10,9 +10,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.SearchView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -56,7 +60,14 @@ class Home : Fragment() {
     private lateinit var mostChaptersCountry:HashMap<String,Int>
     private lateinit var searchView:androidx.appcompat.widget.SearchView
     private lateinit var pieChart: PieChart
+    lateinit var gdgChapterRecyclerView: RecyclerView
+    lateinit var fourthCardViewTextView:TextView
+    lateinit var firstcardviewTextView:TextView
+    lateinit var scrollView:ScrollView
+    lateinit var secondcardview:CardView
+    lateinit var thirdCardView:CardView
     var done=false
+    var flag2=0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -74,6 +85,23 @@ class Home : Fragment() {
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         val view = binding.root
 
+        flag2=0
+        fourthCardViewTextView=binding.fourthcardviewTextView
+        firstcardviewTextView=binding.firstcardviewTextView
+        scrollView=binding.scrollView
+        gdgChapterRecyclerView=binding.recyclerViewChapters
+        searchView=binding.searchChaptersView
+        pieRecyclerView=binding.pieChartRecyclerView
+        secondcardview=binding.SecondcardView
+        thirdCardView=binding.thirdCardview
+
+        fourthCardViewTextView.visibility=View.GONE
+        firstcardviewTextView.visibility=View.GONE
+        scrollView.visibility=View.GONE
+        gdgChapterRecyclerView.visibility=View.GONE
+        thirdCardView.visibility=View.GONE
+        secondcardview.visibility=View.GONE
+
 
         progressBar=binding.progressBar
 
@@ -81,17 +109,15 @@ class Home : Fragment() {
 
         newadapterlist = mutableListOf()
         adapter = GdgChaptersAdapter(newadapterlist)
-        binding.recyclerViewChapters.layoutManager =
+        gdgChapterRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerViewChapters.adapter = adapter
+        gdgChapterRecyclerView.adapter = adapter
 
 
-        searchView=binding.searchChaptersView
 
         mostChaptersCountry= hashMapOf()
 
         countryCount= mutableListOf()
-        pieRecyclerView=binding.pieChartRecyclerView
         pieRecyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         pieChartAdapter=PieChartAdapter(countryCount)
         pieRecyclerView.adapter=pieChartAdapter
@@ -164,7 +190,6 @@ class Home : Fragment() {
     //Check if chapter_url database is empty then fetch data and if
     private fun checkurlDatabase() {
         var flag1=0
-        val flag2=0
         var urlListsize=0
          chapterDatabaseViewModel.readAllChaptersViewModel.observe(requireActivity(),Observer{chapterList->
              Log.d("coroutines","inside the checkurldatabase")
@@ -275,6 +300,7 @@ class Home : Fragment() {
                 it.count
             }
             pieChartAdapter.refreshData(countryCount)
+            pieChart.startAnimation()
         }
     }
 
@@ -289,9 +315,25 @@ class Home : Fragment() {
 
     private fun getChapterFromDatabase() {
         CoroutineScope(Dispatchers.Main).launch{
+
             chapterDatabaseViewModel.readAllChaptersViewModel.observe(requireActivity(),Observer {it->
                 adapterlist=it
                 adapter.refreshData(adapterlist)
+                if(flag2==0){
+                    flag2=1
+                    if (progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
+                    scrollView.visibility=View.VISIBLE
+                    fourthCardViewTextView.visibility=View.VISIBLE
+                    fourthCardViewTextView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                    firstcardviewTextView.visibility=View.VISIBLE
+                    firstcardviewTextView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                    gdgChapterRecyclerView.visibility=View.VISIBLE
+                    gdgChapterRecyclerView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                    secondcardview.visibility=View.VISIBLE
+                    secondcardview.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+//                thirdcardview.visibility=View.VISIBLE
+                }
+
 
 //                //Pie chart
 //                for (i in 0 until adapterlist.size) {
@@ -304,7 +346,6 @@ class Home : Fragment() {
 //                setDataToPie()
 //            }
 
-                if (progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
                 newadapterlist=adapterlist.toMutableList()
                 //store or increase count in mostChaptersCountry
 

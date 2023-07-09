@@ -72,19 +72,19 @@ object ActionBuildCommandUtility {
                 "  <ScreenOverlay>\n" +
                 "  <name>Logo</name> \n" +
                 "  <Icon> \n" +
-                "   <href>http://lg1:81/resources/logos.png</href> \n" +
+                "   <href>https://raw.githubusercontent.com/soCallmeAdityaKumar/Google-Developers-Community-Visualization-Tool/main/app/src/main/assets/splashimage.png</href> \n" +
                 "  </Icon> \n" +
                 "  <overlayXY x=\"0\" y=\"1\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
                 "  <screenXY x=\"0.02\" y=\"0.95\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
                 "  <rotationXY x=\"0\" y=\"0\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
-                "  <size x=\"0.4\" y=\"0.2\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
+                "  <size x=\"0.8\" y=\"0.8\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
                 "  </ScreenOverlay> \n" +
                 " </Folder> \n" +
                 "</Document> \n" +
                 "</kml>\n" +
                 "' > " +
                 BASE_PATH +
-                "kml/slave_4.kml"
+                "kml/slave_3.kml"
         Log.w(TAG_DEBUG, "Command: $startCommand")
         return startCommand
     }
@@ -98,7 +98,7 @@ object ActionBuildCommandUtility {
     fun buildCommandBalloonTest(balloon: Balloon): String {
         val poi = balloon.poi
         val TEST_PLACE_MARK_ID = "testPlaceMark12345"
-        val startCommand = "echo'"+
+        val startCommand = "echo '"+
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<kml xmlns=\"http://www.opengis.net/kml/2.2\"\n" +
                 " xmlns:gx=\"http://www.google.com/kml/ext/2.2\">\n" +

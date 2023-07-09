@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -69,12 +70,16 @@ class UpcomingEvents : Fragment() {
 
         secondcardViewTextView=binding.secondcardviewTextView
         thirdCardViewTextView=binding.thirdcardviewTextView
+        upcomingRecyclerView=binding.recyclerView
+        lastweekRecyclerView=binding.lastweekRecyclerview
+
+
 
         secondcardViewTextView.visibility=View.GONE
         thirdCardViewTextView.visibility=View.GONE
-
-        upcomingRecyclerView=binding.recyclerView
         upcomingRecyclerView.visibility=View.GONE
+        lastweekRecyclerView.visibility=View.GONE
+
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         adapter=UpcoEventsAdapter(eventlist)
         binding.recyclerView.adapter = adapter
@@ -85,7 +90,6 @@ class UpcomingEvents : Fragment() {
 
 
 //        lastweekeventslist= mutableListOf()
-        lastweekRecyclerView=binding.lastweekRecyclerview
         lastweekRecyclerView.visibility=View.GONE
         lastweekRecyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         lastweekadapter=UpcoEventsAdapter(lastweekeventslist)
@@ -137,6 +141,10 @@ class UpcomingEvents : Fragment() {
                     if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
                     if(secondcardViewTextView.visibility==View.GONE)secondcardViewTextView.visibility=View.VISIBLE
                     if(upcomingRecyclerView.visibility==View.GONE)upcomingRecyclerView.visibility=View.VISIBLE
+                    secondcardViewTextView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                    upcomingRecyclerView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+
+
 
                     eventlist = convertDataType(it).toMutableList()
                     adapter.refreshData(eventlist)
@@ -160,6 +168,9 @@ class UpcomingEvents : Fragment() {
                 val result=convertweekevententityToResult(it)
                 if(thirdCardViewTextView.visibility==View.GONE)thirdCardViewTextView.visibility=View.VISIBLE
                 if(lastweekRecyclerView.visibility==View.GONE)lastweekRecyclerView.visibility=View.VISIBLE
+                thirdCardViewTextView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                lastweekRecyclerView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+
                 lastweekadapter.refreshData(result)
                 lastweekadapter.setOnItemClickListener(object :UpcoEventsAdapter.onItemClickListener{
                     override fun onItemClick(position: Int) {

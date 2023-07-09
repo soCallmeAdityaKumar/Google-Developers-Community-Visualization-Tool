@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.ScrollView
@@ -79,6 +81,10 @@ class GdgChapterDetails : Fragment() {
     lateinit var editor:SharedPreferences.Editor
     lateinit var progressBar: ProgressBar
     lateinit var scrollView: ScrollView
+    lateinit var aboutgdgcardView:CardView
+    lateinit var organizercardView:CardView
+    lateinit var upcomingcardView:CardView
+    lateinit var pasteventCardView:CardView
 
      var handler=Handler()
 
@@ -105,6 +111,20 @@ class GdgChapterDetails : Fragment() {
          countryName=binding.countryname
          aboutGdg=binding.aboutgdg
          member=binding.memebers
+         pasteventCardView=binding.pasteventscardview
+         upcomingcardView=binding.upcomingcardView
+         aboutgdgcardView=binding.aboutgdgcardview
+         organizercardView=binding.organizercardview
+
+
+         gdgName.visibility=View.GONE
+         cityName.visibility=View.GONE
+         countryName.visibility=View.GONE
+         member.visibility=View.GONE
+         pasteventCardView.visibility=View.GONE
+         upcomingcardView.visibility=View.GONE
+         aboutgdgcardView.visibility=View.GONE
+         organizercardView.visibility=View.GONE
 
 
          organizerRecyclerView=binding.orgainzersrecycler
@@ -227,6 +247,71 @@ class GdgChapterDetails : Fragment() {
             organizerAdapter.refreshData(organizerList)
             eventsAdapterpast.refreshData(pastEventsList)
 
+            //make views visible
+            withContext(Dispatchers.Main) {
+                gdgName.visibility = View.VISIBLE
+                gdgName.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        android.R.anim.slide_in_left
+                    )
+                )
+                cityName.visibility = View.VISIBLE
+                cityName.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        android.R.anim.slide_in_left
+                    )
+                )
+                countryName.visibility = View.VISIBLE
+                countryName.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        android.R.anim.slide_in_left
+                    )
+                )
+                member.visibility = View.VISIBLE
+                member.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        android.R.anim.slide_in_left
+                    )
+                )
+                pasteventCardView.visibility = View.VISIBLE
+                pasteventCardView.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        android.R.anim.slide_in_left
+                    )
+                )
+                upcomingcardView.visibility = View.VISIBLE
+                upcomingcardView.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        android.R.anim.slide_in_left
+                    )
+                )
+                aboutgdgcardView.visibility = View.VISIBLE
+                aboutgdgcardView.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        android.R.anim.slide_in_left
+                    )
+                )
+                organizercardView.visibility = View.VISIBLE
+                organizercardView.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        android.R.anim.slide_in_left
+                    ),
+                )
+            }
+
+
+
+
+
+
             withContext(Dispatchers.Main){
                 if(upcomingEventlist.size!=0){
                     upcoEventsAdapterupcoming.refreshData(upcomingEventlist)
@@ -246,7 +331,9 @@ class GdgChapterDetails : Fragment() {
                     upcomingEventsRecycler.visibility = View.GONE
                 }
             if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
-            if (scrollView.visibility == View.GONE) scrollView.visibility = View.VISIBLE
+            if (scrollView.visibility == View.GONE) {
+                scrollView.visibility = View.VISIBLE
+            }
             }
         }
         else {
@@ -313,7 +400,68 @@ class GdgChapterDetails : Fragment() {
 
                 organizerAdapter.refreshData(organizerList)
                 if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
-                if (scrollView.visibility == View.GONE) scrollView.visibility = View.VISIBLE
+                if (scrollView.visibility == View.GONE) {
+                    scrollView.visibility = View.VISIBLE
+                }
+
+                    gdgName.visibility = View.VISIBLE
+                    gdgName.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                    cityName.visibility = View.VISIBLE
+                    cityName.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                    countryName.visibility = View.VISIBLE
+                    countryName.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                    member.visibility = View.VISIBLE
+                    member.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                    pasteventCardView.visibility = View.VISIBLE
+                    pasteventCardView.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                    upcomingcardView.visibility = View.VISIBLE
+                    upcomingcardView.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                    aboutgdgcardView.visibility = View.VISIBLE
+                    aboutgdgcardView.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                    organizercardView.visibility = View.VISIBLE
+                    organizercardView.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        ),
+                    )
+
+
 
 
             }

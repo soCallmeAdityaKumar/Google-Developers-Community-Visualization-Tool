@@ -58,7 +58,7 @@ class TourGDGThread internal constructor(
         val balloon = Balloon()
         val description = gdg.city + ", " + gdg.country
         balloon.setPoi(poi).setDescription(description)
-            .setImageUri(null).setImagePath(null).setVideoPath(null).setDuration(15)
+            .setImageUri(null).setImagePath(null).setVideoPath(null).setDuration(30)
         actionController!!.TourGDG(poi, balloon)
     }
 
