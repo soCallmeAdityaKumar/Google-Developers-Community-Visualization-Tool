@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.Calendar.CalendarFragment">
+
+    <com.events.calendar.views.EventsCalendar
+        android:id="@+id/eventsCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        app:datesTextSize="40sp"
+        app:eventDotColor="#ff0000"
+        app:isBoldTextOnSelectionEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:monthTitleColor="#000000"
+        app:monthTitleTextSize="16sp"
+        app:primaryTextColor="#000000"
+        app:rangeSelectionColor="#ffe600"
+        app:rangeSelectionEndColor="#c1ae01"
+        app:rangeSelectionStartColor="#c1ae01"
+        app:secondaryTextColor="#666666"
+        app:selectedTextColor="#000000"
+        app:selectionColor="#ffe600"
+        app:weekHeaderColor="#c6c6c6"
+        app:weekHeaderTextSize="36sp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

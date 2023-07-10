@@ -20,7 +20,7 @@
         android:title="Upcoming events"/>
     <item android:id="@+id/calender"
         android:icon="@drawable/calendar"
-        android:visible="false"
+        android:visible="true"
         android:title="Calender"/>
     <item android:id="@+id/projects"
         android:visible="false"

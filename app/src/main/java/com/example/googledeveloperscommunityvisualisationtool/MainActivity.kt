@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.upcomingEvents -> "EVENTS"
                 R.id.home -> "HOME"
                 R.id.oldGdgList -> "OLD GDG DATA"
+                R.id.calender->"EVENTS CALENDAR"
                 R.id.gdgChapterDetails -> "CHAPTER DETAIL"
                 R.id.oldGdgList -> "OLD GOOGLE DEVELOPER GROUPS"
                 else -> "GOOGLE DEVELOPER COMMUNITY VISUALIZATION TOOL"

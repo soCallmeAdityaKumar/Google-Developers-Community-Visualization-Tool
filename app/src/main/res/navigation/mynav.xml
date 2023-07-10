@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_home_to_oldGdgList"
             app:destination="@id/oldGdgList" />
+        <action
+            android:id="@+id/action_home_to_calendarFragment"
+            app:destination="@id/calender" />
     </fragment>
     <fragment
         android:id="@+id/maps"
@@ -104,4 +107,9 @@
             android:name="upcomingeventsUrl"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/calender"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.Calendar.CalendarFragment"
+        android:label="fragment_calendar"
+        tools:layout="@layout/fragment_calendar" />
 </navigation>

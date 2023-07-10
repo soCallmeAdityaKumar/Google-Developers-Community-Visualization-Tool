@@ -1,5 +1,6 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcom
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcoEventViewMod
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcomingEventfactory
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentUpcomingEventsBinding
+import com.example.googledeveloperscommunityvisualisationtool.fragments.Calendar.EventInterface
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroomfactory
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroommodel
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.weekEventEntity
@@ -53,6 +55,7 @@ class UpcomingEvents : Fragment() {
     lateinit var progressBar: ProgressBar
     lateinit var refreshLayout: SwipeRefreshLayout
     lateinit var lastweekroomViewModel:lastweekroommodel
+    private  var  listener:EventInterface?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,6 +102,16 @@ class UpcomingEvents : Fragment() {
         return view
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if( parentFragment is EventInterface){
+            listener=parentFragment as EventInterface
+        }else{
+            throw ClassCastException("Parent fragment must implement EventInterface")
+        }
+    }
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -143,7 +156,6 @@ class UpcomingEvents : Fragment() {
                     if(upcomingRecyclerView.visibility==View.GONE)upcomingRecyclerView.visibility=View.VISIBLE
                     secondcardViewTextView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
                     upcomingRecyclerView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
-
 
 
                     eventlist = convertDataType(it).toMutableList()
@@ -215,6 +227,7 @@ class UpcomingEvents : Fragment() {
                     events[i].title,
                     events[i].url))
 
+
                 Log.d("lastweek","${events[i].title} added to database")
 
                 CoroutineScope(Dispatchers.Main).launch {
@@ -284,6 +297,9 @@ class UpcomingEvents : Fragment() {
 
             job2.join()
             eventlist = upcoEventViewMod.returnlistViewModel()
+            for (event in eventlist){
+                listener?.addUpcomingEvents(event.start_date)
+            }
 //            withContext(Dispatchers.Main){
 //                adapter.refreshData(eventlist)
 //            }

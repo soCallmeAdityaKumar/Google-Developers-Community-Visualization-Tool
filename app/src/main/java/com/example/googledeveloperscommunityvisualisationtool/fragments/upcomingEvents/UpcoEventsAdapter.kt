@@ -2,11 +2,14 @@ package com.example.googledeveloperscommunityvisualisationtool.fragments.upcomin
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.Result
 import com.example.googledeveloperscommunityvisualisationtool.databinding.EventsitemlistBinding
+import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentCalendarBinding
+import com.example.googledeveloperscommunityvisualisationtool.fragments.Calendar.CalendarFragment
 import kotlin.random.Random
 
 class UpcoEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter<UpcoEventsAdapter.MyViewHolder>() {
