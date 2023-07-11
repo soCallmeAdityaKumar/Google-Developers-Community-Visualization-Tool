@@ -10,14 +10,19 @@ import android.view.ViewGroup
 import com.events.calendar.utils.EventsCalendarUtil.today
 import com.events.calendar.views.EventsCalendar
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentCalendarBinding
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Year
 import java.util.Calendar
 import java.util.Date
+import java.util.GregorianCalendar
 
-class CalendarFragment : Fragment() ,EventsCalendar.Callback,EventInterface{
+class CalendarFragment : Fragment() ,EventsCalendar.Callback{
 
-    private lateinit var binding:FragmentCalendarBinding
-    private lateinit var viewModel: CalendarViewModel
-    private lateinit var eventsCalendar: EventsCalendar
+     lateinit var binding:FragmentCalendarBinding
+     lateinit var viewModel: CalendarViewModel
+     lateinit var eventsCalendar: EventsCalendar
+     var date=Date()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +53,15 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback,EventInterface{
 //            .disableDaysInWeek(Calendar.SATURDAY, Calendar.SUNDAY) //disable days in a week on the whole EventsCalendar [varargs days: Int]
             .build()
 
+        val c=Calendar.getInstance()
+        val formatter= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
+        val date=c.setTime(formatter.parse("2023-07-31T12:00:00+06:00"))
+        c.add(Calendar.DATE,0)
+        eventsCalendar.addEvent(c)
+        Log.d("events",eventsCalendar.hasEvent(c).toString())
+//        eventsCalendar.clearEvents()
+
+
         return view
     }
 
@@ -62,17 +76,37 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback,EventInterface{
     }
 
     override fun onDaySelected(selectedDate: Calendar?) {
-        Log.e("SHORT", "CLICKED")
+        Log.e("SHORT", getDateString( selectedDate?.timeInMillis))
+//        ${getDateString(selectedDate?.timeInMillis)}
 
     }
 
     override fun onMonthChanged(monthStartDate: Calendar?) {
         Log.e("MON", "CHANGED")
     }
-
-    override fun addUpcomingEvents(date: String) {
-        eventsCalendar.addEvent(date)
+    private fun getDateString(time: Long?): String {
+        if (time != null) {
+            val cal = Calendar.getInstance()
+            cal.timeInMillis = time
+            val month = when (cal[Calendar.MONTH]) {
+                Calendar.JANUARY -> "January"
+                Calendar.FEBRUARY -> "February"
+                Calendar.MARCH -> "March"
+                Calendar.APRIL -> "April"
+                Calendar.MAY -> "May"
+                Calendar.JUNE -> "June"
+                Calendar.JULY -> "July"
+                Calendar.AUGUST -> "August"
+                Calendar.SEPTEMBER -> "September"
+                Calendar.OCTOBER -> "October"
+                Calendar.NOVEMBER -> "November"
+                Calendar.DECEMBER -> "December"
+                else -> ""
+            }
+            return "$month ${cal[Calendar.DAY_OF_MONTH]}, ${cal[Calendar.YEAR]}"
+        } else return ""
     }
+
 
 
 }

@@ -1,6 +1,5 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,11 +9,9 @@ import android.view.animation.AnimationUtils
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +22,7 @@ import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcom
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcoEventViewMod
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcomingEventfactory
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentUpcomingEventsBinding
-import com.example.googledeveloperscommunityvisualisationtool.fragments.Calendar.EventInterface
+import com.example.googledeveloperscommunityvisualisationtool.fragments.Calendar.CalendarFragment
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroomfactory
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroommodel
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.weekEventEntity
@@ -37,8 +34,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Date
 
 class UpcomingEvents : Fragment() {
     lateinit var binding:FragmentUpcomingEventsBinding
@@ -55,7 +57,6 @@ class UpcomingEvents : Fragment() {
     lateinit var progressBar: ProgressBar
     lateinit var refreshLayout: SwipeRefreshLayout
     lateinit var lastweekroomViewModel:lastweekroommodel
-    private  var  listener:EventInterface?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,15 +103,6 @@ class UpcomingEvents : Fragment() {
         return view
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if( parentFragment is EventInterface){
-            listener=parentFragment as EventInterface
-        }else{
-            throw ClassCastException("Parent fragment must implement EventInterface")
-        }
-    }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -144,7 +136,7 @@ class UpcomingEvents : Fragment() {
 
     //if database is empty it will fetch data from the api otherwise refresh the adapter
     private fun checkDatabase() {
-            upcomingDatBaseViewModel.readAllEventViewModel.observe(viewLifecycleOwner, Observer {
+            upcomingDatBaseViewModel.readAllEventViewModel.observe(requireActivity(), Observer {
                 if (it.isEmpty()) {
                     CoroutineScope(Dispatchers.IO).launch {
                         networkCheckAndRun()
@@ -176,7 +168,7 @@ class UpcomingEvents : Fragment() {
 
         lastweekroomViewModel.readlastweekEventViewModel.observe(requireActivity(), Observer {
             if(it.isNotEmpty()){
-                Log.d("date","fragment created database size ${it.size} ")
+                Log.d("upcomingevent","fragment created database size ${it.size} ")
                 val result=convertweekevententityToResult(it)
                 if(thirdCardViewTextView.visibility==View.GONE)thirdCardViewTextView.visibility=View.VISIBLE
                 if(lastweekRecyclerView.visibility==View.GONE)lastweekRecyclerView.visibility=View.VISIBLE
@@ -295,14 +287,16 @@ class UpcomingEvents : Fragment() {
 
             }
 
+
             job2.join()
             eventlist = upcoEventViewMod.returnlistViewModel()
-            for (event in eventlist){
-                listener?.addUpcomingEvents(event.start_date)
+            Log.d("eventlistsize",eventlist.size.toString())
+
+
+
+            withContext(Dispatchers.Main){
+                adapter.refreshData(eventlist)
             }
-//            withContext(Dispatchers.Main){
-//                adapter.refreshData(eventlist)
-//            }
         }
 
         delay(5000)
@@ -322,7 +316,17 @@ class UpcomingEvents : Fragment() {
     private  fun insertToDatabase() {
 
         Log.d("eventsizeininsertDatabase",eventlist.size.toString())
+
         for (events in eventlist){
+
+            val eventDate=events.start_date
+            val formatter= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
+            val calendar=Calendar.getInstance()
+            calendar.setTime(formatter.parse(eventDate))
+            calendar.add(Calendar.DATE,0)
+            val fragment=CalendarFragment()
+            fragment.eventsCalendar.addEvent(calendar)
+
             var alltags=""
             for (eventstags in events.tags){
                 alltags+="$eventstags "
