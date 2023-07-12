@@ -57,6 +57,8 @@ class UpcomingEvents : Fragment() {
     lateinit var progressBar: ProgressBar
     lateinit var refreshLayout: SwipeRefreshLayout
     lateinit var lastweekroomViewModel:lastweekroommodel
+    val listOfDates= mutableListOf<String>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -319,13 +321,7 @@ class UpcomingEvents : Fragment() {
 
         for (events in eventlist){
 
-            val eventDate=events.start_date
-            val formatter= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
-            val calendar=Calendar.getInstance()
-            calendar.setTime(formatter.parse(eventDate))
-            calendar.add(Calendar.DATE,0)
-            val fragment=CalendarFragment()
-            fragment.eventsCalendar.addEvent(calendar)
+            listOfDates.add(events.start_date)
 
             var alltags=""
             for (eventstags in events.tags){
