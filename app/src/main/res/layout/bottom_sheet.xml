@@ -7,7 +7,7 @@
     android:background="@drawable/dialog_sheet">
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/bottom_sheet_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Date"
@@ -18,14 +18,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/eventTitle"
+        android:id="@+id/event_bottom_Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:textSize="30dp"
         android:text="EventTitle"
-        app:layout_constraintEnd_toEndOf="@+id/date"
+        app:layout_constraintEnd_toEndOf="@+id/bottom_sheet_date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date" />
+        app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_date" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

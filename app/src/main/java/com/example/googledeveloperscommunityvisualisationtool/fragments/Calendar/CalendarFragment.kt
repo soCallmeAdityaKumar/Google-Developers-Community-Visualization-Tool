@@ -119,15 +119,13 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
             for(i in it){
                 val calendar=Calendar.getInstance()
                 val formatter=SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
-                Log.d("Calendar",formatter.parse(i.start_date).toString())
                 calendar.setTime(formatter.parse(i.start_date))
+                Log.d("Calendar","event.startdate->${i.start_date}+Calendar.time->${calendar.time}+Fulldate->${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]}-${calendar[Calendar.YEAR]}")
                 calendar.add(Calendar.DATE,0)
                 eventsCalendar.addEvent(calendar)
-                Log.d("Calendar",calendar.time.toString())
-
                 editor.apply {
-                    val eventlist=listOf<String>()
-                    editor?.putString(formatter.parse(i.start_date).toString(),i.title)
+                    editor.putString("${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]}-${calendar[Calendar.YEAR]}",i.title)
+                    apply()
                 }
             }
         })
@@ -139,26 +137,26 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
     }
 
     override fun onDaySelected(selectedDate: Calendar?) {
-        Log.e("SHORT", getDateString( selectedDate?.timeInMillis))
+        Log.e("SHORT",selectedDate?.time.toString())
 //        ${getDateString(selectedDate?.timeInMillis)}
-        val formatter=SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
+        val dateString="${selectedDate?.get(Calendar.DATE)}-${selectedDate?.get(Calendar.MONTH)}-${selectedDate?.get(Calendar.YEAR)}"
         selectedDate!!.time
         if(eventsCalendar.hasEvent(selectedDate)){
-            showEventDetail(selectedDate!!)
+            showEventDetail(dateString)
         }
 
     }
 
-    private fun showEventDetail(date:Calendar) {
+    private fun showEventDetail(date:String) {
         val dialog= Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.bottom_sheet)
 
-        val eventDate:TextView=dialog.findViewById(R.id.date)
-        val evenTitle:TextView=dialog.findViewById(R.id.title)
+        val eventDate:TextView=dialog.findViewById(R.id.bottom_sheet_date)
+        val evenTitle:TextView=dialog.findViewById(R.id.event_bottom_Title)
 
-        eventDate.text=date.toString()
-        evenTitle.text=sharedPref.getString(date.toString(),"")
+        eventDate.text=date
+        evenTitle.text=sharedPref.getString(date,"")
 
         dialog.show()
         dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)

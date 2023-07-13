@@ -13,6 +13,7 @@
         android:overScrollMode="never"
         app:datesTextSize="40sp"
         app:eventDotColor="#ff0000"
+        android:splitMotionEvents="true"
         app:isBoldTextOnSelectionEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
