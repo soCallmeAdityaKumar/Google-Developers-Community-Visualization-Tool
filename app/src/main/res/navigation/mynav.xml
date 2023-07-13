@@ -104,8 +104,8 @@
         android:label="fragment_upcoming_event_details"
         tools:layout="@layout/fragment_upcoming_event_details" >
         <argument
-            android:name="upcomingeventsUrl"
-            app:argType="string" />
+            android:name="dateAndUrl"
+            app:argType="com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.DateAndUrl" />
     </fragment>
     <fragment
         android:id="@+id/calender"

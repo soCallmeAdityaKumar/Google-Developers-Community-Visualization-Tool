@@ -23,6 +23,7 @@ import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcom
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcomingEventfactory
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentUpcomingEventsBinding
 import com.example.googledeveloperscommunityvisualisationtool.fragments.Calendar.CalendarFragment
+import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.DateAndUrl
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroomfactory
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroommodel
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.weekEventEntity
@@ -160,7 +161,7 @@ class UpcomingEvents : Fragment() {
                     }
                     adapter.setOnItemClickListener(object:UpcoEventsAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {
-                            val action=UpcomingEventsDirections.actionUpcomingEventsToUpcomingEventDetails(eventlist[position].url)
+                            val action=UpcomingEventsDirections.actionUpcomingEventsToUpcomingEventDetails(DateAndUrl(eventlist[position].url,eventlist[position].start_date))
                             findNavController().navigate(action)
                         }
                     })

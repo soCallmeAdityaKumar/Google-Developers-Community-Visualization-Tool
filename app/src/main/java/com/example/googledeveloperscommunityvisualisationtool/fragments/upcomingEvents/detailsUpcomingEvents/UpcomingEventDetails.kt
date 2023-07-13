@@ -1,12 +1,10 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents
 
 import android.app.AlarmManager
-import android.app.Notification
-import android.app.Notification.BigTextStyle
+
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Context.ALARM_SERVICE
 import android.content.Intent
 import android.opengl.Visibility
@@ -115,12 +113,11 @@ class UpcomingEventDetails : Fragment() {
         return view
     }
 
-    private fun setAlarm(dateAndTime:String) {
+    private fun setAlarm(dateAndTime:String,title:String) {
 
         alarmManager= activity?.getSystemService(ALARM_SERVICE) as AlarmManager
         val intent=Intent(requireContext(),AlarmReceiver::class.java)
-
-
+        intent.putExtra("title",title)
         pendingIntent=PendingIntent.getBroadcast(
             requireContext(),
             0,
@@ -128,21 +125,18 @@ class UpcomingEventDetails : Fragment() {
             PendingIntent.FLAG_IMMUTABLE
         )
 
-        val inputDateString = dateAndTime.dropLast(6)
-        val inputFormat = "EEE, MMM dd, hh:mm a yyyy"
-        val outputFormat = "yyyy-MM-dd hh:mm a"
-        val year=LocalDateTime.now().year.toString()
+        val inputString=dateAndTime
+        val outputFormat="yyyy-MM-dd HH:mm"
+        val inputFormat="yyyy-MM-dd'T'HH:mm:ssX"
         val inputDateFormat = SimpleDateFormat(inputFormat, Locale.ENGLISH)
         val outputDateFormat = SimpleDateFormat(outputFormat, Locale.ENGLISH)
-        val date = inputDateFormat.parse("$inputDateString $year")
+        val date = inputDateFormat.parse(inputString)
         val formattedDate = outputDateFormat.format(date)
         val finaldate=outputDateFormat.parse(formattedDate)
         val calendar=Calendar.getInstance()
         calendar.setTime(finaldate)
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,AlarmManager.INTERVAL_DAY,pendingIntent)
-        Log.d("Alarm","Alarm set for $date $formattedDate $finaldate")
-//        ${formatter.parse("${dateAndTime.dropLast(16).drop(5)}$year")}
-
+        Log.d("Alarm","Alarm set for $finaldate")
 
     }
 
@@ -171,7 +165,7 @@ class UpcomingEventDetails : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             CoroutineScope(Dispatchers.IO).launch {
-                viewModel.getResponseModel(url.upcomingeventsUrl,requireContext())
+                viewModel.getResponseModel(url.dateAndUrl.url,requireContext())
                 Log.d("eventdetails","after getResponse")
             }
             Log.d("eventdetails","before fetching")
@@ -214,7 +208,7 @@ class UpcomingEventDetails : Fragment() {
 
                 notifyButton.setOnClickListener {
                     createNotificationChannel()
-                    setAlarm(eventData.dateAndTime)
+                    setAlarm(url.dateAndUrl.dateAndTime,eventData.title)
                 }
             }
 

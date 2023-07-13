@@ -18,19 +18,20 @@ import com.example.googledeveloperscommunityvisualisationtool.R
 
 class AlarmReceiver:BroadcastReceiver() {
     private  val CHANNEL_ID="Upcoming_Event_Notification"
-
     @SuppressLint("MissingPermission")
     override fun onReceive(context: Context?, intent: Intent?){
 
         val i=Intent(context,MainActivity::class.java)
+        var title:String=intent?.getStringExtra("title")!!
+
         intent!!.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
         val pendingIntent=PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_IMMUTABLE)
 
         val builder=NotificationCompat.Builder(context!!,CHANNEL_ID)
             .setSmallIcon(R.drawable.googledeveloperscommunitylogo)
-            .setContentTitle("Upcoming Event")
-            .setContentText("View your Event Title")
+            .setContentTitle("Hey! You have an Event right now")
+            .setContentText(title)
             .setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
