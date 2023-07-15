@@ -67,10 +67,10 @@ class MainActivity : AppCompatActivity() {
         val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         if (isConnected!!) {
             binding.appBarMain.connectionStatus.text="Connected"
-            binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#52b788"))
+            binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
         } else {
             binding.appBarMain.connectionStatus.text="Not Connected"
-            binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#ba181b"))
+            binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
 
         }
     }

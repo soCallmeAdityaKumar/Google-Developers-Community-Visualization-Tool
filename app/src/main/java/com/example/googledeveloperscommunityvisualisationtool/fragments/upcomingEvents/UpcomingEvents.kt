@@ -149,8 +149,8 @@ class UpcomingEvents : Fragment() {
                     if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
                     if(secondcardViewTextView.visibility==View.GONE)secondcardViewTextView.visibility=View.VISIBLE
                     if(upcomingRecyclerView.visibility==View.GONE)upcomingRecyclerView.visibility=View.VISIBLE
-                    secondcardViewTextView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
-                    upcomingRecyclerView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                    secondcardViewTextView.startAnimation(AnimationUtils.loadAnimation(binding.root.context,android.R.anim.slide_in_left))
+                    upcomingRecyclerView.startAnimation(AnimationUtils.loadAnimation(binding.root.context,android.R.anim.slide_in_left))
 
 
                     eventlist = convertDataType(it).toMutableList()

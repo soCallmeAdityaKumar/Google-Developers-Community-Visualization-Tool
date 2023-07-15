@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".dataFetching.oldData.oldGdg.OldGdgList">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,8 +14,9 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:elevation="40dp"
-        android:backgroundTint="#e6ccb2"
+        android:backgroundTint="@color/OrganizerColorList"
         app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -35,6 +36,7 @@
             android:textAlignment="center"
             android:fontFamily="@font/chivomonomedium"
             android:textSize="32dp"
+            android:textColor="@color/MainHeadingText"
             android:text="GDG Name"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,6 +52,7 @@
             android:layout_marginStart="200dp"
             android:layout_marginBottom="10dp"
             android:textSize="32dp"
+            android:textColor="@color/MainHeadingText"
             android:fontFamily="@font/chivomonomedium"
             android:textAlignment="center"
             android:text="City"
@@ -63,6 +66,7 @@
             android:layout_marginStart="200dp"
             android:textSize="32dp"
             android:text="Country"
+            android:textColor="@color/MainHeadingText"
             android:fontFamily="@font/chivomonomedium"
             android:layout_marginBottom="10dp"
             app:layout_constraintBaseline_toBaselineOf="@+id/gdgname"
@@ -70,7 +74,7 @@
             app:layout_constraintStart_toEndOf="@+id/city" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <ProgressBar
         android:id="@+id/progressBar"

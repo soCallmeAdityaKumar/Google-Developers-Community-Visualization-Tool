@@ -20,10 +20,7 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+        android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.gdgChapterDetails.GdgChapterDetails">
 
@@ -41,7 +38,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
-        android:textColor="@color/black"
+        android:textColor="@color/MainHeadingText"
         android:textSize="62dp"
         android:textStyle="bold"
         android:fontFamily="@font/montserratmedium"
@@ -57,7 +54,7 @@
         android:layout_marginEnd="20dp"
         android:textSize="26dp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="@color/MainHeadingText"
         android:fontFamily="@font/montserratmedium"
         android:textAlignment="viewEnd"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +70,7 @@
         android:fontFamily="@font/montserratmedium"
         android:textSize="30dp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="@color/MainHeadingText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gdgname" />
 
@@ -84,7 +81,7 @@
         android:layout_margin="20dp"
         android:textSize="30dp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="@color/MainHeadingText"
         android:fontFamily="@font/montserratmedium"
         app:layout_constraintStart_toEndOf="@+id/cityname"
         app:layout_constraintTop_toBottomOf="@+id/gdgname" />
@@ -97,10 +94,10 @@
             android:elevation="20dp"
             android:text="Start Tour GDG"
             android:fontFamily="@font/montserratmedium"
-            android:textColor="@color/black"
+            android:textColor="@color/MainHeadingText"
             android:textStyle="bold"
             app:strokeWidth="1dp"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/OrganizerColorList"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -115,8 +112,8 @@
             app:strokeWidth="1dp"
             android:textStyle="bold"
             android:fontFamily="@font/montserratmedium"
-            android:textColor="@color/black"
-            android:background="@color/white"
+            android:textColor="@color/MainHeadingText"
+            android:backgroundTint="@color/OrganizerColorList"
             android:layout_marginEnd="20dp"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -132,7 +129,7 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="20dp"
             android:layout_margin="20dp"
-            android:backgroundTint="#4FFFFFFF"
+            android:backgroundTint="@color/CardViewTransparent"
             android:background="@drawable/glass_background"
             app:strokeWidth="1dp"
             app:cardElevation="0dp"
@@ -146,12 +143,13 @@
 
                 <TextView
                     android:id="@+id/aboutgdgtextview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="153dp"
+                    android:layout_height="66dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/staatlichesregular"
                     android:text="About GDG"
+                    android:textColor="@color/MainHeadingText"
                     android:textSize="42dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -165,6 +163,7 @@
                     android:layout_marginBottom="20dp"
                     android:fontFamily="@font/montserratmedium"
                     android:textSize="25dp"
+                    android:textColor="@color/MainHeadingText"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -181,7 +180,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             app:cardCornerRadius="20dp"
-            android:backgroundTint="#4FFFFFFF"
+            android:backgroundTint="@color/CardViewTransparent"
             android:background="@drawable/glass_background"
             app:strokeWidth="1dp"
             app:cardElevation="0dp"
@@ -201,6 +200,7 @@
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/staatlichesregular"
                     android:text="Organizers"
+                    android:textColor="@color/MainHeadingText"
                     android:textSize="42dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -225,7 +225,7 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="20dp"
             android:layout_margin="20dp"
-            android:backgroundTint="#4FFFFFFF"
+            android:backgroundTint="@color/CardViewTransparent"
             android:background="@drawable/glass_background"
             app:strokeWidth="1dp"
             app:cardElevation="0dp"
@@ -247,6 +247,7 @@
                     android:fontFamily="@font/staatlichesregular"
                     android:text="Upcoming Events"
                     android:textSize="42dp"
+                    android:textColor="@color/MainHeadingText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -285,7 +286,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             app:cardCornerRadius="20dp"
-            android:backgroundTint="#4FFFFFFF"
+            android:backgroundTint="@color/CardViewTransparent"
             android:background="@drawable/glass_background"
             app:strokeWidth="1dp"
             app:cardElevation="0dp"
@@ -305,6 +306,7 @@
                     android:fontFamily="@font/staatlichesregular"
                     android:text="Past Events"
                     android:textSize="42dp"
+                    android:textColor="@color/MainHeadingText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

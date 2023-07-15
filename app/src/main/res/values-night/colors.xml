@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="AppbackgroundColor">#12101A</color>
+    <color name="MainHeadingText">@color/white</color>
+    <color name="CardViewTransparent">#66000000</color>
+    <color name="OrganizerColorList">#4FFFFFFF</color>
+    <color name="strokeColor">#949FA6</color>
+    <color name="bookTicketTextColor">@color/white</color>
+    <color name="bookTicketBackground">#4FFFFFFF</color>
+    <color name="navbarColor">#FF344347</color>
+    <color name="NotConnected">#ba181b</color>
+    <color name="Connected">#52b788</color>
+
+</resources>

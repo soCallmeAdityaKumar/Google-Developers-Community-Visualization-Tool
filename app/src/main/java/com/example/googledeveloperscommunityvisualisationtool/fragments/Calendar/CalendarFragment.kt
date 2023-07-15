@@ -77,34 +77,11 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
                 .setMonthRange(start, end) //set starting month [start: Calendar] and ending month [end: Calendar]
                 .setWeekStartDay(Calendar.SUNDAY, false) //set start day of the week as you wish [startday: Int, doReset: Boolean]
                 .setCurrentSelectedDate(today) //set current date and scrolls the calendar to the corresponding month of the selected date [today: Calendar]
-//            .setDatesTypeface(typeface) //set font for dates
                 .setDateTextFontSize(16f) //set font size for dates
-//            .setMonthTitleTypeface(typeface) //set font for title of the calendar
                 .setMonthTitleFontSize(26f) //set font size for title of the calendar
-//            .setWeekHeaderTypeface(typeface) //set font for week names
-                .setWeekHeaderFontSize(16f) //set font size for week names
+                .setWeekHeaderFontSize(26f) //set font size for week names
                 .setCallback(this) //set the callback for EventsCalendar
-//            .addEvent(listOfCalendar) //set events on the EventsCalendar [c: Calendar]
-//            .disableDate(dc) //disable a specific day on the EventsCalendar [c: Calendar]
-//            .disableDaysInWeek(Calendar.SATURDAY, Calendar.SUNDAY) //disable days in a week on the whole EventsCalendar [varargs days: Int]
-            eventsCalendar.build()
-
-
-
-
-//        val c=Calendar.getInstance()
-//        val formatter= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
-//        val date=c.setTime(formatter.parse("2023-07-31T12:00:00+06:00"))
-//        c.add(Calendar.DATE,0)
-//        eventsCalendar.addEvent(c)
-//        Log.d("events",eventsCalendar.hasEvent(c).toString())
-//        eventsCalendar.clearEvents()
-
-
-
-
-
-
+         .build()
 
         return view
     }

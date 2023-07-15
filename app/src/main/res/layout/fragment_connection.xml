@@ -18,6 +18,8 @@
         android:layout_margin="20dp"
         android:textAlignment="viewStart"
         android:textSize="30dp"
+        android:backgroundTint="@color/CardViewTransparent"
+        android:textColor="@color/MainHeadingText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -40,10 +42,12 @@
         android:layout_height="wrap_content"
         android:background="@drawable/cardview"
         android:hint="LG Name"
+        android:textColor="@color/MainHeadingText"
         android:padding="20dp"
         android:layout_margin="20dp"
         android:textAlignment="viewStart"
         android:textSize="30dp"
+        android:backgroundTint="@color/CardViewTransparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/IpAddressEditText" />
@@ -56,9 +60,11 @@
         android:background="@drawable/cardview"
         android:hint="LG Password"
         android:password="true"
+        android:textColor="@color/MainHeadingText"
         android:padding="20dp"
         android:textAlignment="viewStart"
         android:textSize="30dp"
+        android:backgroundTint="@color/CardViewTransparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LgNameEditText" />
@@ -72,6 +78,7 @@
         android:background="@drawable/cardview"
         android:padding="20dp"
         android:text="Connect"
+        android:backgroundTint="@color/CardViewTransparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LgPassword" />
@@ -84,6 +91,7 @@
         android:padding="20dp"
         android:visibility="invisible"
         android:text="Try Again"
+        android:backgroundTint="@color/CardViewTransparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LgPassword"
@@ -95,12 +103,55 @@
         android:layout_height="wrap_content"
         android:background="@drawable/cardview"
         android:padding="20dp"
+        android:backgroundTint="@color/CardViewTransparent"
         android:text="Connecting.."
         android:layout_margin="20dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LgPassword" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/CleanKMLs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Clean Kml"
+        android:padding="10dp"
+        android:fontFamily="@font/montserratmedium"
+        android:textSize="20dp"
+        android:backgroundTint="@color/CardViewTransparent"
+        android:background="@drawable/cardview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttTryAgain" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/RebootLg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reboot LG"
+        android:textSize="20dp"
+        android:padding="10dp"
+        android:fontFamily="@font/montserratmedium"
+        android:backgroundTint="@color/CardViewTransparent"
+        android:background="@drawable/cardview"
+        android:layout_margin="20dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/CleanKMLs"
+        app:layout_constraintStart_toEndOf="@+id/CleanKMLs" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/PowerOffLg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PowerOff LG"
+        android:textSize="20dp"
+        android:padding="10dp"
+        android:fontFamily="@font/montserratmedium"
+        android:background="@drawable/cardview"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/CardViewTransparent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/RebootLg"
+        app:layout_constraintStart_toEndOf="@+id/RebootLg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

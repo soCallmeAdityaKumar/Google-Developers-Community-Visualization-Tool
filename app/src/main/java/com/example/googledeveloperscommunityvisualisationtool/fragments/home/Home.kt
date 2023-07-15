@@ -162,11 +162,11 @@ class Home : Fragment() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        chapUrlroomViewModel.readAllChapterUrlViewModel.removeObserver{}
-        chapterDatabaseViewModel.readAllChaptersViewModel.removeObserver{}
-    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        chapUrlroomViewModel.readAllChapterUrlViewModel.removeObserver{}
+//        chapterDatabaseViewModel.readAllChaptersViewModel.removeObserver{}
+//    }
 
     private fun loadConnectionStatus() {
         val sharedPreferences = activity?.getSharedPreferences(
@@ -191,7 +191,7 @@ class Home : Fragment() {
     private fun checkurlDatabase() {
         var flag1=0
         var urlListsize=0
-         chapterDatabaseViewModel.readAllChaptersViewModel.observe(requireActivity(),Observer{chapterList->
+         chapterDatabaseViewModel.readAllChaptersViewModel.observeForever(Observer{chapterList->
              Log.d("coroutines","inside the checkurldatabase")
 
 
@@ -246,7 +246,7 @@ class Home : Fragment() {
     private fun getAllGdgChapter(j:Int) {
         Log.d("coroutines", "beforedelay")
         val job4=CoroutineScope(Dispatchers.Main).launch {
-           chapUrlroomViewModel.readAllChapterUrlViewModel.observe(requireActivity(),
+           chapUrlroomViewModel.readAllChapterUrlViewModel.observeForever(
                Observer{ gdgURlChapterEntity ->
                     Log.d("home","starting from ${gdgURlChapterEntity[j].url}")
                     CoroutineScope(Dispatchers.IO).launch {
@@ -316,7 +316,7 @@ class Home : Fragment() {
     private fun getChapterFromDatabase() {
         CoroutineScope(Dispatchers.Main).launch{
 
-            chapterDatabaseViewModel.readAllChaptersViewModel.observe(requireActivity(),Observer {it->
+            chapterDatabaseViewModel.readAllChaptersViewModel.observeForever(Observer {it->
                 adapterlist=it
                 adapter.refreshData(adapterlist)
                 if(flag2==0){

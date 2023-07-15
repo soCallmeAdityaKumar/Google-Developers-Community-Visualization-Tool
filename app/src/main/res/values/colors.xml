@@ -10,11 +10,17 @@
     <color name="textColorClick">#000000</color>
     <color name="colorPrimary">#3B79AE</color>
     <color name="textColorPrimary">#F2F2F2</color>
-    <color name="AppbackgroundColor">#B3EBDFD7</color>
+    //Light Mode
+    <color name="AppbackgroundColor">@color/white</color>
+    <color name="MainHeadingText">@color/black</color>
+    <color name="CardViewTransparent">#4FFFFFFF</color>
+    <color name="OrganizerColorList">#80FFFFFF</color>
+    <color name="strokeColor">@color/black</color>
+    <color name="bookTicketTextColor">@color/black</color>
+    <color name="bookTicketBackground">#80FFFFFF</color>
+    <color name="navbarColor">#FFAAAAAA</color>
+    <color name="NotConnected">#ba181b</color>
+    <color name="Connected">#52b788</color>
 
-    //PieChart
-    <color name="R">#FFA726</color>
-    <color name="Python">#66BB6A</color>
-    <color name="CPP">#EF5350</color>
-    <color name="Java">#29B6F6</color>
+
 </resources>

@@ -222,10 +222,10 @@ class connection : Fragment() {
         val act=activity as MainActivity
         if (isConnected!!) {
             act.binding.appBarMain.connectionStatus.text="Connected"
-            act.binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#52b788"))
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
         } else {
             act.binding.appBarMain.connectionStatus.text="Not Connected"
-            act.binding.appBarMain.connectionStatus.setTextColor(Color.parseColor("#ba181b"))
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
 
         }
     }

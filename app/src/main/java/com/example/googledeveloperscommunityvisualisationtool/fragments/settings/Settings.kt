@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.findNavController
+import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentSettingsBinding
 
@@ -26,6 +28,18 @@ class Settings : Fragment() {
         }
         binding.ThirdcardView.setOnClickListener {
             findNavController().navigate(R.id.action_settings_to_alarm_notification)
+        }
+
+        binding.themeMode.setOnCheckedChangeListener{buttonView,isChecked->
+            if(!isChecked){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                val mainActivity=activity as MainActivity
+                mainActivity.binding.drawerlayout.setBackgroundResource(R.drawable.light_background)
+            }else{
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                val mainActivity=activity as MainActivity
+                mainActivity.binding.drawerlayout.setBackgroundResource(R.drawable.dark_background)
+            }
         }
         return view
     }
