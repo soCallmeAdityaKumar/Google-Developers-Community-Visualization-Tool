@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -58,6 +59,7 @@ class UpcomingEvents : Fragment() {
     lateinit var progressBar: ProgressBar
     lateinit var refreshLayout: SwipeRefreshLayout
     lateinit var lastweekroomViewModel:lastweekroommodel
+    private var fragmentLifecycleOwner:LifecycleOwner?=null
     val listOfDates= mutableListOf<String>()
 
 
@@ -65,6 +67,7 @@ class UpcomingEvents : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View
     {
+        fragmentLifecycleOwner=viewLifecycleOwner
 
         binding=FragmentUpcomingEventsBinding.inflate(layoutInflater,container,false)
         val view= binding.root
@@ -129,17 +132,17 @@ class UpcomingEvents : Fragment() {
 
     }
 
-    override fun onDestroy() {
-        lastweekroomViewModel.readlastweekEventViewModel.removeObserver{}
-        upcomingDatBaseViewModel.readAllEventViewModel.removeObserver{}
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        lastweekroomViewModel.readlastweekEventViewModel.removeObserver{fragmentLifecycleOwner}
+        upcomingDatBaseViewModel.readAllEventViewModel.removeObserver{fragmentLifecycleOwner}
 
     }
 
 
     //if database is empty it will fetch data from the api otherwise refresh the adapter
     private fun checkDatabase() {
-            upcomingDatBaseViewModel.readAllEventViewModel.observe(requireActivity(), Observer {
+            upcomingDatBaseViewModel.readAllEventViewModel.observe(fragmentLifecycleOwner!!, Observer {
                 if (it.isEmpty()) {
                     CoroutineScope(Dispatchers.IO).launch {
                         networkCheckAndRun()
@@ -169,7 +172,7 @@ class UpcomingEvents : Fragment() {
                 }
             })
 
-        lastweekroomViewModel.readlastweekEventViewModel.observe(requireActivity(), Observer {
+        lastweekroomViewModel.readlastweekEventViewModel.observe(fragmentLifecycleOwner!!, Observer {
             if(it.isNotEmpty()){
                 Log.d("upcomingevent","fragment created database size ${it.size} ")
                 val result=convertweekevententityToResult(it)
@@ -227,7 +230,7 @@ class UpcomingEvents : Fragment() {
 
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(3000)
-                    lastweekroomViewModel.readlastweekEventViewModel.observe(requireActivity(),
+                    lastweekroomViewModel.readlastweekEventViewModel.observe(fragmentLifecycleOwner!!,
                         Observer {
                             if(it.isNotEmpty()){
                                 Log.d("lastweek","database size ${it.size}")
@@ -272,7 +275,7 @@ class UpcomingEvents : Fragment() {
         if(upcoEventViewMod.isNetworkAvailable()){
             getAllUpcomingEvents()
         }else{
-            Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show()
+            Toast.makeText(binding.root.context, "Network Error", Toast.LENGTH_SHORT).show()
         }
     }
 

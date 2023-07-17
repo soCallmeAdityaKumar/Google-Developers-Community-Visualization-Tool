@@ -73,14 +73,14 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
             val end=Calendar.getInstance()
             end.add(Calendar.YEAR,2)
             eventsCalendar.setSelectionMode(eventsCalendar.SINGLE_SELECTION) //set mode of Calendar
-                .setToday(today) //set today's date [today: Calendar]
-                .setMonthRange(start, end) //set starting month [start: Calendar] and ending month [end: Calendar]
-                .setWeekStartDay(Calendar.SUNDAY, false) //set start day of the week as you wish [startday: Int, doReset: Boolean]
-                .setCurrentSelectedDate(today) //set current date and scrolls the calendar to the corresponding month of the selected date [today: Calendar]
-                .setDateTextFontSize(16f) //set font size for dates
-                .setMonthTitleFontSize(26f) //set font size for title of the calendar
-                .setWeekHeaderFontSize(26f) //set font size for week names
-                .setCallback(this) //set the callback for EventsCalendar
+                .setToday(today)
+                .setMonthRange(start, end)
+                .setWeekStartDay(Calendar.SUNDAY, false)
+                .setCurrentSelectedDate(today)
+                .setDateTextFontSize(16f)
+                .setMonthTitleFontSize(26f)
+                .setWeekHeaderFontSize(26f)
+                .setCallback(this)
          .build()
 
         return view
@@ -106,6 +106,7 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
                 }
             }
         })
+        eventsCalendar.setCallback(this)
 
     }
 

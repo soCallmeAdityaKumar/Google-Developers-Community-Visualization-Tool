@@ -2,9 +2,10 @@
 <resources>
     <color name="AppbackgroundColor">#12101A</color>
     <color name="MainHeadingText">@color/white</color>
-    <color name="CardViewTransparent">#66000000</color>
-    <color name="OrganizerColorList">#4FFFFFFF</color>
+    <color name="CardViewTransparent">#292E33</color>
+    <color name="OrganizerColorList">#292E33</color>
     <color name="strokeColor">#949FA6</color>
+    <color name="subText">#748AA1</color>
     <color name="bookTicketTextColor">@color/white</color>
     <color name="bookTicketBackground">#4FFFFFFF</color>
     <color name="navbarColor">#FF344347</color>

@@ -9,8 +9,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:cardCornerRadius="20dp"
-        android:backgroundTint="@color/OrganizerColorList"
-        android:layout_margin="10dp"
+    android:backgroundTint="@color/CardViewTransparent"
+    android:background="@drawable/glass_background"        android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -26,6 +26,7 @@
                 android:fontFamily="@font/montserratmedium"
                 android:textAlignment="center"
                 android:textSize="32dp"
+
                 android:textColor="@color/MainHeadingText"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -37,33 +38,31 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp"
                 android:fontFamily="@font/montserratmedium"
                 android:textAlignment="center"
+                android:textColor="@color/subText"
                 android:textSize="22dp"
-                android:textColor="@color/MainHeadingText"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
+                app:layout_constraintTop_toBottomOf="@+id/description" />
 
             <TextView
                 android:id="@+id/description"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
                 android:fontFamily="@font/montserratmedium"
                 android:textAlignment="center"
+                android:textColor="@color/subText"
                 android:textSize="22dp"
-                android:textColor="@color/MainHeadingText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/date"
-                app:layout_constraintVertical_bias="0.007" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.676" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

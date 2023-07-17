@@ -6,6 +6,7 @@ import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
+import android.view.Display.Mode
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +14,10 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ProgressBar
 import android.widget.ScrollView
-import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
 import java.util.HashMap
@@ -60,13 +62,17 @@ class Home : Fragment() {
     private lateinit var mostChaptersCountry:HashMap<String,Int>
     private lateinit var searchView:androidx.appcompat.widget.SearchView
     private lateinit var pieChart: PieChart
+    private lateinit var statisticsText:TextView
     lateinit var gdgChapterRecyclerView: RecyclerView
-    lateinit var fourthCardViewTextView:TextView
-    lateinit var firstcardviewTextView:TextView
     lateinit var scrollView:ScrollView
     lateinit var secondcardview:CardView
+    lateinit var activeChapterText:TextView
     lateinit var thirdCardView:CardView
-    var done=false
+    lateinit var pieSharePref:SharedPreferences
+    lateinit var pieEditor:SharedPreferences.Editor
+    private var fragmentLifecycleOwner: LifecycleOwner?=null
+    var sortedMap: HashMap<String,Int> = hashMapOf()
+
     var flag2=0
 
     override fun onAttach(context: Context) {
@@ -79,33 +85,36 @@ class Home : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.d("home","onCreateView() called")
-
-
+        fragmentLifecycleOwner=viewLifecycleOwner
 
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         val view = binding.root
 
         flag2=0
-        fourthCardViewTextView=binding.fourthcardviewTextView
-        firstcardviewTextView=binding.firstcardviewTextView
         scrollView=binding.scrollView
         gdgChapterRecyclerView=binding.recyclerViewChapters
         searchView=binding.searchChaptersView
         pieRecyclerView=binding.pieChartRecyclerView
         secondcardview=binding.SecondcardView
         thirdCardView=binding.thirdCardview
+        statisticsText=binding.firstcardviewTextView
+        progressBar=binding.progressBar
+        activeChapterText=binding.fourthcardviewTextView
 
-        fourthCardViewTextView.visibility=View.GONE
-        firstcardviewTextView.visibility=View.GONE
+
         scrollView.visibility=View.GONE
         gdgChapterRecyclerView.visibility=View.GONE
         thirdCardView.visibility=View.GONE
         secondcardview.visibility=View.GONE
+        statisticsText.visibility=View.GONE
+        activeChapterText.visibility=View.GONE
+        progressBar.visibility=View.VISIBLE
 
-
-        progressBar=binding.progressBar
 
         pieChart=binding.PieChart
+        mostChaptersCountry= hashMapOf()
+        pieSharePref=activity?.getSharedPreferences("PieSharedPref",Context.MODE_PRIVATE)!!
+        pieEditor=pieSharePref.edit()
 
         newadapterlist = mutableListOf()
         adapter = GdgChaptersAdapter(newadapterlist)
@@ -113,9 +122,6 @@ class Home : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         gdgChapterRecyclerView.adapter = adapter
 
-
-
-        mostChaptersCountry= hashMapOf()
 
         countryCount= mutableListOf()
         pieRecyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
@@ -127,7 +133,6 @@ class Home : Fragment() {
         sharedPref = activity?.getSharedPreferences("didShowPrompt", Context.MODE_PRIVATE)!!
         val prefEdit = sharedPref?.edit()
 
-//        secondCardViewTapTarget()
 
         return view
 
@@ -151,8 +156,75 @@ class Home : Fragment() {
 
         loadConnectionStatus()
 
+        startPieChartmaking()
+
+    }
+
+    private fun startPieChartmaking() {
+        var countryList:List<ChaptersUrlEntity> = listOf()
+        if(pieSharePref.all.size<10){
+            chapUrlroomViewModel.readAllChapterUrlViewModel.observe(fragmentLifecycleOwner!!, Observer {
+                countryList=it
+                CoroutineScope(Dispatchers.IO).launch {
+                    if(countryList.isNotEmpty()) {
+                        delay(5000)
+                        for (i in 0 until countryList.size) {
+                            increment(mostChaptersCountry, countryList[i].country)
+                        }
+                        withContext(Dispatchers.Main) {
+                            setDataToPie()
+                            if (progressBar.visibility == View.VISIBLE) progressBar.visibility =
+                                View.GONE
+                            statisticsText.visibility = View.VISIBLE
+                            secondcardview.visibility = View.VISIBLE
+                            statisticsText.startAnimation(
+                                AnimationUtils.loadAnimation(
+                                    requireContext(),
+                                    android.R.anim.slide_in_left
+                                )
+                            )
+                            secondcardview.startAnimation(
+                                AnimationUtils.loadAnimation(
+                                    requireContext(),
+                                    android.R.anim.slide_in_left
+                                )
+                            )
+                        }
+                    }
+                }
+            })
+        }
+        else{
+            setDataToPieFromPref()
+        }
 
 
+    }
+
+    private fun setDataToPieFromPref() {
+        var j=0
+        val listOfColor= listOf("#FFA726","#66BB6A","#EF5350","#29B6F6","#FFC8DD","#2B2D42","#8D99AE","#D5BDAF","#E4C1F9","#7400B8")
+        pieSharePref.all.forEach {map->
+            pieChart.addPieSlice(PieModel(map.key,map.value as Float,Color.parseColor(listOfColor[j])))
+            countryCount.add(CountryCountData(listOfColor[j],map.key,Integer.parseInt(map.value.toString().dropLast(2))))
+            j++
+        }
+        pieChartAdapter.refreshData(countryCount)
+        statisticsText.visibility = View.VISIBLE
+        secondcardview.visibility = View.VISIBLE
+        statisticsText.startAnimation(
+            AnimationUtils.loadAnimation(
+                requireContext(),
+                android.R.anim.slide_in_left
+            )
+        )
+        secondcardview.startAnimation(
+            AnimationUtils.loadAnimation(
+                requireContext(),
+                android.R.anim.slide_in_left
+            )
+        )
+        pieChart.startAnimation()
     }
 
     override fun onResume() {
@@ -161,12 +233,6 @@ class Home : Fragment() {
         checkurlDatabase()
 
     }
-
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        chapUrlroomViewModel.readAllChapterUrlViewModel.removeObserver{}
-//        chapterDatabaseViewModel.readAllChaptersViewModel.removeObserver{}
-//    }
 
     private fun loadConnectionStatus() {
         val sharedPreferences = activity?.getSharedPreferences(
@@ -191,20 +257,12 @@ class Home : Fragment() {
     private fun checkurlDatabase() {
         var flag1=0
         var urlListsize=0
-         chapterDatabaseViewModel.readAllChaptersViewModel.observeForever(Observer{chapterList->
+         chapterDatabaseViewModel.readAllChaptersViewModel.observe(fragmentLifecycleOwner!!,Observer{chapterList->
              Log.d("coroutines","inside the checkurldatabase")
 
-
-                 for ( i in 0 until chapterList.size){
-                     increment(mostChaptersCountry,chapterList[i].country)
-                 }
-                 setDataToPie()
-
-
-
              if(flag1==0){
-                 chapUrlroomViewModel.readAllChapterUrlViewModel.observe(viewLifecycleOwner,Observer { urlList->
-                     Log.d("coroutines","inside the chapterUrlDatabase->${urlList.size}")
+                 chapUrlroomViewModel.readAllChapterUrlViewModel.observe(fragmentLifecycleOwner!!,Observer { urlList ->
+                     Log.d("coroutines", "inside the chapterUrlDatabase->${urlList.size}")
 
                      urlListsize=urlList.size
                      if(flag1==0){
@@ -231,14 +289,6 @@ class Home : Fragment() {
              }
              getChapterFromDatabase()
 
-             //Pie chart
-//             for (i in 0 until chapterList.size) {
-//                 increment(mostChaptersCountry, chapterList[i].country)
-//             }
-//             if(mostChaptersCountry.size>=10){
-//                 mostChaptersCountry.entries.sortedByDescending { it.value }.take(10)
-//                 setDataToPie()
-//             }
          })
     }
 
@@ -246,7 +296,7 @@ class Home : Fragment() {
     private fun getAllGdgChapter(j:Int) {
         Log.d("coroutines", "beforedelay")
         val job4=CoroutineScope(Dispatchers.Main).launch {
-           chapUrlroomViewModel.readAllChapterUrlViewModel.observeForever(
+           chapUrlroomViewModel.readAllChapterUrlViewModel.observe(fragmentLifecycleOwner!!,
                Observer{ gdgURlChapterEntity ->
                     Log.d("home","starting from ${gdgURlChapterEntity[j].url}")
                     CoroutineScope(Dispatchers.IO).launch {
@@ -282,22 +332,22 @@ class Home : Fragment() {
     }
 
     private  fun setDataToPie() {
+
         var j=0
         val listOfColor= listOf("#FFA726","#66BB6A","#EF5350","#29B6F6","#FFC8DD","#2B2D42","#8D99AE","#D5BDAF","#E4C1F9","#7400B8")
         Log.d("size",mostChaptersCountry.size.toString())
-        var sortedMap: HashMap<String,Int> = hashMapOf()
 
         if(mostChaptersCountry.size>10){
             mostChaptersCountry.entries.sortedByDescending { it.value }.take(10).forEach{ sortedMap[it.key] = it.value}
             sortedMap.forEach{(k,v)->Log.d("sorted","$k->$v")}
             sortedMap.forEach { (k, v) ->
-                pieChart.refreshDrawableState()
+                pieEditor.apply{
+                    pieEditor.putFloat(k, v.toFloat())
+                    apply()
+                }
                 pieChart.addPieSlice(PieModel(k, v.toFloat(),Color.parseColor(listOfColor[j])))
                 countryCount.add(CountryCountData(listOfColor[j],k,v))
                 j++
-            }
-            countryCount.sortedByDescending {
-                it.count
             }
             pieChartAdapter.refreshData(countryCount)
             pieChart.startAnimation()
@@ -306,65 +356,56 @@ class Home : Fragment() {
 
     fun <K> increment(map: HashMap<K, Int>, key: K) {
 
-        when (val count = map[key])
-        {
-            null -> map[key] = 1
-            else -> map[key] = count + 1
-        }
+      when(val count=map[key]){
+          null->map[key]=0
+          else->map[key]=count+1
+      }
     }
 
     private fun getChapterFromDatabase() {
         CoroutineScope(Dispatchers.Main).launch{
 
-            chapterDatabaseViewModel.readAllChaptersViewModel.observeForever(Observer {it->
-                adapterlist=it
+            chapterDatabaseViewModel.readAllChaptersViewModel.observe(fragmentLifecycleOwner!!,Observer { it ->
+
+                adapterlist = it
                 adapter.refreshData(adapterlist)
-                if(flag2==0){
-                    flag2=1
-                    if (progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
-                    scrollView.visibility=View.VISIBLE
-                    fourthCardViewTextView.visibility=View.VISIBLE
-                    fourthCardViewTextView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
-                    firstcardviewTextView.visibility=View.VISIBLE
-                    firstcardviewTextView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
-                    gdgChapterRecyclerView.visibility=View.VISIBLE
-                    gdgChapterRecyclerView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
-                    secondcardview.visibility=View.VISIBLE
-                    secondcardview.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
-//                thirdcardview.visibility=View.VISIBLE
+                if(it.isNotEmpty()){
+                if (flag2 == 0) {
+                    flag2 = 1
+                    if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
+                    scrollView.visibility = View.VISIBLE
+                    activeChapterText.visibility = View.VISIBLE
+                    gdgChapterRecyclerView.visibility = View.VISIBLE
+                    gdgChapterRecyclerView.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+
                 }
-
-
-//                //Pie chart
-//                for (i in 0 until adapterlist.size) {
-//                    increment(mostChaptersCountry, adapterlist[i].country)
-//                }
-//                setDataToPie()
-
-//            if(mostChaptersCountry.size>=10){
-//                mostChaptersCountry.entries.sortedByDescending { it.value }.take(10)
-//                setDataToPie()
-//            }
-
-                newadapterlist=adapterlist.toMutableList()
+                newadapterlist = adapterlist.toMutableList()
                 //store or increase count in mostChaptersCountry
 
-                searchView.setOnQueryTextListener(object :androidx.appcompat.widget.SearchView.OnQueryTextListener{
+                searchView.setOnQueryTextListener(object :
+                    androidx.appcompat.widget.SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         return false
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
                         newadapterlist.clear()
-                        val searchtext=newText!!.toLowerCase(Locale.getDefault())
-                        if(searchtext.isNotEmpty()){
+                        val searchtext = newText!!.toLowerCase(Locale.getDefault())
+                        if (searchtext.isNotEmpty()) {
                             adapterlist.forEach {
-                                if(it.gdgName.lowercase(Locale.getDefault()).contains(searchtext)){
+                                if (it.gdgName.lowercase(Locale.getDefault())
+                                        .contains(searchtext)
+                                ) {
                                     newadapterlist.add(it)
                                 }
                             }
                             adapter.refreshData(newadapterlist)
-                        }else{
+                        } else {
                             newadapterlist.clear()
                             newadapterlist.addAll(adapterlist)
                             adapter.refreshData(newadapterlist)
@@ -375,13 +416,15 @@ class Home : Fragment() {
 
 
 
-                adapter.setOnItemClickListener(object :GdgChaptersAdapter.onItemClickListener{
+                adapter.setOnItemClickListener(object : GdgChaptersAdapter.onItemClickListener {
                     override fun onItemClick(position: Int) {
-                        val action= HomeDirections.actionHomeToGdgChapterDetails(newadapterlist[position])
+                        val action =
+                            HomeDirections.actionHomeToGdgChapterDetails(newadapterlist[position])
                         findNavController().navigate(action)
                         onPause()
                     }
                 })
+            }
             })
         }
     }
@@ -446,8 +489,11 @@ class Home : Fragment() {
         return chaptersUrlEntityList
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        chapterDatabaseViewModel.readAllChaptersViewModel.removeObserver{fragmentLifecycleOwner!!}
+        chapUrlroomViewModel.readAllChapterUrlViewModel.removeObserver{fragmentLifecycleOwner!!}
 
-
-
+    }
 
 }

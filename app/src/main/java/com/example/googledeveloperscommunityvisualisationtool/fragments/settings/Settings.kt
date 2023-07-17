@@ -33,12 +33,12 @@ class Settings : Fragment() {
         binding.themeMode.setOnCheckedChangeListener{buttonView,isChecked->
             if(!isChecked){
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                val mainActivity=activity as MainActivity
-                mainActivity.binding.drawerlayout.setBackgroundResource(R.drawable.light_background)
+//                val mainActivity=activity as MainActivity
+//                mainActivity.binding.drawerlayout.setBackgroundResource(R.drawable.light_background)
             }else{
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                val mainActivity=activity as MainActivity
-                mainActivity.binding.drawerlayout.setBackgroundResource(R.drawable.dark_background)
+//                val mainActivity=activity as MainActivity
+//                mainActivity.binding.drawerlayout.setBackgroundResource(R.drawable.dark_background)
             }
         }
         return view

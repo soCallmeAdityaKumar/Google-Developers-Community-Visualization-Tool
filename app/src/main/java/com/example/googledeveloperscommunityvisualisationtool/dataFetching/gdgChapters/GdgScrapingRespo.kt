@@ -18,7 +18,6 @@ class GdgScrapingRespo {
     private var gdgChapters=ArrayList<GdgDataClass>()
 
     private  lateinit var gdgDetails: GDGDetails
-
     fun getGdgChapters(){
         try {
             Log.d("home","inside the get chapter repo")

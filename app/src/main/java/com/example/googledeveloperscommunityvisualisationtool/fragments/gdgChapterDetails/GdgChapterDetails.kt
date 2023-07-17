@@ -84,7 +84,6 @@ class GdgChapterDetails : Fragment() {
     lateinit var aboutgdgcardView:CardView
     lateinit var organizercardView:CardView
     lateinit var upcomingcardView:CardView
-    lateinit var pasteventCardView:CardView
 
      var handler=Handler()
 
@@ -111,25 +110,22 @@ class GdgChapterDetails : Fragment() {
          countryName=binding.countryname
          aboutGdg=binding.aboutgdg
          member=binding.memebers
-         pasteventCardView=binding.pasteventscardview
-         upcomingcardView=binding.upcomingcardView
          aboutgdgcardView=binding.aboutgdgcardview
-         organizercardView=binding.organizercardview
+         organizerRecyclerView=binding.orgainzersrecycler
+         pasteventsRecycler=binding.pasteventsrecycler
+         upcomingEventsRecycler=binding.upcomingrecyclerview
 
 
          gdgName.visibility=View.GONE
          cityName.visibility=View.GONE
          countryName.visibility=View.GONE
          member.visibility=View.GONE
-         pasteventCardView.visibility=View.GONE
-         upcomingcardView.visibility=View.GONE
+         pasteventsRecycler.visibility=View.GONE
+         upcomingEventsRecycler.visibility=View.GONE
          aboutgdgcardView.visibility=View.GONE
-         organizercardView.visibility=View.GONE
+         organizerRecyclerView.visibility=View.GONE
 
 
-         organizerRecyclerView=binding.orgainzersrecycler
-         upcomingEventsRecycler=binding.upcomingrecyclerview
-         pasteventsRecycler=binding.pasteventsrecycler
 
          organizerRecyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
          organizerList= listOf()
@@ -277,15 +273,15 @@ class GdgChapterDetails : Fragment() {
                         android.R.anim.slide_in_left
                     )
                 )
-                pasteventCardView.visibility = View.VISIBLE
-                pasteventCardView.startAnimation(
+                pasteventsRecycler.visibility = View.VISIBLE
+                pasteventsRecycler.startAnimation(
                     AnimationUtils.loadAnimation(
                         requireContext(),
                         android.R.anim.slide_in_left
                     )
                 )
-                upcomingcardView.visibility = View.VISIBLE
-                upcomingcardView.startAnimation(
+                upcomingEventsRecycler.visibility = View.VISIBLE
+                upcomingEventsRecycler.startAnimation(
                     AnimationUtils.loadAnimation(
                         requireContext(),
                         android.R.anim.slide_in_left
@@ -298,8 +294,8 @@ class GdgChapterDetails : Fragment() {
                         android.R.anim.slide_in_left
                     )
                 )
-                organizercardView.visibility = View.VISIBLE
-                organizercardView.startAnimation(
+                organizerRecyclerView.visibility = View.VISIBLE
+                organizerRecyclerView.startAnimation(
                     AnimationUtils.loadAnimation(
                         requireContext(),
                         android.R.anim.slide_in_left
@@ -432,15 +428,15 @@ class GdgChapterDetails : Fragment() {
                             android.R.anim.slide_in_left
                         )
                     )
-                    pasteventCardView.visibility = View.VISIBLE
-                    pasteventCardView.startAnimation(
+                pasteventsRecycler.visibility = View.VISIBLE
+                pasteventsRecycler.startAnimation(
                         AnimationUtils.loadAnimation(
                             requireContext(),
                             android.R.anim.slide_in_left
                         )
                     )
-                    upcomingcardView.visibility = View.VISIBLE
-                    upcomingcardView.startAnimation(
+                upcomingEventsRecycler.visibility = View.VISIBLE
+                upcomingEventsRecycler.startAnimation(
                         AnimationUtils.loadAnimation(
                             requireContext(),
                             android.R.anim.slide_in_left
@@ -453,8 +449,8 @@ class GdgChapterDetails : Fragment() {
                             android.R.anim.slide_in_left
                         )
                     )
-                    organizercardView.visibility = View.VISIBLE
-                    organizercardView.startAnimation(
+                organizerRecyclerView.visibility = View.VISIBLE
+                organizerRecyclerView.startAnimation(
                         AnimationUtils.loadAnimation(
                             requireContext(),
                             android.R.anim.slide_in_left

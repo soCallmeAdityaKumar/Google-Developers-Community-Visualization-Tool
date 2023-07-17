@@ -47,11 +47,11 @@
             android:id="@+id/address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="26dp"
             android:visibility="visible"
             android:fontFamily="@font/montserratmedium"
             android:layout_marginTop="20dp"
-            android:textColor="@color/MainHeadingText"
+            android:textColor="@color/subText"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,9 +64,9 @@
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             android:visibility="visible"
-            android:textColor="@color/MainHeadingText"
+            android:textColor="@color/subText"
             android:textAlignment="viewEnd"
-            android:textSize="20dp"
+            android:textSize="26dp"
             android:fontFamily="@font/montserratmedium"
             app:layout_constraintHorizontal_bias="1.0"
 />
@@ -76,10 +76,10 @@
             android:id="@+id/gdgdName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="26dp"
             android:fontFamily="@font/montserratmedium"
             android:layout_marginTop="20dp"
-            android:textColor="@color/MainHeadingText"
+            android:textColor="@color/subText"
             android:layout_marginStart="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/address" />
@@ -93,8 +93,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserratmedium"
-            android:textSize="20dp"
-            android:textColor="@color/MainHeadingText"
+            android:textSize="26dp"
+            android:textColor="@color/subText"
             android:visibility="visible"
             android:layout_marginStart="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -108,7 +108,7 @@
             android:backgroundTint="@color/OrganizerColorList"
             android:fontFamily="@font/robotocondensedbold"
             android:text="Notify For the Events"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="30dp"
             android:textColor="@color/MainHeadingText"
             app:elevation="500dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -125,7 +125,9 @@
             android:id="@+id/aboutcardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
             app:cardCornerRadius="10dp"
             android:backgroundTint="@color/CardViewTransparent"
             android:background="@drawable/glass_background"
@@ -159,7 +161,7 @@
                             android:layout_margin="20dp"
                             android:fontFamily="@font/montserratmedium"
                             android:textSize="25dp"
-                            android:textColor="@color/MainHeadingText"
+                            android:textColor="@color/subText"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/abouttheEvent" />
@@ -167,57 +169,29 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <TextView
+            android:id="@+id/MemeberstextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/staatlichesregular"
+            android:text="Members"
+            android:textColor="@color/MainHeadingText"
+            android:textSize="42dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/membersCardView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/memberRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            app:cardCornerRadius="20dp"
-            android:backgroundTint="@color/CardViewTransparent"
-            android:background="@drawable/glass_background"
-            app:strokeWidth="1dp"
-            app:cardElevation="0dp"
-            android:elevation="200dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView3"
-            app:layout_constraintVertical_bias="0.0">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:backgroundTint="#F7F2FA"
-                    android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/MemeberstextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="20dp"
-                            android:fontFamily="@font/staatlichesregular"
-                            android:text="Members"
-                            android:textColor="@color/MainHeadingText"
-                            android:textSize="42dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/memberRecyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:layout_marginTop="10dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/MemeberstextView"
-                            tools:layout_editor_absoluteX="20dp" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
+            app:layout_constraintTop_toBottomOf="@+id/MemeberstextView"
+            tools:layout_editor_absoluteX="20dp" />
 </LinearLayout>
 </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

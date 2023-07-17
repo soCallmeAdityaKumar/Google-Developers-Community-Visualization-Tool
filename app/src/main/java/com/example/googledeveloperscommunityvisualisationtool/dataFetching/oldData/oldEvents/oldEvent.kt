@@ -41,8 +41,6 @@ class oldEvent : Fragment() {
     lateinit var organizerAdapter:oldGdgOrganAdap
     lateinit var progressBar: ProgressBar
     lateinit var scrollView:ScrollView
-    lateinit var oraganizersCardView: CardView
-    lateinit var pasteventsCardView:CardView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,8 +60,6 @@ class oldEvent : Fragment() {
         cityName.text=endpoint.chaptername.city
         countryname=binding.countryname
         countryname.text=endpoint.chaptername.country
-        oraganizersCardView=binding.organizercardview
-        pasteventsCardView=binding.pasteventscardview
 
         eventList= listOf()
         pasteventRecyclerView=binding.eventRecyclerView
@@ -103,8 +99,8 @@ class oldEvent : Fragment() {
                 Log.d("oldevent",organizerList.size.toString())
                 if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
                 if(scrollView.visibility==View.GONE)scrollView.visibility=View.VISIBLE
-                pasteventsCardView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
-                oraganizersCardView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                pasteventRecyclerView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                organizerrecyclerView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
                 gdgName.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
                 cityName.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
                 countryname.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))

@@ -71,7 +71,6 @@ class UpcomingEventDetails : Fragment() {
     lateinit var memberrecyclerView:RecyclerView
     lateinit var organizersAdapter: OrganizersAdapter
     lateinit var aboutcardView:CardView
-    lateinit var membersCardView: CardView
     lateinit var notifyButton:Button
 
     override fun onCreateView(
@@ -96,7 +95,6 @@ class UpcomingEventDetails : Fragment() {
         rsvp=binding.rsvp
         memberrecyclerView=binding.memberRecyclerView
         aboutcardView=binding.aboutcardView
-        membersCardView=binding.membersCardView
         notifyButton=binding.notifyButton
 
 
@@ -175,10 +173,10 @@ class UpcomingEventDetails : Fragment() {
                 if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
                 val eventData= viewModel.returnEvents()
                 gdgName.text=eventData.gdgName
-                gdgName.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                gdgName.startAnimation(AnimationUtils.loadAnimation(binding.root.context,android.R.anim.slide_in_left))
 
                 eventTitle.text=eventData.title
-                eventTitle.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                eventTitle.startAnimation(AnimationUtils.loadAnimation(binding.root.context,android.R.anim.slide_in_left))
 
                 if(eventData.address.isEmpty()){
                     address.visibility=View.GONE
