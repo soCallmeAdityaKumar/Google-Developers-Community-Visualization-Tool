@@ -13,6 +13,8 @@
     <string name="activity_connection_error">It was not possible to connect to Liquid Galaxy. \n Please, go to the tab connect and try again.</string>
     <string name="activity_connection_host_port_error">The format for the host and port is not valid.</string>
     <string name="connecting"> Connecting …</string>
+    <string name="rebootLG">Wait! LG is restarting</string>
+    <string name="ShutdownLG">Lg will now ShutDown</string>
     <string name="activity_connection_error_connect">It was not possible to connect to Liquid Galaxy.</string>
     <string name="button_try_again">Try Again</string>
     <string name="activity_connection_success">You are now connected to Liquid Galaxy</string>

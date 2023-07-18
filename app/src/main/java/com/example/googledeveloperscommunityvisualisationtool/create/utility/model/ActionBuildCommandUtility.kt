@@ -230,7 +230,7 @@ object ActionBuildCommandUtility {
     fun buildCleanKMLs(): String {
         val command = "echo '' > " +
                 BASE_PATH +
-                "kmls.txt"
+                "kml.txt"
         Log.w(TAG_DEBUG, "command: $command")
         return command
     }
@@ -581,4 +581,5 @@ object ActionBuildCommandUtility {
         Log.w(TAG_DEBUG, "commandCleanSlaves: $command")
         return command
     }
+
 }

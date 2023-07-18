@@ -9,6 +9,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,7 @@ import com.example.googledeveloperscommunityvisualisationtool.connection.LGConne
 import com.example.googledeveloperscommunityvisualisationtool.connection.LGConnectionSendFile
 import com.example.googledeveloperscommunityvisualisationtool.dialog.CustomDialogUtility
 import com.example.googledeveloperscommunityvisualisationtool.R
+import com.example.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.model.ActionController
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentConnectionBinding
 import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
@@ -37,7 +39,11 @@ class connection : Fragment() {
     private lateinit var lgnameEditText: EditText
     private lateinit var connectingTextView:TextView
     private lateinit var buttTryAgain:Button
+    private lateinit var rebootLG:Button
+    private lateinit var powerOffLg:Button
+    private lateinit var cleanKml:Button
     var handler=Handler()
+    var screenAmount=5
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,6 +59,9 @@ class connection : Fragment() {
         connectButton=binding.ConnectLGButton
         connectingTextView=binding.ConnectingTextView
         buttTryAgain=binding.buttTryAgain
+        rebootLG=binding.RebootLg
+        powerOffLg=binding.PowerOffLg
+        cleanKml=binding.CleanKMLs
 
         connectButton.setOnClickListener { connectionTest() }
 
@@ -64,8 +73,61 @@ class connection : Fragment() {
             editor.apply()
         })
 
+        rebootLG.setOnClickListener {
+            startrebootLg()
+        }
+
+        powerOffLg.setOnClickListener {
+            startPowerOff()
+        }
+
+        cleanKml.setOnClickListener {
+            startCleaningKML()
+        }
+
 
         return view
+    }
+
+    private fun startCleaningKML() {
+        try {
+            val lgConnectionManager = LGConnectionManager.getInstance()
+            lgConnectionManager!!.startConnection()
+            val lgCommand = LGCommand(
+                ActionBuildCommandUtility.buildCommandCleanSlaves(),
+                LGCommand.CRITICAL_MESSAGE, object : LGCommand.Listener {
+                    override fun onResponse(response: String?) {
+
+                    }
+                })
+            lgConnectionManager.addCommandToLG(lgCommand)
+        }catch (e:Exception){
+            println("Could not connect to LG")
+        }
+    }
+    private fun startPowerOff() {
+        val dialog = CustomDialogUtility.getDialog(requireActivity(), resources.getString(R.string.ShutdownLG))
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+        val password=passwordEditText.text.toString()
+        for(i in screenAmount downTo 1){
+            try{
+                val command=
+                    "sshpass -p $password ssh -t lg$i \"echo $password | sudo -S poweroff\" "
+                val lgCommand=LGCommand(command,LGCommand.CRITICAL_MESSAGE,object :LGCommand.Listener{
+                    override fun onResponse(response: String?) {
+                        dialog.dismiss()
+                    }
+                })
+                val lgConnectionManager = LGConnectionManager.getInstance()
+                lgConnectionManager!!.startConnection()
+                lgConnectionManager!!.addCommandToLG(lgCommand)
+            }catch (e:Exception){
+                println("Could not ShutDown to LG")
+                throw e
+            }
+        }
     }
 
     override fun onResume() {
@@ -112,6 +174,32 @@ class connection : Fragment() {
         createConnection(usernameText, passwordText, hostPort, lgCommand)
         sendMessageError(lgCommand, dialog)
     }
+
+    private fun startrebootLg(){
+        val dialog = CustomDialogUtility.getDialog(requireActivity(), resources.getString(R.string.rebootLG))
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+        val password=passwordEditText.text.toString()
+        for(i in screenAmount downTo 1){
+            Log.d("reboot","trying for $i")
+            try{
+                val command="sshpass -p $password ssh -t lg$i \"echo $password | sudo -S reboot\""
+                val lgCommand=LGCommand(command,LGCommand.CRITICAL_MESSAGE,object :LGCommand.Listener{
+                    override fun onResponse(response: String?) {
+                        dialog.dismiss()
+                    }
+                })
+                val lgConnectionManager = LGConnectionManager.getInstance()
+                lgConnectionManager!!.startConnection()
+                lgConnectionManager!!.addCommandToLG(lgCommand)
+            }catch (e:Exception){
+                println("Could not reboot to LG")
+                throw e
+            }
+        }
+    }
+
     private fun sendMessageError(lgCommand: LGCommand, dialog: Dialog) {
         handler.postDelayed({
             if (dialog.isShowing) {
