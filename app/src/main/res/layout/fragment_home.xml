@@ -29,13 +29,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/statisticsImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="23dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewChapters" />
+
         <TextView
             android:id="@+id/firstcardviewTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
+            android:layout_marginStart="5dp"
             android:fontFamily="@font/montserratmedium"
             android:text="Statistics"
             android:textAlignment="viewStart"
@@ -43,7 +52,7 @@
             android:textSize="42dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/statisticsImage"
             app:layout_constraintTop_toBottomOf="@+id/recyclerViewChapters"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -155,11 +164,20 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <ImageView
+            android:id="@+id/cloudImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="23dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/fourthcardviewTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/montserratmedium"
             android:text=" Active Chapters"
@@ -168,10 +186,9 @@
             android:textSize="42dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cloudImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
-
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchChaptersView"

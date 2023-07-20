@@ -11,5 +11,7 @@
     <color name="navbarColor">#FF344347</color>
     <color name="NotConnected">#ba181b</color>
     <color name="Connected">#52b788</color>
+    <color name="appbarColor">#292E33</color>
+
 
 </resources>

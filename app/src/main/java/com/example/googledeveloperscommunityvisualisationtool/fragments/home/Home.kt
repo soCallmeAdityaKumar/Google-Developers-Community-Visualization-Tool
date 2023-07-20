@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
@@ -23,6 +24,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.googledeveloperscommunityvisualisationtool.MainActivity
+import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.dataClass.gdgGroupClasses.GdgDataClass
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgChapModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgScrapingRespo
@@ -70,6 +72,8 @@ class Home : Fragment() {
     lateinit var thirdCardView:CardView
     lateinit var pieSharePref:SharedPreferences
     lateinit var pieEditor:SharedPreferences.Editor
+    lateinit var cloudImageView:ImageView
+    lateinit var statisticsImageView: ImageView
     private var fragmentLifecycleOwner: LifecycleOwner?=null
     var sortedMap: HashMap<String,Int> = hashMapOf()
 
@@ -100,6 +104,8 @@ class Home : Fragment() {
         statisticsText=binding.firstcardviewTextView
         progressBar=binding.progressBar
         activeChapterText=binding.fourthcardviewTextView
+        cloudImageView=binding.cloudImage
+        statisticsImageView=binding.statisticsImage
 
 
         scrollView.visibility=View.GONE
@@ -128,6 +134,8 @@ class Home : Fragment() {
         pieChartAdapter=PieChartAdapter(countryCount)
         pieRecyclerView.adapter=pieChartAdapter
 
+        cloudImageView.setImageDrawable(resources.getDrawable(R.drawable.cloud_dark_logo))
+        statisticsImageView.setImageDrawable(resources.getDrawable(R.drawable.statistics_dark_logo))
 
 
         sharedPref = activity?.getSharedPreferences("didShowPrompt", Context.MODE_PRIVATE)!!

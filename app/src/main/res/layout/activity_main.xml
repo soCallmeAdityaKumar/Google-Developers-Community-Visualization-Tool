@@ -14,15 +14,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    <com.google.android.material.navigation.NavigationView
+    <com.google.android.material.navigationrail.NavigationRailView
         android:id="@+id/navView"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
         android:backgroundTint="@color/navbarColor"
         app:itemTextColor="@color/nav_item"
+        android:layout_gravity="left"
         app:itemIconTint="@color/nav_item"
         app:itemIconSize="30dp"
+        app:menuGravity="center"
+        app:elevation="5dp"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/mynav_menu"
         android:padding="20dp"
         />

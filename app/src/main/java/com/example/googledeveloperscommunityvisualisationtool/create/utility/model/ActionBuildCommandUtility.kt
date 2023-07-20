@@ -581,5 +581,10 @@ object ActionBuildCommandUtility {
         Log.w(TAG_DEBUG, "commandCleanSlaves: $command")
         return command
     }
+    fun buildRebootSlaves(password:String,i:Int):String{
+        val command="sshpass -p $password ssh -t lg$i \"echo $password | sudo -S reboot\""
+        Log.w(TAG_DEBUG, "commandRebootSlaves: $command")
+        return command
+    }
 
 }
