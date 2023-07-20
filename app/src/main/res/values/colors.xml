@@ -11,11 +11,12 @@
     <color name="colorPrimary">#3B79AE</color>
     <color name="textColorPrimary">#F2F2F2</color>
     //Light Mode
-    <color name="AppbackgroundColor">#DAE3FF</color>
+    <color name="AppbackgroundColor">@color/white</color>
     <color name="MainHeadingText">@color/black</color>
-    <color name="CardViewTransparent">#dee2e6</color>
-    <color name="OrganizerColorList">#dee2e6</color>
+    <color name="CardViewTransparent">@color/white</color>
+    <color name="OrganizerColorList">@color/white</color>
     <color name="subText">#748AA1</color>
+    <color name="GDGCitynameList">#424242</color>
     <color name="strokeColor">@color/black</color>
     <color name="bookTicketTextColor">@color/black</color>
     <color name="bookTicketBackground">#80FFFFFF</color>
@@ -23,6 +24,8 @@
     <color name="NotConnected">#ba181b</color>
     <color name="Connected">#52b788</color>
     <color name="appbarColor">#dee2e6</color>
+    <color name="ButtonColor">#1090CB</color>
+    <color name="searchBar">@color/white</color>
 
 
 </resources>

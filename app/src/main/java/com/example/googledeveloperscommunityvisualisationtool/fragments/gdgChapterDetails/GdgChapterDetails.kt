@@ -220,8 +220,7 @@ class GdgChapterDetails : Fragment() {
             Log.d("storedargs",args.chapter.gdgName)
             Log.d("stored",sharedPref.getString("gdgname",null).toString())
             gdgName.text = sharedPref.getString("gdgname", null)
-            cityName.text = sharedPref.getString("cityname", null)
-            countryName.text = sharedPref.getString("countryname", null)
+            cityName.text =" ${sharedPref.getString("cityname", null)}, ${sharedPref.getString("countryname", null)}"
             aboutGdg.text = sharedPref.getString("aboutgdg", null)
             member.text = sharedPref.getString("member", null)
             val orgaizersString= sharedPref.getString("organzierslist",null)
@@ -238,7 +237,6 @@ class GdgChapterDetails : Fragment() {
             organizerList=gson.fromJson(orgaizersString,organizerlistType)
 
             Log.d("stored",pastEventsList.size.toString())
-            Log.d("stored",pastEventsList[0].toString())
 
             organizerAdapter.refreshData(organizerList)
             eventsAdapterpast.refreshData(pastEventsList)
@@ -338,8 +336,7 @@ class GdgChapterDetails : Fragment() {
 
                 gdgDetails = gdgViewModel.getdetails()
                 gdgName.text = gdgDetails.gdgName
-                cityName.text = args.chapter.city_name
-                countryName.text = args.chapter.country
+                cityName.text = "${args.chapter.city_name}, ${args.chapter.country}"
                 aboutGdg.text = args.chapter.about
                 member.text = args.chapter.membersNumber
                 organizerList = gdgDetails.orgnaizersList

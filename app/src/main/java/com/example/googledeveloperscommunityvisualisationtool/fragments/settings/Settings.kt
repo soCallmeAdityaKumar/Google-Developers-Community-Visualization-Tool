@@ -1,5 +1,7 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.settings
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,12 +18,24 @@ class Settings : Fragment() {
 
     private lateinit var viewModel: SettingsViewModel
     private lateinit var binding:FragmentSettingsBinding
+    private lateinit var sharedPref:SharedPreferences
+    private lateinit var prefEditor:SharedPreferences.Editor
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding=FragmentSettingsBinding.inflate(layoutInflater,container,false)
         val view=binding.root
+
+        sharedPref=activity?.getSharedPreferences("Theme",Context.MODE_PRIVATE)!!
+        prefEditor=sharedPref.edit()
+        val night=sharedPref.getBoolean("Night",false)
+
+        if(night){
+            binding.themeMode.isChecked=true
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+
 
         binding.FirstcardView.setOnClickListener{
             findNavController().navigate(R.id.action_settings_to_connection)
@@ -33,10 +47,14 @@ class Settings : Fragment() {
         binding.themeMode.setOnCheckedChangeListener{buttonView,isChecked->
             if(!isChecked){
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                prefEditor.putBoolean("Night",false)
+                prefEditor.apply()
 //                val mainActivity=activity as MainActivity
 //                mainActivity.binding.drawerlayout.setBackgroundResource(R.drawable.light_background)
             }else{
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                prefEditor.putBoolean("Night",true)
+                prefEditor.apply()
 //                val mainActivity=activity as MainActivity
 //                mainActivity.binding.drawerlayout.setBackgroundResource(R.drawable.dark_background)
             }

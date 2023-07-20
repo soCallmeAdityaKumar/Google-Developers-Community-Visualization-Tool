@@ -1,9 +1,11 @@
 package com.example.googledeveloperscommunityvisualisationtool
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var prefEdit:SharedPreferences.Editor
     private lateinit var navController: NavController
     private lateinit var drawerLayout:DrawerLayout
+    private lateinit var themeSharedPreferences: SharedPreferences
     var storedgdgData=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +39,16 @@ class MainActivity : AppCompatActivity() {
         binding.appBarMain.menuButton.setOnClickListener {
             binding.drawerlayout.openDrawer(GravityCompat.START)
         }
+        themeSharedPreferences=this.getSharedPreferences("Theme",Context.MODE_PRIVATE)
+        val night=themeSharedPreferences.getBoolean("Night",true)
+        if(night){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            binding.appBarMain.notifyImage.setImageDrawable(resources.getDrawable(R.drawable.notify_dark_logo))
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            binding.appBarMain.notifyImage.setImageDrawable(resources.getDrawable(R.drawable.notify_light_logo))
 
+        }
 //        loadConnectionStatus()
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
@@ -53,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.oldGdgList -> "OLD GOOGLE DEVELOPER GROUPS"
                 else -> "GOOGLE DEVELOPER COMMUNITY VISUALIZATION TOOL"
             }
+            binding.appBarMain.notifyImage.setImageDrawable(getDrawable(R.drawable.notify_light_logo))
 
         }
     }

@@ -75,6 +75,7 @@ class Home : Fragment() {
     lateinit var cloudImageView:ImageView
     lateinit var statisticsImageView: ImageView
     private var fragmentLifecycleOwner: LifecycleOwner?=null
+    private lateinit var themeSharedPreferences: SharedPreferences
     var sortedMap: HashMap<String,Int> = hashMapOf()
 
     var flag2=0
@@ -134,8 +135,16 @@ class Home : Fragment() {
         pieChartAdapter=PieChartAdapter(countryCount)
         pieRecyclerView.adapter=pieChartAdapter
 
-        cloudImageView.setImageDrawable(resources.getDrawable(R.drawable.cloud_dark_logo))
-        statisticsImageView.setImageDrawable(resources.getDrawable(R.drawable.statistics_dark_logo))
+
+        themeSharedPreferences=activity?.getSharedPreferences("Theme",Context.MODE_PRIVATE)!!
+        val night=themeSharedPreferences.getBoolean("Night",false)
+        if(night){
+            cloudImageView.setImageDrawable(resources.getDrawable(R.drawable.cloud_dark_logo))
+            statisticsImageView.setImageDrawable(resources.getDrawable(R.drawable.statistics_dark_logo))
+        }else{
+            cloudImageView.setImageDrawable(resources.getDrawable(R.drawable.cloud_light_logo))
+            statisticsImageView.setImageDrawable(resources.getDrawable(R.drawable.statistics_light_logo))
+        }
 
 
         sharedPref = activity?.getSharedPreferences("didShowPrompt", Context.MODE_PRIVATE)!!
