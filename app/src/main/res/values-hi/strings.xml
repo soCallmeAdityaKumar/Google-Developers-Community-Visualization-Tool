@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //Navigation
+    <string name="Home">घर</string>
+    <string name="Upcoming_Events">आगामी कार्यक्रम</string>
+    <string name="Calendar">पंचांग</string>
+    <string name="Settings">समायोजन</string>
+    <string name="Old_Data">पुराना डेटा</string>
+
+    //AppName
+    <string name="app_name">Google डेवलपर्स सामुदायिक विज़ुअलाइज़ेशन टूल</string>
+
+    <string name="open">खुला</string>
+    <string name="close">बंद करना</string>
+    <string name="title_activity_splash_screen">शीर्षक_गतिविधि_स्प्लैश_स्क्रीन</string>
+    <string name="NavViewInto">यह नेविगेशन दृश्य है</string>
+    <string name="NavViewMenuButton">नेविगेशन दिखाने के लिए स्लाइड करें</string>
+    <string name="hello_blank_fragment">नमस्कार रिक्त अंश</string>
+    <string name="test_connection">परीक्षण स्थान…</string>
+    <string name="activity_connection_error">लिक्विड गैलेक्सी से कनेक्ट करना संभव नहीं था।   कृपया, कनेक्ट टैब पर जाएं और पुनः प्रयास करें।</string>
+    <string name="activity_connection_host_port_error">होस्ट और पोर्ट का प्रारूप मान्य नहीं है.</string>
+    <string name="connecting">कनेक्ट हो रहा है...</string>
+    <string name="rebootLG">इंतज़ार! एलजी पुनः आरंभ कर रहा है</string>
+    <string name="ShutdownLG">एलजी अब बंद हो जाएगा</string>
+    <string name="activity_connection_error_connect">लिक्विड गैलेक्सी से कनेक्ट करना संभव नहीं था।</string>
+    <string name="button_try_again">पुनः प्रयास करें</string>
+    <string name="activity_connection_success">अब आप लिक्विड गैलेक्सी से जुड़ गए हैं</string>
+    <string name="GDG_Sub_headingFirst">स्थानीय डेवलपर्स से जुड़ें और नए कौशल सीखें</string>
+    <string name="GDG_Sub_headingSecond">अपने निकट के GDG चैप्टर से जुड़ें और जानें नवीनतम Google प्रौद्योगिकियाँ</string>
+
+
+</resources>

@@ -152,7 +152,7 @@ object ActionBuildCommandUtility {
                 "</kml>" +
                 "' > " +
                 BASE_PATH +
-                "balloon.kml"
+                "bolloon.kml"
         Log.w(TAG_DEBUG, startCommand + description + imageCommand + videoCommand + endCommand)
         return startCommand + description + imageCommand + videoCommand + endCommand
     }

@@ -71,6 +71,14 @@ class connection : Fragment() {
         resetRefreshButton=binding.ResetRefresh
         setRefreshButton=binding.SetRefresh
 
+        val lgsharedPref=activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name,MODE_PRIVATE)!!
+        val isConnected=lgsharedPref.getBoolean("IS_CONNECTED",false)
+        if(isConnected){
+            passwordEditText.setText(lgsharedPref.getString("USER_PASSWORD",null))
+            lgipAddress.setText(lgsharedPref.getString("URI_TEXT",null))
+            lgnameEditText.setText(lgsharedPref.getString("USER_NAME",null))
+        }
+
         connectButton.setOnClickListener { connectionTest() }
 
         buttTryAgain?.setOnClickListener(View.OnClickListener { view: View? ->

@@ -1,5 +1,6 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails
 
+import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -11,6 +12,7 @@ import com.example.googledeveloperscommunityvisualisationtool.create.utility.mod
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.model.poi.POICamera
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.model.poi.POILocation
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
+import java.net.URI
 import java.util.concurrent.atomic.AtomicBoolean
 
 class TourGDGThread internal constructor(
@@ -56,9 +58,9 @@ class TourGDGThread internal constructor(
         val poiCamera = POICamera(10.0, 0.0, 3000.0, "absolute", 4)
         val poi = POI().setPoiLocation(poiLocation).setPoiCamera(poiCamera)
         val balloon = Balloon()
-        val description = gdg.city + ", " + gdg.country
+        val description = gdg.city+","+ gdg.country+"\n"+gdg.membersNumber+"\n"+gdg.about
         balloon.setPoi(poi).setDescription(description)
-            .setImageUri(null).setImagePath(null).setVideoPath(null).setDuration(30)
+            .setImageUri(Uri.parse(gdg.banner.path)).setImagePath(null).setVideoPath(null).setDuration(30)
         actionController!!.TourGDG(poi, balloon)
     }
 

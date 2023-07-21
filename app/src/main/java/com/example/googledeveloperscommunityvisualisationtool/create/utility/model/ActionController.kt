@@ -329,6 +329,7 @@ private constructor() {
      */
     fun TourGDG(poi: POI, balloon: Balloon) {
         cleanFileKMLs(0)
+        buildCleanKMLs()
         sendBalloonTourGDG(balloon, null)
         sendPoiToLG(poi, null)
     }

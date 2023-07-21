@@ -1,4 +1,12 @@
 <resources>
+    //Navigation
+    <string name="Home">Home</string>
+    <string name="Upcoming_Events">Upcoming Events</string>
+    <string name="Calendar">Calendar</string>
+    <string name="Settings">Settings</string>
+    <string name="Old_Data">Old Data</string>
+
+
     <string name="app_name">Google Developers Community Visualization Tool</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -20,10 +28,4 @@
     <string name="activity_connection_success">You are now connected to Liquid Galaxy</string>
     <string name="GDG_Sub_headingFirst">Connect with local developers and learn new skills</string>
     <string name="GDG_Sub_headingSecond">Join a GDG chapter near you and discover the \nlatest Google technologies</string>
-
-
-
-
-
-
 </resources>
