@@ -5,7 +5,7 @@
 <item android:id="@+id/home"
         android:visible="true"
         android:icon="@drawable/home"
-        android:title="Home"/>
+        android:title="@string/Home"/>
     <item android:id="@+id/maps"
         android:visible="false"
         android:icon="@drawable/map"
@@ -17,11 +17,11 @@
     <item android:id="@+id/upcomingEvents"
         android:visible="true"
         android:icon="@drawable/events"
-        android:title="Upcoming events"/>
+        android:title="@string/Upcoming_Events"/>
     <item android:id="@+id/calender"
         android:icon="@drawable/calendar"
         android:visible="true"
-        android:title="Calender"/>
+        android:title="@string/Calendar"/>
 <!--    <item android:id="@+id/projects"-->
 <!--        android:visible="false"-->
 <!--        android:title="Project"/>-->
@@ -36,10 +36,10 @@
     <item android:id="@+id/settings"
         android:visible="true"
         android:icon="@drawable/settings"
-        android:title="Settings"/>
+        android:title="@string/Settings"/>
     <item android:id="@+id/oldGdgList"
         android:visible="true"
         android:icon="@drawable/clockimg"
-        android:title="Old Data"/>
+        android:title="@string/Old_Data"/>
     </group>
 </menu>

@@ -443,10 +443,10 @@ class connection : Fragment() {
         val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         val act=activity as MainActivity
         if (isConnected!!) {
-            act.binding.appBarMain.connectionStatus.text="Connected"
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.connected)
             act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
         } else {
-            act.binding.appBarMain.connectionStatus.text="Not Connected"
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.not_connected)
             act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
 
         }

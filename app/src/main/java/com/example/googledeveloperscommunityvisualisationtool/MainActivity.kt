@@ -53,17 +53,13 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             binding.appBarMain.titleactionbar.text = when (destination.id) {
-                R.id.settings -> "SETTINGS"
-                R.id.connection -> "CONNECTION"
-                R.id.alarm_notification -> "ALARM AND NOTIFICATION"
-                R.id.teamDetails -> "TEAM DETAILS"
-                R.id.upcomingEvents -> "EVENTS"
-                R.id.home -> "HOME"
-                R.id.oldGdgList -> "OLD GDG DATA"
-                R.id.calender->"EVENTS CALENDAR"
-                R.id.gdgChapterDetails -> "CHAPTER DETAIL"
-                R.id.oldGdgList -> "OLD GOOGLE DEVELOPER GROUPS"
-                else -> "GOOGLE DEVELOPER COMMUNITY VISUALIZATION TOOL"
+                R.id.settings -> resources.getString(R.string.Settings)
+                R.id.upcomingEvents -> resources.getString(R.string.UpcomingEvent)
+                R.id.home -> resources.getString(R.string.Home)
+                R.id.oldGdgList -> resources.getString(R.string.Old_Data)
+                R.id.calender->resources.getString(R.string.Calendar)
+                R.id.gdgChapterDetails -> resources.getString(R.string.GDG_ChapterDetails)
+                else -> resources.getString(R.string.app_name)
             }
             binding.appBarMain.notifyImage.setImageDrawable(getDrawable(R.drawable.notify_light_logo))
 

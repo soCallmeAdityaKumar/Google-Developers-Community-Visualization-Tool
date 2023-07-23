@@ -2,10 +2,8 @@ package com.example.googledeveloperscommunityvisualisationtool.fragments.setting
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.graphics.Bitmap.Config
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,8 +15,6 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.findNavController
-import androidx.sqlite.db.SupportSQLiteOpenHelper
-import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentSettingsBinding
 import java.util.Locale
@@ -30,7 +26,6 @@ class Settings : Fragment() {
     private lateinit var sharedPref:SharedPreferences
     private lateinit var prefEditor:SharedPreferences.Editor
     private lateinit var arrayAdapter:ArrayAdapter<String>
-    private lateinit var languageList:List<String>
     private lateinit var spinner: Spinner
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,9 +68,9 @@ class Settings : Fragment() {
             }
         }
 
-        languageList= listOf("Select Langauage","English","Hindi")
+        val languages=resources.getStringArray(R.array.languages)
         arrayAdapter=
-            ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,languageList)
+            ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,languages)
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter=arrayAdapter
         spinner.setSelection(0)
@@ -86,16 +81,8 @@ class Settings : Fragment() {
                 position: Int,
                 id: Long
             ) {
-//                val selectedLanguageCode = getLanguageCodeFromPosition(position)
-//                LocaleHelper.setLocale(requireActivity(),selectedLanguageCode)
-                val selectedLanguage=parent!!.getItemAtPosition(position).toString()
-                if(selectedLanguage.equals("English")){
-                    LocaleHelper.setLocale(requireActivity(),selectedLanguage)
-                    startActivity(Intent(requireContext(),MainActivity::class.java))
-                }else if(selectedLanguage.equals("Hindi")){
-                    LocaleHelper.setLocale(requireActivity(),selectedLanguage)
-                    startActivity(Intent(requireContext(),MainActivity::class.java))
-                }
+                val selectedLanguageCode = getLanguageCodeFromPosition(position)
+                updateAppLanguage(selectedLanguageCode)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -114,17 +101,20 @@ class Settings : Fragment() {
             val configuration= Configuration()
             configuration.setLocale(locale)
             activity.baseContext.resources.updateConfiguration(configuration,activity.baseContext.resources.displayMetrics)
-//            activity.recreate()
         }
+    }
+    private fun updateAppLanguage(languageCode: String) {
+        // Use the LocaleHelper from the previous example to change the app's language
+        LocaleHelper.setLocale(requireActivity(), languageCode)
+
     }
 
     private fun getLanguageCodeFromPosition(position: Int): String {
         // Map the position to the corresponding language code
         return when (position) {
-            0 -> "en" // English
-            1 -> "hi" // French
-            // Add more cases for other languages as needed
-            else -> "en" // Default to English
+            0 -> "en"
+            1 -> "hi"
+            else -> "en"
         }
     }
 

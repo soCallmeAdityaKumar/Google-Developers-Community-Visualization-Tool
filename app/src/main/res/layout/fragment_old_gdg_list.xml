@@ -37,7 +37,7 @@
             android:fontFamily="@font/chivomonomedium"
             android:textSize="32dp"
             android:textColor="@color/MainHeadingText"
-            android:text="GDG Name"
+            android:text="@string/gdg_name"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -55,7 +55,7 @@
             android:textColor="@color/MainHeadingText"
             android:fontFamily="@font/chivomonomedium"
             android:textAlignment="center"
-            android:text="City"
+            android:text="@string/city"
             app:layout_constraintBaseline_toBaselineOf="@+id/gdgname"
             app:layout_constraintStart_toEndOf="@+id/gdgname" />
 
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="200dp"
             android:textSize="32dp"
-            android:text="Country"
+            android:text="@string/country"
             android:textColor="@color/MainHeadingText"
             android:fontFamily="@font/chivomonomedium"
             android:layout_marginBottom="10dp"

@@ -2,13 +2,15 @@
 <resources>
     //Navigation
     <string name="Home">घर</string>
-    <string name="Upcoming_Events">आगामी कार्यक्रम</string>
+    <string name="Upcoming_Events">घटनाक्रम का कैलेंडर</string>
     <string name="Calendar">पंचांग</string>
     <string name="Settings">समायोजन</string>
-    <string name="Old_Data">पुराना डेटा</string>
+    <string name="Old_Data">पुराना जीडीजी डेटा</string>
+    <string name="GDG_ChapterDetails">अध्याय विवरण</string>
+    <string name="UpcomingEvent">आयोजन</string>
 
     //AppName
-    <string name="app_name">Google डेवलपर्स सामुदायिक विज़ुअलाइज़ेशन टूल</string>
+    <string name="app_name">गूगल डेवलपर्स सामुदायिक विज़ुअलाइज़ेशन टूल</string>
 
     <string name="open">खुला</string>
     <string name="close">बंद करना</string>
@@ -16,17 +18,55 @@
     <string name="NavViewInto">यह नेविगेशन दृश्य है</string>
     <string name="NavViewMenuButton">नेविगेशन दिखाने के लिए स्लाइड करें</string>
     <string name="hello_blank_fragment">नमस्कार रिक्त अंश</string>
+
+    <string name="GDG_Sub_headingFirst">स्थानीय डेवलपर्स से जुड़ें और नए कौशल सीखें</string>
+    <string name="GDG_Sub_headingSecond">अपने निकट के जीडीजी चैप्टर से जुड़ें और जानें नवीनतम गूगल प्रौद्योगिकियाँ</string>
+    //HomeFragment
+    <string name="google_developer_ngroups">गूगल डेवलपर \nसमूह</string>
+    <string name="active_chapters">सक्रिय अध्याय</string>
+    <string name="statistics">आंकड़े</string>
+    <string name="max_groups_in_countries">देशों में अधिकतम समूह</string>
+    <string name="top_10_events">शीर्ष 10 घटनाएँ</string>
+    <string name="about_gdg">जीडीजी के बारे में</string>
+    <string name="organizers">आयोजकों</string>
+    <string name="upcoming_events">आगामी कार्यक्रम</string>
+    <string name="past_events">अतीत की घटनायें</string>
+    <string name="stop_tour_gdg">स्टॉप टूर जीडीजी</string>
+    <string name="start_tour_gdg">टूर जीडीजी प्रारंभ करें</string>
+    <string name="connection">संबंध</string>
+    <string name="language">भाषा</string>
+    <string name="text_to_speech">भाषण के पाठ</string>
+    <string name="alarm_notification">अलार्म अधिसूचना</string>
+    <string name="clear_database">डेटाबेस साफ़ करें</string>
+    <string name="night_mode">रात का मोड</string>
+    <string name="lg_ip_address_port">एलजी आईपी पता: पोर्ट</string>
+    <string name="lg_name">एलजी नाम</string>
+    <string name="lg_password">एलजी नाम</string>
+    <string name="connecting">कनेक्ट हो रहा है...</string>
     <string name="test_connection">परीक्षण स्थान…</string>
     <string name="activity_connection_error">लिक्विड गैलेक्सी से कनेक्ट करना संभव नहीं था।   कृपया, कनेक्ट टैब पर जाएं और पुनः प्रयास करें।</string>
     <string name="activity_connection_host_port_error">होस्ट और पोर्ट का प्रारूप मान्य नहीं है.</string>
-    <string name="connecting">कनेक्ट हो रहा है...</string>
     <string name="rebootLG">इंतज़ार! एलजी पुनः आरंभ कर रहा है</string>
     <string name="ShutdownLG">एलजी अब बंद हो जाएगा</string>
     <string name="activity_connection_error_connect">लिक्विड गैलेक्सी से कनेक्ट करना संभव नहीं था।</string>
     <string name="button_try_again">पुनः प्रयास करें</string>
     <string name="activity_connection_success">अब आप लिक्विड गैलेक्सी से जुड़ गए हैं</string>
-    <string name="GDG_Sub_headingFirst">स्थानीय डेवलपर्स से जुड़ें और नए कौशल सीखें</string>
-    <string name="GDG_Sub_headingSecond">अपने निकट के GDG चैप्टर से जुड़ें और जानें नवीनतम Google प्रौद्योगिकियाँ</string>
+    <string name="clean_kml">केएमएल साफ़ करें</string>
+    <string name="reboot_lg">एलजी को रिबूट करें</string>
+    <string name="poweroff_lg">पावरऑफ एलजी</string>
+    <string name="set_refresh">ताज़ा करें सेट करें</string>
+    <string name="reset_refresh">रीसेट ताज़ा करें</string>
+    <string name="relaunch_lg">एलजी को पुनः लॉन्च करें</string>
+    <string name="save_kml">केएमएल सहेजें</string>
+    <string name="gdg_name">जीडीजी नाम</string>
+    <string name="city">शहर</string>
+    <string name="country">देश</string>
+    <string name="about_this_event">इस घटना के बारे में</string>
+    <string name="members">सदस्यों</string>
+    <string name="notify_for_the_events">घटनाओं के लिए सूचित करें</string>
+    <string name="last_week_events">पिछले सप्ताह की घटनाएँ</string>
+    <string name="not_connected">जुड़े नहीं हैं</string>
+    <string name="connected">जुड़े हुए</string>
 
 
 </resources>

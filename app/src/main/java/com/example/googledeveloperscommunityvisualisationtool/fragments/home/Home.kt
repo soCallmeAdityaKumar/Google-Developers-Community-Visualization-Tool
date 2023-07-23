@@ -184,6 +184,7 @@ class Home : Fragment() {
                 countryList=it
                 CoroutineScope(Dispatchers.IO).launch {
                     if(countryList.isNotEmpty()) {
+                        mostChaptersCountry.clear()
                         delay(5000)
                         for (i in 0 until countryList.size) {
                             increment(mostChaptersCountry, countryList[i].country)

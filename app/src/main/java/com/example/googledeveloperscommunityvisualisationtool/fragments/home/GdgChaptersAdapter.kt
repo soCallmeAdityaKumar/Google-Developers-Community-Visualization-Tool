@@ -1,15 +1,11 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.home
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.GdgChaptersListBinding
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
-import kotlin.random.Random
 
 class GdgChaptersAdapter(var chapterList: List<ChapterEntity>):RecyclerView.Adapter<GdgChaptersAdapter.MyViewHolder>() {
     private lateinit var mListen:onItemClickListener
@@ -42,7 +38,7 @@ class GdgChaptersAdapter(var chapterList: List<ChapterEntity>):RecyclerView.Adap
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         with(holder) {
             with(chapterList[position]) {
-                binding.GdgNameTextView.text = this.gdgName
+                binding.GdgNameTextView.text =this.gdgName
                 binding.GdgCityTextView.text = this.city_name
                 binding.GDGCountryTextView.text=this.country
                 if(this.banner.path.isNotEmpty()){

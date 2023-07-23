@@ -1,31 +1,74 @@
 <resources>
-    //Navigation
-    <string name="Home">Home</string>
-    <string name="Upcoming_Events">Upcoming Events</string>
-    <string name="Calendar">Calendar</string>
-    <string name="Settings">Settings</string>
-    <string name="Old_Data">Old Data</string>
-
-
     <string name="app_name">Google Developers Community Visualization Tool</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="title_activity_splash_screen">splash_screen</string>
-    <!-- Strings used for fragments for navigation -->
+    //Navigation
+    <string name="Home">HOME</string>
+    <string name="Upcoming_Events">UPCOMING EVENTS</string>
+    <string name="Calendar">EVENTS CALENDAR</string>
+    <string name="Settings">SETTINGS</string>
+    <string name="Old_Data">Old GDG Data</string>
+    <string name="GDG_ChapterDetails">CHAPTER DETAIL</string>
+    <string name="UpcomingEvent">EVENTS</string>
     <string name="NavViewInto">"This is navigation view"</string>
     <string name="NavViewMenuButton">"Slide to show Navigation"</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="test_connection"> Test Location …</string>
     //Messages
+    <string name="GDG_Sub_headingFirst">Connect with local developers and learn new skills</string>
+    <string name="GDG_Sub_headingSecond">Join a GDG chapter near you and discover the \nlatest Google technologies</string>
+    //Home
+    <string name="google_developer_ngroups">Google Developer\nGroups</string>
+    <string name="active_chapters">Active Chapters</string>
+    <string name="statistics">Statistics</string>
+    <string name="max_groups_in_countries">Max groups in Countries</string>
+    <string name="top_10_events">Top 10 Events</string>
+    //ChapterDetails
+    <string name="about_gdg">About GDG</string>
+    <string name="organizers">Organizers</string>
+    <string name="upcoming_events">Upcoming Events</string>
+    <string name="past_events">Past Events</string>
+    <string name="stop_tour_gdg">Stop Tour GDG</string>
+    <string name="start_tour_gdg">Start Tour GDG</string>
+    //Settings
+    <string name="connection">Connection</string>
+    <string name="language">Language</string>
+    <string name="text_to_speech">Text To Speech</string>
+    <string name="alarm_notification">Alarm Notification</string>
+    <string name="clear_database">Clear Database</string>
+    <string name="night_mode">Night Mode</string>
+    //Connection
+    <string name="lg_ip_address_port">LG Ip Address : Port</string>
+    <string name="lg_name">LG Name</string>
+    <string name="lg_password">LG Password</string>
     <string name="activity_connection_error">It was not possible to connect to Liquid Galaxy. \n Please, go to the tab connect and try again.</string>
     <string name="activity_connection_host_port_error">The format for the host and port is not valid.</string>
-    <string name="connecting"> Connecting …</string>
     <string name="rebootLG">Wait! LG is restarting</string>
     <string name="ShutdownLG">Lg will now ShutDown</string>
     <string name="activity_connection_error_connect">It was not possible to connect to Liquid Galaxy.</string>
     <string name="button_try_again">Try Again</string>
     <string name="activity_connection_success">You are now connected to Liquid Galaxy</string>
-    <string name="GDG_Sub_headingFirst">Connect with local developers and learn new skills</string>
-    <string name="GDG_Sub_headingSecond">Join a GDG chapter near you and discover the \nlatest Google technologies</string>
+    <string name="connecting"> Connecting …</string>
+    <string name="clean_kml">Clean Kml</string>
+    <string name="reboot_lg">Reboot LG</string>
+    <string name="poweroff_lg">PowerOff LG</string>
+    <string name="set_refresh">Set Refresh</string>
+    <string name="reset_refresh">Reset Refresh</string>
+    <string name="relaunch_lg">Relaunch LG</string>
+    <string name="save_kml">Save KML</string>
+    <string name="gdg_name">GDG Name</string>
+    <string name="city">City</string>
+    <string name="country">Country</string>
+    <string name="about_this_event">About this Event</string>
+    <string name="members">Members</string>
+    <string name="notify_for_the_events">Notify For the Events</string>
+    <string name="last_week_events">Last Week Events</string>
+    <string name="not_connected">Not Connected</string>
+    <string name="connected">Connected</string>
+
+    <string-array name="languages">
+        <item>English</item>
+        <item>Hindi</item>
+    </string-array>
 </resources>

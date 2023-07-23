@@ -1,6 +1,5 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails
 
-import android.app.Activity
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
@@ -8,28 +7,22 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.provider.CalendarContract.Events
 import android.util.Log
-import android.view.Display.Mode
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavType
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.googledeveloperscommunityvisualisationtool.MainActivity
-import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgChapModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgScrapingRespo
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgViewModel
@@ -40,17 +33,15 @@ import com.example.googledeveloperscommunityvisualisationtool.fragments.home.Pas
 import com.example.googledeveloperscommunityvisualisationtool.fragments.home.UpcomingEvents
 import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.connection.LGConnectionTest.testPriorConnection
-import com.example.googledeveloperscommunityvisualisationtool.databinding.ActivityMainBinding
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentGdgChapterDetailsBinding
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
 import com.google.gson.Gson
-import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.reflect.Type
+import java.lang.Exception
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -140,6 +131,7 @@ class GdgChapterDetails : Fragment() {
 
          noUpcomingEventTextView=binding.NoUpcomingView
          noUpcomingEventTextView.visibility=View.VISIBLE
+
 
          pastEventsList= listOf()
          pasteventsRecycler.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
@@ -335,10 +327,10 @@ class GdgChapterDetails : Fragment() {
             withContext(Dispatchers.Main) {
 
                 gdgDetails = gdgViewModel.getdetails()
-                gdgName.text = gdgDetails.gdgName
+                gdgName.text=gdgDetails.gdgName
                 cityName.text = "${args.chapter.city_name}, ${args.chapter.country}"
                 aboutGdg.text = args.chapter.about
-                member.text = args.chapter.membersNumber
+                member.text =args.chapter.membersNumber
                 organizerList = gdgDetails.orgnaizersList
                 pastEventsList = coneverttoeventsbypast(gdgDetails.pastEventsList)
                 upcomingEventlist = coneverttoeventsbyupcoming(gdgDetails.upcomingEventsList)
@@ -452,11 +444,7 @@ class GdgChapterDetails : Fragment() {
                             requireContext(),
                             android.R.anim.slide_in_left
                         ),
-                    )
-
-
-
-
+                )
             }
         }
 
