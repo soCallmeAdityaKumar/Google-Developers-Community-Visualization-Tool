@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var drawerLayout:DrawerLayout
     private lateinit var themeSharedPreferences: SharedPreferences
+    lateinit var notifyImage:ImageView
     var storedgdgData=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = binding.drawerlayout
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         binding.navView.setupWithNavController(navController)
+        notifyImage=binding.appBarMain.notifyImage
+
 
         binding.appBarMain.menuButton.setOnClickListener {
             binding.drawerlayout.openDrawer(GravityCompat.START)
@@ -62,6 +66,9 @@ class MainActivity : AppCompatActivity() {
                 else -> resources.getString(R.string.app_name)
             }
             binding.appBarMain.notifyImage.setImageDrawable(getDrawable(R.drawable.notify_light_logo))
+            notifyImage.setOnClickListener {
+                controller.navigate(R.id.notification)
+            }
 
         }
     }

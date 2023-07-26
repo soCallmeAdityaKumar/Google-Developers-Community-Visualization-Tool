@@ -8,10 +8,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.airbnb.lottie.LottieAnimationView
 import com.example.googledeveloperscommunityvisualisationtool.R
 import java.util.Objects
 
-class CustomDialog : DialogFragment() {
+class CustomDialog() : DialogFragment() {
     //private final static String TAG_DEBUG = "DEBUGG_TOAST";
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = requireActivity().layoutInflater

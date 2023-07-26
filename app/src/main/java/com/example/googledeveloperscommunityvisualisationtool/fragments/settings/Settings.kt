@@ -26,14 +26,12 @@ class Settings : Fragment() {
     private lateinit var sharedPref:SharedPreferences
     private lateinit var prefEditor:SharedPreferences.Editor
     private lateinit var arrayAdapter:ArrayAdapter<String>
-    private lateinit var spinner: Spinner
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding=FragmentSettingsBinding.inflate(layoutInflater,container,false)
         val view=binding.root
-        spinner=binding.LanguageSpinner
 
         sharedPref=activity?.getSharedPreferences("Theme",Context.MODE_PRIVATE)!!
         prefEditor=sharedPref.edit()
@@ -67,30 +65,6 @@ class Settings : Fragment() {
 //                mainActivity.binding.drawerlayout.setBackgroundResource(R.drawable.dark_background)
             }
         }
-
-        val languages=resources.getStringArray(R.array.languages)
-        arrayAdapter=
-            ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,languages)
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter=arrayAdapter
-        spinner.setSelection(0)
-        spinner.onItemSelectedListener=object :AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedLanguageCode = getLanguageCodeFromPosition(position)
-                updateAppLanguage(selectedLanguageCode)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-        }
-
 
         return view
     }

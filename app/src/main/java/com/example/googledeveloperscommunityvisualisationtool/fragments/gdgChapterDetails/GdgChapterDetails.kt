@@ -22,7 +22,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.googledeveloperscommunityvisualisationtool.MainActivity
+import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgChapModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgScrapingRespo
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgViewModel
@@ -72,6 +74,7 @@ class GdgChapterDetails : Fragment() {
     lateinit var editor:SharedPreferences.Editor
     lateinit var progressBar: ProgressBar
     lateinit var scrollView: ScrollView
+    lateinit var loadingLottieAnimationView: LottieAnimationView
     lateinit var aboutgdgcardView:CardView
     lateinit var organizercardView:CardView
     lateinit var upcomingcardView:CardView
@@ -91,7 +94,7 @@ class GdgChapterDetails : Fragment() {
          progressBar=binding.progressBar
          scrollView=binding.scrollView
 
-         progressBar.visibility=View.VISIBLE
+//         progressBar.visibility=View.VISIBLE
          scrollView.visibility=View.GONE
 
 
@@ -105,6 +108,7 @@ class GdgChapterDetails : Fragment() {
          organizerRecyclerView=binding.orgainzersrecycler
          pasteventsRecycler=binding.pasteventsrecycler
          upcomingEventsRecycler=binding.upcomingrecyclerview
+         loadingLottieAnimationView=binding.loadinLottieAnimation
 
 
          gdgName.visibility=View.GONE
@@ -115,6 +119,8 @@ class GdgChapterDetails : Fragment() {
          upcomingEventsRecycler.visibility=View.GONE
          aboutgdgcardView.visibility=View.GONE
          organizerRecyclerView.visibility=View.GONE
+         loadingLottieAnimationView.visibility=View.VISIBLE
+         loadingLottieAnimationView.playAnimation()
 
 
 
@@ -316,8 +322,10 @@ class GdgChapterDetails : Fragment() {
                     noUpcomingEventTextView.visibility = View.VISIBLE
                     upcomingEventsRecycler.visibility = View.GONE
                 }
-            if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
-            if (scrollView.visibility == View.GONE) {
+//                if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
+                if (loadingLottieAnimationView.visibility == View.VISIBLE) loadingLottieAnimationView.visibility = View.GONE
+
+                if (scrollView.visibility == View.GONE) {
                 scrollView.visibility = View.VISIBLE
             }
             }
@@ -384,7 +392,8 @@ class GdgChapterDetails : Fragment() {
                 eventsAdapterpast.refreshData(pastEventsList)
 
                 organizerAdapter.refreshData(organizerList)
-                if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
+//                if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
+                if (loadingLottieAnimationView.visibility == View.VISIBLE) loadingLottieAnimationView.visibility = View.GONE
                 if (scrollView.visibility == View.GONE) {
                     scrollView.visibility = View.VISIBLE
                 }

@@ -14,9 +14,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.connection.LGCommand
 import com.example.googledeveloperscommunityvisualisationtool.connection.LGConnectionManager
@@ -354,7 +356,7 @@ class connection : Fragment() {
             } else {
                 CustomDialogUtility.showDialog(
                     requireActivity(),
-                    resources.getString(R.string.activity_connection_success)
+                    resources.getString(R.string.activity_connection_success),
                 )
                 val editor =
                     activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)?.edit()

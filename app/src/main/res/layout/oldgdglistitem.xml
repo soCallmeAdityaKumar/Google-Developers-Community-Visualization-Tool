@@ -11,6 +11,7 @@
     android:background="@drawable/glass_background"
     app:cardElevation="0dp"
     android:elevation="200dp"
+    app:cardCornerRadius="20dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"

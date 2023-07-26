@@ -47,8 +47,13 @@ import kotlinx.coroutines.withContext
 import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 class UpcomingEventDetails : Fragment() {
     val url:UpcomingEventDetailsArgs by navArgs()
@@ -111,11 +116,13 @@ class UpcomingEventDetails : Fragment() {
         return view
     }
 
-    private fun setAlarm(dateAndTime:String,title:String) {
+    private fun setAlarm(dateAndTime:String,title:String,image:String,details:String) {
 
         alarmManager= activity?.getSystemService(ALARM_SERVICE) as AlarmManager
         val intent=Intent(requireContext(),AlarmReceiver::class.java)
         intent.putExtra("title",title)
+        intent.putExtra("image",image)
+        intent.putExtra("desc",details)
         pendingIntent=PendingIntent.getBroadcast(
             requireContext(),
             0,
@@ -124,17 +131,16 @@ class UpcomingEventDetails : Fragment() {
         )
 
         val inputString=dateAndTime
-        val outputFormat="yyyy-MM-dd HH:mm"
-        val inputFormat="yyyy-MM-dd'T'HH:mm:ssX"
-        val inputDateFormat = SimpleDateFormat(inputFormat, Locale.ENGLISH)
-        val outputDateFormat = SimpleDateFormat(outputFormat, Locale.ENGLISH)
-        val date = inputDateFormat.parse(inputString)
-        val formattedDate = outputDateFormat.format(date)
-        val finaldate=outputDateFormat.parse(formattedDate)
+        Log.d("inputString",inputString.toString())
+        val originalFormatter = ZonedDateTime.parse(inputString)
+        val instant = originalFormatter.toInstant()
+        val date = Date.from(instant)
+        Log.d("date",date.toString())
         val calendar=Calendar.getInstance()
-        calendar.setTime(finaldate)
+        calendar.setTime(date)
+        Log.d("calendar",calendar.time.toString())
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,AlarmManager.INTERVAL_DAY,pendingIntent)
-        Log.d("Alarm","Alarm set for $finaldate")
+        Log.d("Alarm","Alarm set for $date")
 
     }
 
@@ -151,6 +157,10 @@ class UpcomingEventDetails : Fragment() {
             val notificationManager = activity?.getSystemService(NotificationManager::class.java)
             notificationManager?.createNotificationChannel(channel)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
 
@@ -173,32 +183,74 @@ class UpcomingEventDetails : Fragment() {
                 if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
                 val eventData= viewModel.returnEvents()
                 gdgName.text=eventData.gdgName
-                gdgName.startAnimation(AnimationUtils.loadAnimation(binding.root.context,android.R.anim.slide_in_left))
+                if(isAdded) {
+                    gdgName.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                }
 
                 eventTitle.text=eventData.title
-                eventTitle.startAnimation(AnimationUtils.loadAnimation(binding.root.context,android.R.anim.slide_in_left))
+                if(isAdded) {
+                    eventTitle.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                }
 
                 if(eventData.address.isEmpty()){
                     address.visibility=View.GONE
                 }else{
                     address.text=eventData.address
-                    address.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                    if(isAdded) {
+                        address.startAnimation(
+                            AnimationUtils.loadAnimation(
+                                requireContext(),
+                                android.R.anim.slide_in_left
+                            )
+                        )
+                    }
                 }
                 if(eventData.dateAndTime.isEmpty()){
                     dateAndTime.visibility=View.GONE
                 }else{
                     dateAndTime.text=eventData.dateAndTime
-                    dateAndTime.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                    if(isAdded) {
+                        dateAndTime.startAnimation(
+                            AnimationUtils.loadAnimation(
+                                requireContext(),
+                                android.R.anim.slide_in_left
+                            )
+                        )
+                    }
                 }
                 desc.text=eventData.desc
                 aboutcardView.visibility=View.VISIBLE
-                aboutcardView.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                if(isAdded) {
+                    aboutcardView.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                }
 
                 if(eventData.rsvp.isEmpty()){
                     rsvp.visibility=View.GONE
                 }else{
                     rsvp.text=eventData.rsvp
-                    rsvp.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
+                    if(isAdded) {
+                        rsvp.startAnimation(
+                            AnimationUtils.loadAnimation(
+                                requireContext(),
+                                android.R.anim.slide_in_left
+                            )
+                        )
+                    }
                 }
                 organizerList=eventData.mentors.toList()
 
@@ -206,7 +258,7 @@ class UpcomingEventDetails : Fragment() {
 
                 notifyButton.setOnClickListener {
                     createNotificationChannel()
-                    setAlarm(url.dateAndUrl.dateAndTime,eventData.title)
+                    setAlarm(url.dateAndUrl.dateAndTime,eventData.title,url.dateAndUrl.logo,eventData.desc)
                 }
             }
 

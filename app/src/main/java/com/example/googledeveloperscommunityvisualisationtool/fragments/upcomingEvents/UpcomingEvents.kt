@@ -164,7 +164,9 @@ class UpcomingEvents : Fragment() {
                     }
                     adapter.setOnItemClickListener(object:UpcoEventsAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {
-                            val action=UpcomingEventsDirections.actionUpcomingEventsToUpcomingEventDetails(DateAndUrl(eventlist[position].url,eventlist[position].start_date))
+                            val action=UpcomingEventsDirections.actionUpcomingEventsToUpcomingEventDetails(DateAndUrl(eventlist[position].url,eventlist[position].start_date,
+                                eventlist[position].picture.thumbnail_url!!
+                            ))
                             findNavController().navigate(action)
                         }
                     })

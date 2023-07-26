@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_home_to_calendarFragment"
             app:destination="@id/calender" />
+        <action
+            android:id="@+id/action_home_to_notification"
+            app:destination="@id/notification" />
     </fragment>
     <fragment
         android:id="@+id/maps"
@@ -112,4 +115,9 @@
         android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.Calendar.CalendarFragment"
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" />
+    <fragment
+        android:id="@+id/notification"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.Notification.Notification"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
 </navigation>

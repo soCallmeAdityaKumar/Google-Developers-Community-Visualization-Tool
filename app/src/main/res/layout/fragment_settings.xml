@@ -12,15 +12,7 @@
     android:orientation="vertical"
     tools:context=".fragments.settings.Settings">
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/themeMode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/night_mode"
-        android:fontFamily="@font/poppins_medium"
-        android:textColor="@color/MainHeadingText"
-        android:layout_margin="20dp"
-        android:textSize="30dp" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/FirstcardView"
         android:layout_height="wrap_content"
@@ -65,49 +57,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/SecondcardView"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:backgroundTint="@color/CardViewTransparent"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="0dp"
-        android:background="@drawable/glass_background"        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="100dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/SecondcardviewTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="@string/language"
-                android:textAlignment="viewStart"
-                android:textColor="@color/MainHeadingText"
-                android:textSize="30dp"
-                android:fontFamily="@font/poppins_medium"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Spinner
-                android:id="@+id/LanguageSpinner"
-                android:layout_width="140dp"
-                android:layout_height="40dp"
-                android:layout_margin="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/ThirdcardView"
         android:layout_height="wrap_content"
@@ -241,6 +191,26 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="40dp"
+        android:layout_height="wrap_content">
+
+        <Switch
+            android:id="@+id/themeMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:fontFamily="@font/poppins_medium"
+            android:showText="false"
+            android:textColor="@color/MainHeadingText"
+            android:thumb="@drawable/switch_thumb"
+            android:track="@drawable/switch_toggle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </LinearLayout>

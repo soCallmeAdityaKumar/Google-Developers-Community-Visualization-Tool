@@ -270,6 +270,5 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/CleanLogo"
         app:layout_constraintStart_toEndOf="@+id/RelaunchLg" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -11,8 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Date"
+        android:textColor="@color/MainHeadingText"
         android:layout_margin="20dp"
         android:textSize="30dp"
+        android:fontFamily="@font/montserratmedium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,6 +26,8 @@
         android:layout_margin="20dp"
         android:textSize="30dp"
         android:text="EventTitle"
+        android:fontFamily="@font/montserratmedium"
+        android:textColor="@color/MainHeadingText"
         app:layout_constraintEnd_toEndOf="@+id/bottom_sheet_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_date" />

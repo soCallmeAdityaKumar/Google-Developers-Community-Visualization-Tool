@@ -5,8 +5,9 @@ import android.os.Parcelable
 import androidx.versionedparcelable.ParcelField
 
 
-data class DateAndUrl(val url:String,val dateAndTime:String):Parcelable {
+data class DateAndUrl(val url:String,val dateAndTime:String,val logo:String):Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!
     ) {
@@ -15,6 +16,7 @@ data class DateAndUrl(val url:String,val dateAndTime:String):Parcelable {
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(url)
         parcel.writeString(dateAndTime)
+        parcel.writeString(logo)
     }
 
     override fun describeContents(): Int {
@@ -30,4 +32,5 @@ data class DateAndUrl(val url:String,val dateAndTime:String):Parcelable {
             return arrayOfNulls(size)
         }
     }
+
 }

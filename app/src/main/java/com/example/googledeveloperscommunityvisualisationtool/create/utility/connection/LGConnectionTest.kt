@@ -1,6 +1,7 @@
 package com.example.googledeveloperscommunityvisualisationtool.create.utility.connection
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Handler
 import androidx.fragment.app.FragmentActivity
 import com.example.googledeveloperscommunityvisualisationtool.connection.LGCommand

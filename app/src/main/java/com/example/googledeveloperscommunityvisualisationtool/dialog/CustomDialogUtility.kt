@@ -4,13 +4,16 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
+import com.airbnb.lottie.LottieAnimationView
 import com.example.googledeveloperscommunityvisualisationtool.R
+import org.jsoup.select.Evaluator.Id
 
 object CustomDialogUtility {
     /**
@@ -43,9 +46,12 @@ object CustomDialogUtility {
         textMessage.text = message
         textMessage.gravity = View.TEXT_ALIGNMENT_CENTER
         builder.setView(v)
+//        val lottieAnimationView=v.findViewById<LottieAnimationView>(R.id.lottieAnimationView)
+//        lottieAnimationView.setAnimation(animation)
+//        lottieAnimationView.playAnimation()
         val dialog: Dialog = builder.create()
         dialog.setCanceledOnTouchOutside(false)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        dialog.window?.setBackgroundDrawable(drawable)
         return dialog
     }
 }
