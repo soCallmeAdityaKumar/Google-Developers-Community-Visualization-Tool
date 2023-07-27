@@ -45,6 +45,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.w3c.dom.Text
+import java.sql.Time
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -119,16 +120,6 @@ class UpcomingEventDetails : Fragment() {
     private fun setAlarm(dateAndTime:String,title:String,image:String,details:String) {
 
         alarmManager= activity?.getSystemService(ALARM_SERVICE) as AlarmManager
-        val intent=Intent(requireContext(),AlarmReceiver::class.java)
-        intent.putExtra("title",title)
-        intent.putExtra("image",image)
-        intent.putExtra("desc",details)
-        pendingIntent=PendingIntent.getBroadcast(
-            requireContext(),
-            0,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
 
         val inputString=dateAndTime
         Log.d("inputString",inputString.toString())
@@ -139,12 +130,24 @@ class UpcomingEventDetails : Fragment() {
         val calendar=Calendar.getInstance()
         calendar.setTime(date)
         Log.d("calendar",calendar.time.toString())
+
+
+
+        val intent=Intent(requireContext(),AlarmReceiver::class.java)
+        intent.putExtra("title",title)
+        intent.putExtra("image",image)
+        intent.putExtra("desc",details)
+        intent.putExtra("time",calendar.time.toString().dropLast(18))
+
+        pendingIntent=PendingIntent.getBroadcast(
+            requireContext(),
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,AlarmManager.INTERVAL_DAY,pendingIntent)
         Log.d("Alarm","Alarm set for $date")
-
     }
-
-
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

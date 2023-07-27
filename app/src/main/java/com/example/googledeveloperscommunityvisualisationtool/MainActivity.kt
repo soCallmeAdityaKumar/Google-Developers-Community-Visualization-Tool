@@ -63,6 +63,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.oldGdgList -> resources.getString(R.string.Old_Data)
                 R.id.calender->resources.getString(R.string.Calendar)
                 R.id.gdgChapterDetails -> resources.getString(R.string.GDG_ChapterDetails)
+                R.id.notification->resources.getString(R.string.notification)
+                R.id.connection->resources.getString(R.string.connection)
                 else -> resources.getString(R.string.app_name)
             }
             binding.appBarMain.notifyImage.setImageDrawable(getDrawable(R.drawable.notify_light_logo))

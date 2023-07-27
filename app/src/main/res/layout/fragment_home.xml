@@ -36,21 +36,22 @@
                 android:layout_margin="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                app:cardCornerRadius="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:background="@drawable/landingback"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:background="@drawable/landingback">
 
                     <ImageView
                         android:id="@+id/tickimageViewfirst"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:layout_marginTop="10dp"
                         android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
                         android:src="@drawable/tick_light_logo"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/GDGHeading" />
@@ -77,9 +78,9 @@
                         android:layout_marginTop="44dp"
                         android:fontFamily="@font/montserratmedium"
                         android:text="@string/google_developer_ngroups"
+                        android:textColor="#1090CB"
                         android:textSize="40dp"
                         android:textStyle="bold"
-                        android:textColor="#1090CB"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -97,8 +98,8 @@
                         android:id="@+id/GDGSubHeadingSecond"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
                         android:layout_marginStart="5dp"
+                        android:layout_marginTop="15dp"
                         android:fontFamily="@font/montserratmedium"
                         android:text="@string/GDG_Sub_headingSecond"
                         android:textColor="#5C5C5C"
@@ -155,7 +156,7 @@
                 android:background="@drawable/glass_background"
                 android:backgroundTint="@color/CardViewTransparent"
                 android:elevation="200dp"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="50dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toStartOf="@+id/thirdCardview"
                 app:layout_constraintHorizontal_bias="0.0"

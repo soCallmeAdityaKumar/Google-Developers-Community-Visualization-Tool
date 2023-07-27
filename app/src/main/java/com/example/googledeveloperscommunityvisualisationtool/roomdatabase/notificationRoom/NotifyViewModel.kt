@@ -23,4 +23,9 @@ class NotifyViewModel(val context: Context): ViewModel() {
             repo.addNotification(notifyEntity)
         }
     }
+    fun deleteAllNotification(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.deleteAllNotification()
+        }
+    }
 }

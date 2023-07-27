@@ -4,5 +4,6 @@ data class notificationData(
     val image:String,
     val desc:String,
     val title:String,
-    val time:Long
+    val timeInMiliSec:Long,
+    val time:String
 )

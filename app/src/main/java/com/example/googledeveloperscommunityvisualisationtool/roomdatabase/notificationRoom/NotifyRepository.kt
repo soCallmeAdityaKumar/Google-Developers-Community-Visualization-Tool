@@ -9,4 +9,7 @@ class NotifyRepository(val dao:NotifyDao) {
     {
         dao.addNotification(notifyEntity)
     }
+    suspend fun deleteAllNotification(){
+        dao.deleteAllNotification()
+    }
 }

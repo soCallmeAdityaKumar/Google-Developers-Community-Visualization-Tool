@@ -124,13 +124,28 @@ class GdgScrapingRespo {
             organizers.add(Organizers(name, company, title, image))
 
         }
+
+        val facebookLink=doc.getElementsByClass("chapter-social chapter-social--facebook").attr("href")!!
+        val twitterLink=doc.getElementsByClass("chapter-social chapter-social--twitter").attr("href")!!
+        val linkedInLink=doc.getElementsByClass("chapter-social chapter-social--linkedin").attr("href")!!
+        val instagramLink=doc.getElementsByClass("chapter-social chapter-social--instagram").attr("href")!!
+        val emailLink=gdgURL+doc.getElementsByClass("chapter-social chapter-social--contact").attr("href")!!
+        Log.d("link","$twitterLink, $linkedInLink, $instagramLink, $emailLink")
+
+
+
         gdgDetails = GDGDetails(
             gdgName,
             groupMember,
             about,
             pastEventList,
             upcomingEventsList,
-            organizers
+            organizers,
+            instagramLink,
+            emailLink,
+            twitterLink,
+            linkedInLink,
+            facebookLink
         )
 
 

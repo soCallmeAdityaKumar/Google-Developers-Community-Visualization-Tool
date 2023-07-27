@@ -67,6 +67,8 @@
     <string name="last_week_events">पिछले सप्ताह की घटनाएँ</string>
     <string name="not_connected">जुड़े नहीं हैं</string>
     <string name="connected">जुड़े हुए</string>
+    <string name="notification">NOTIFICATION</string>
+
 
 
 </resources>

@@ -6,7 +6,12 @@ data class GDGDetails(
     val about:String,
     val pastEventsList:List<PastEvents>,
     val upcomingEventsList:List<UpcomingEvents>,
-    val orgnaizersList:List<Organizers>
+    val orgnaizersList:List<Organizers>,
+    val instagramLink:String,
+    val emailLink:String,
+    val twitterLink:String,
+    val linkedIn:String,
+    val facebookLink:String
 )
 
 

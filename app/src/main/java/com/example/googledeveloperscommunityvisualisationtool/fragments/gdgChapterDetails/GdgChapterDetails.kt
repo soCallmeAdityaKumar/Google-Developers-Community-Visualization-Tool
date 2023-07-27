@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
@@ -39,6 +40,7 @@ import com.example.googledeveloperscommunityvisualisationtool.databinding.Fragme
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,8 +80,14 @@ class GdgChapterDetails : Fragment() {
     lateinit var aboutgdgcardView:CardView
     lateinit var organizercardView:CardView
     lateinit var upcomingcardView:CardView
+    lateinit var facebookLogo:CircleImageView
+    lateinit var twitterLogo:CircleImageView
+    lateinit var linkedInLogo:CircleImageView
+    lateinit var gmailLogo:CircleImageView
+    lateinit var instagramLogo:CircleImageView
 
-     var handler=Handler()
+
+    var handler=Handler()
 
 
 
@@ -109,6 +117,11 @@ class GdgChapterDetails : Fragment() {
          pasteventsRecycler=binding.pasteventsrecycler
          upcomingEventsRecycler=binding.upcomingrecyclerview
          loadingLottieAnimationView=binding.loadinLottieAnimation
+         linkedInLogo=binding.linkedin
+         facebookLogo=binding.facebook
+         twitterLogo=binding.twitter
+         gmailLogo=binding.gmail
+         instagramLogo=binding.instagram
 
 
          gdgName.visibility=View.GONE
@@ -123,6 +136,12 @@ class GdgChapterDetails : Fragment() {
          loadingLottieAnimationView.playAnimation()
 
 
+
+         linkedInLogo.setBackgroundResource(R.drawable.linkedin_icon)
+         facebookLogo.setBackgroundResource(R.drawable.facebook_logo)
+         gmailLogo.setBackgroundResource(R.drawable.gmail_icons)
+         twitterLogo.setBackgroundResource(R.drawable.twitter_logo)
+         instagramLogo.setBackgroundResource(R.drawable.instagram_icon)
 
          organizerRecyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
          organizerList= listOf()
@@ -221,6 +240,7 @@ class GdgChapterDetails : Fragment() {
             cityName.text =" ${sharedPref.getString("cityname", null)}, ${sharedPref.getString("countryname", null)}"
             aboutGdg.text = sharedPref.getString("aboutgdg", null)
             member.text = sharedPref.getString("member", null)
+
             val orgaizersString= sharedPref.getString("organzierslist",null)
             val pasteventsString= sharedPref.getString("pasteventslist",null)!!.replace(Regex("&quot;"),"")
             val upcomingeventsString= sharedPref.getString("upcomingeventlist",null)
@@ -238,6 +258,51 @@ class GdgChapterDetails : Fragment() {
 
             organizerAdapter.refreshData(organizerList)
             eventsAdapterpast.refreshData(pastEventsList)
+            if(sharedPref.getString("facebook","")!!.isNotEmpty()){
+                facebookLogo.setOnClickListener{
+                    val uri = Uri.parse(sharedPref.getString("facebook",""))
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                }
+            }else{
+                facebookLogo.visibility=View.GONE
+            }
+            if(sharedPref.getString("instagram","")!!.isNotEmpty()){
+                instagramLogo.setOnClickListener{
+                    val uri = Uri.parse(sharedPref.getString("instagram",""))
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                }
+            }else{
+                instagramLogo.visibility=View.GONE
+            }
+            if(sharedPref.getString("linkedIn","")!!.isNotEmpty()){
+                linkedInLogo.setOnClickListener{
+                    val uri = Uri.parse(sharedPref.getString("linkedIn",""))
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                }
+            }else{
+                linkedInLogo.visibility=View.GONE
+            }
+            if(sharedPref.getString("twitter","")!!.isNotEmpty()){
+                twitterLogo.setOnClickListener{
+                    val uri = Uri.parse(sharedPref.getString("twitter",""))
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                }
+            }else{
+                twitterLogo.visibility=View.GONE
+            }
+            if(sharedPref.getString("email","")!!.isNotEmpty()){
+                gmailLogo.setOnClickListener{
+                    val uri = Uri.parse(sharedPref.getString("email",""))
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                }
+            }else{
+                gmailLogo.visibility=View.GONE
+            }
 
             //make views visible
             withContext(Dispatchers.Main) {
@@ -343,7 +408,51 @@ class GdgChapterDetails : Fragment() {
                 pastEventsList = coneverttoeventsbypast(gdgDetails.pastEventsList)
                 upcomingEventlist = coneverttoeventsbyupcoming(gdgDetails.upcomingEventsList)
 
-
+                if(gdgDetails.facebookLink.isNotEmpty()){
+                    facebookLogo.setOnClickListener{
+                        val uri = Uri.parse(gdgDetails.facebookLink)
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivity(intent)
+                    }
+                }else{
+                    facebookLogo.visibility=View.GONE
+                }
+                if(gdgDetails.instagramLink.isNotEmpty()){
+                    instagramLogo.setOnClickListener{
+                        val uri = Uri.parse(gdgDetails.instagramLink)
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivity(intent)
+                    }
+                }else{
+                    instagramLogo.visibility=View.GONE
+                }
+                if(gdgDetails.linkedIn.isNotEmpty()){
+                    linkedInLogo.setOnClickListener{
+                        val uri = Uri.parse(gdgDetails.linkedIn)
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivity(intent)
+                    }
+                }else{
+                    linkedInLogo.visibility=View.GONE
+                }
+                if(gdgDetails.twitterLink.isNotEmpty()){
+                    twitterLogo.setOnClickListener{
+                        val uri = Uri.parse(gdgDetails.twitterLink)
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivity(intent)
+                    }
+                }else{
+                    twitterLogo.visibility=View.GONE
+                }
+                if(gdgDetails.emailLink.isNotEmpty()){
+                    gmailLogo.setOnClickListener{
+                        val uri = Uri.parse(gdgDetails.emailLink)
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivity(intent)
+                    }
+                }else{
+                    gmailLogo.visibility=View.GONE
+                }
                 if (store.storedgdgData<2) {
                     store.storedgdgData+=1
                     editor.apply {
@@ -353,6 +462,12 @@ class GdgChapterDetails : Fragment() {
                         Log.d("store", "stored - ${gdgDetails.gdgName}")
                         putString("aboutgdg", gdgDetails.about)
                         putString("member", gdgDetails.membersNumber)
+                        putString("instagram",gdgDetails.instagramLink)
+                        putString("facebook",gdgDetails.facebookLink)
+                        putString("twitter",gdgDetails.twitterLink)
+                        putString("linkedIn",gdgDetails.linkedIn)
+                        putString("email",gdgDetails.emailLink)
+
 
                         val stringorganizer = gson.toJson(organizerList)
                         val stringpastevent = gson.toJson(pastEventsList)

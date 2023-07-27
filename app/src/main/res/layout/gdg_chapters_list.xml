@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="450dp"
     android:padding="1dp"
-    android:layout_height="470dp"
+    android:layout_height="500dp"
     android:backgroundTint="@color/CardViewTransparent"
     android:layout_alignParentStart="true"
     android:layout_alignParentTop="true"
@@ -16,7 +16,7 @@
     android:elevation="200dp"
     app:strokeColor="#D2D2D2"
     android:layout_marginBottom="20dp"
-    app:cardCornerRadius="20dp">
+    app:cardCornerRadius="50dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,13 +24,14 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/backgroundImageView"
+            style="@style/RoundedSquare"
             android:layout_width="0dp"
             android:layout_height="300dp"
-            style="@style/RoundedSquare"
             android:background="@drawable/landingback"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/RoundedSquare" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/gdgImage"
@@ -44,13 +45,15 @@
 
         <TextView
             android:id="@+id/GdgNameTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="370dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="marquee"
             android:fontFamily="@font/poppins_medium"
             android:hint="GDG Ahemdabad"
+            android:maxLines="1"
             android:textColor="@color/MainHeadingText"
             android:textSize="40dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,12 +65,14 @@
             android:id="@+id/GdgCityTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="30dp"
             android:layout_marginEnd="20dp"
+            android:ellipsize="marquee"
             android:fontFamily="@font/montserratmedium"
             android:hint="Gdg City"
-            android:textSize="20dp"
+            android:maxLines="1"
             android:textColor="@color/GDGCitynameList"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,14 +82,16 @@
             android:id="@+id/GDGCountryTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="30dp"
+            android:ellipsize="marquee"
+            android:maxLines="1"
             android:fontFamily="@font/poppins_medium"
             android:hint="Gdg Country"
-            android:textSize="20sp"
             android:textColor="@color/GDGCitynameList"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -93,4 +100,4 @@
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+</com.google.android.material.card.MaterialCardView>

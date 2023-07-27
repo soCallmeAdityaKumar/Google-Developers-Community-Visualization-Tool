@@ -11,6 +11,8 @@ interface NotifyDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addNotification(notifyEntity: NotifyEntity)
 
-    @Query("SELECT * FROM notification_table Order By timing")
+    @Query("SELECT * FROM notification_table")
     fun readNotification(): LiveData<List<NotifyEntity>>
+    @Query("DELETE FROM notification_table")
+    suspend fun deleteAllNotification()
 }

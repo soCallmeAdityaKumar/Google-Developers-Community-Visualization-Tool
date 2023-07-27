@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView.RecyclerListener
+import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +27,7 @@ class Notification : Fragment() {
     lateinit var notificationAdapter: NotifyAdapter
     lateinit var notificationList:ArrayList<notificationData>
     lateinit var noItemText:TextView
+    lateinit var clearAll:Button
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +35,7 @@ class Notification : Fragment() {
         binding= FragmentNotificationBinding.inflate(inflater,container,false)
         val view=binding.root
 
+        clearAll=binding.ClearButtton
         noItemText=binding.NoItemText
         notificationList= arrayListOf()
         recyclerView=binding.NotificationrecyclerView
@@ -43,6 +46,8 @@ class Notification : Fragment() {
 
         noItemText.visibility=View.VISIBLE
         recyclerView.visibility=View.GONE
+        clearAll.visibility=View.GONE
+
 
         return view
     }
@@ -56,15 +61,23 @@ class Notification : Fragment() {
             if(notificationList.isNotEmpty()){
                 noItemText.visibility=View.GONE
                 recyclerView.visibility=View.VISIBLE
+                clearAll.visibility=View.VISIBLE
             }
             notificationAdapter.refreshData(notificationList)
         })
+
+        clearAll.setOnClickListener {
+            notificationViewmodel.deleteAllNotification()
+            noItemText.visibility=View.VISIBLE
+            recyclerView.visibility=View.GONE
+            clearAll.visibility=View.GONE
+        }
     }
 
     private fun convertListType(it: List<NotifyEntity>?): ArrayList<notificationData> {
         val ls=ArrayList<notificationData>()
         for(i in 0 until it!!.size){
-            ls.add(notificationData(it[i].image,it[i].desc,it[i].title,it[i].timing))
+            ls.add(notificationData(it[i].image,it[i].desc,it[i].title,it[i].timeinMiliSec,it[i].time))
         }
         return ls
     }

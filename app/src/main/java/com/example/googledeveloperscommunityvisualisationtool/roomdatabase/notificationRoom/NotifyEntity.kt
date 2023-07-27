@@ -9,6 +9,7 @@ data class NotifyEntity (
     val id:Int,
     val title:String,
     val desc:String,
-    val timing:Long,
-    val image:String
+    val timeinMiliSec:Long,
+    val image:String,
+    val time:String
     )
