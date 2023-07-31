@@ -46,8 +46,9 @@ class OrganizersAdapter(var organizers:List<Organizers>):RecyclerView.Adapter<Or
                 binding.organizername.setOnClickListener {
                     Log.d("organizers",this.organizername)
                 }
-                binding.organizername.setEllipsize(TextUtils.TruncateAt.MARQUEE)
                 binding.organizername.setSelected(true)
+                binding.organizercompany.setSelected(true)
+                binding.organizercompany.setSelected(true)
             }
         }
     }

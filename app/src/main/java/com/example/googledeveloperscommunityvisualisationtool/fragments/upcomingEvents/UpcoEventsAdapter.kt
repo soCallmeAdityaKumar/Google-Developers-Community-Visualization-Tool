@@ -60,6 +60,9 @@ class UpcoEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter
                 for (i in 0 until this.tags!!.size){
                     tag += this.tags[i]
                 }
+                binding.eventTitle.setSelected(true)
+                binding.GDGname.setSelected(true)
+                binding.city.setSelected(true)
 //                binding.tags.text=tag.toString()
 
                 }
