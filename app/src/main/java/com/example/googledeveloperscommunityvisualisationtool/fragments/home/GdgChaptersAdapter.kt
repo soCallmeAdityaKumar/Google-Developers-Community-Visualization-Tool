@@ -1,7 +1,10 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.home
 
+import android.animation.ObjectAnimator
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.googledeveloperscommunityvisualisationtool.databinding.GdgChaptersListBinding
@@ -9,6 +12,8 @@ import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgCh
 
 class GdgChaptersAdapter(var chapterList: List<ChapterEntity>):RecyclerView.Adapter<GdgChaptersAdapter.MyViewHolder>() {
     private lateinit var mListen:onItemClickListener
+    private val flippedStateMap = mutableMapOf<Int, Boolean>()
+
     interface  onItemClickListener {
          fun onItemClick(position: Int)
     }
@@ -16,6 +21,7 @@ class GdgChaptersAdapter(var chapterList: List<ChapterEntity>):RecyclerView.Adap
     fun setOnItemClickListener(listener:onItemClickListener){
         mListen=listener
     }
+
     class MyViewHolder(val binding:GdgChaptersListBinding,listener: onItemClickListener):RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -52,17 +58,21 @@ class GdgChaptersAdapter(var chapterList: List<ChapterEntity>):RecyclerView.Adap
                         .centerCrop()
                         .into(binding.gdgImage)
                 }
+                binding.GdgNameTextView.setSelected(true)
+                binding.GdgCityTextView.setSelected(true)
+                binding.GDGCountryTextView.setSelected(true)
+
+
 
             }
         }
     }
-
-
 
     fun refreshData(chapterList:List<ChapterEntity>){
         this.chapterList=chapterList
         notifyDataSetChanged()
 
     }
+
 }
 

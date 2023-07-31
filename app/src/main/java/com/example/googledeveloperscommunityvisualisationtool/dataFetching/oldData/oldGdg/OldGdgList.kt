@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.car.ui.recyclerview.CarUiListItemAdapterAdapterV1.ViewHolderWrapper
+import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentOldGdgListBinding
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.OldGDGEntity
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.oldGDGroomViewModel
@@ -63,6 +64,28 @@ class OldGdgList : Fragment() {
 
         checkDatabase()
 
+
+    }
+    override fun onResume() {
+        super.onResume()
+        val customAppBar = (activity as MainActivity).binding.appBarMain
+        val menuButton = customAppBar.menuButton
+        val backButton = customAppBar.backarrow
+
+        val navController = findNavController()
+        val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
+
+        if (isRootFragment) {
+            menuButton?.visibility = View.VISIBLE
+            backButton?.visibility = View.GONE
+        } else {
+            menuButton?.visibility = View.GONE
+            backButton?.visibility = View.VISIBLE
+        }
+
+        backButton?.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
 
     }
 

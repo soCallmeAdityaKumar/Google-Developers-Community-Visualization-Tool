@@ -8,9 +8,10 @@
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:cardCornerRadius="20dp"
-    android:backgroundTint="@color/CardViewTransparent"
-    android:background="@drawable/glass_background"        android:layout_margin="10dp"
+        app:cardCornerRadius="50dp"
+        android:backgroundTint="@color/CardViewTransparent"
+        android:background="@drawable/glass_background"
+        android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,13 +21,16 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="400dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp"
                 android:fontFamily="@font/montserratmedium"
                 android:textAlignment="center"
                 android:textSize="32dp"
-
+                android:maxLines="1"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:scrollHorizontally="true"
                 android:textColor="@color/MainHeadingText"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +50,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/description" />
+                app:layout_constraintTop_toBottomOf="@+id/description"
+                app:layout_constraintVertical_bias="0.232" />
 
             <TextView
                 android:id="@+id/description"
@@ -62,7 +67,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.676" />
+                app:layout_constraintVertical_bias="0.447" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

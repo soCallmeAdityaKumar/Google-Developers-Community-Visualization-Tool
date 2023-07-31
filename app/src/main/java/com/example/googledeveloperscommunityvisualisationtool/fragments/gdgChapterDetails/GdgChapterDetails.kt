@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,12 +21,15 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.R
+import com.example.googledeveloperscommunityvisualisationtool.TextToSpeech.TextToSpeechClass
+import com.example.googledeveloperscommunityvisualisationtool.connection.LGCommand
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgChapModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgScrapingRespo
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgViewModel
@@ -36,6 +40,7 @@ import com.example.googledeveloperscommunityvisualisationtool.fragments.home.Pas
 import com.example.googledeveloperscommunityvisualisationtool.fragments.home.UpcomingEvents
 import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.connection.LGConnectionTest.testPriorConnection
+import com.example.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentGdgChapterDetailsBinding
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
 import com.google.gson.Gson
@@ -43,8 +48,10 @@ import com.google.gson.reflect.TypeToken
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.internal.wait
 import java.lang.Exception
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -85,6 +92,9 @@ class GdgChapterDetails : Fragment() {
     lateinit var linkedInLogo:CircleImageView
     lateinit var gmailLogo:CircleImageView
     lateinit var instagramLogo:CircleImageView
+    lateinit var textToSpeech:TextToSpeechClass
+    lateinit var ttsSharedPreferences: SharedPreferences
+
 
 
     var handler=Handler()
@@ -99,11 +109,22 @@ class GdgChapterDetails : Fragment() {
          binding=FragmentGdgChapterDetailsBinding.inflate(layoutInflater,container, false)
          val view=binding.root
 
+
          progressBar=binding.progressBar
          scrollView=binding.scrollView
 
 //         progressBar.visibility=View.VISIBLE
          scrollView.visibility=View.GONE
+
+         textToSpeech= TextToSpeechClass(requireContext())
+         ttsSharedPreferences=activity?.getSharedPreferences("TextToSpeechSwitch",Context.MODE_PRIVATE)!!
+             val code=textToSpeech.initialise()
+             if(code== TextToSpeech.SUCCESS){
+                 Log.d("tts","enabled")
+             }
+             else{
+                 Log.d("tts","Not enabled")
+             }
 
 
 
@@ -171,6 +192,28 @@ class GdgChapterDetails : Fragment() {
 
 
         return view
+    }
+    override fun onResume() {
+        super.onResume()
+        val customAppBar = (activity as MainActivity).binding.appBarMain
+        val menuButton = customAppBar.menuButton
+        val backButton = customAppBar.backarrow
+
+        val navController = findNavController()
+        val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
+
+        if (isRootFragment) {
+            menuButton?.visibility = View.VISIBLE
+            backButton?.visibility = View.GONE
+        } else {
+            menuButton?.visibility = View.GONE
+            backButton?.visibility = View.VISIBLE
+        }
+
+        backButton?.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
+
     }
 
     private fun stopTour() {
@@ -389,10 +432,12 @@ class GdgChapterDetails : Fragment() {
                 }
 //                if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
                 if (loadingLottieAnimationView.visibility == View.VISIBLE) loadingLottieAnimationView.visibility = View.GONE
-
                 if (scrollView.visibility == View.GONE) {
                 scrollView.visibility = View.VISIBLE
-            }
+                }
+                if(ttsSharedPreferences.getBoolean("TTS",false)) {
+                    speakOut()
+                }
             }
         }
         else {
@@ -513,6 +558,7 @@ class GdgChapterDetails : Fragment() {
                     scrollView.visibility = View.VISIBLE
                 }
 
+
                     gdgName.visibility = View.VISIBLE
                     gdgName.startAnimation(
                         AnimationUtils.loadAnimation(
@@ -569,11 +615,39 @@ class GdgChapterDetails : Fragment() {
                             android.R.anim.slide_in_left
                         ),
                 )
+                if(ttsSharedPreferences.getBoolean("TTS",false)) {
+                    speakOut()
+                }
+
+
             }
         }
 
 
     }
+
+    private fun speakOut() {
+        textToSpeech.speakText(gdgName.text.toString())
+        textToSpeech.speakText(cityName.text.toString())
+        textToSpeech.speakText(countryName.text.toString())
+        textToSpeech.speakText(member.text.toString())
+        textToSpeech.speakText("About ${gdgName.text.toString()}")
+        textToSpeech.speakText(aboutGdg.text.toString())
+        for(i in organizerList){
+            textToSpeech.speakText(i.organizername)
+            textToSpeech.speakText(i.organizercompany)
+            textToSpeech.speakText(i.organizerTitle)
+        }
+        if(upcomingEventlist.size!=0){
+            textToSpeech.speakText(upcomingEventlist[0].title)
+            textToSpeech.speakText(upcomingEventlist[0].date)
+        }else{
+            textToSpeech.speakText("There are no upcoming events in this gdg by now")
+        }
+
+        textToSpeech.speakText("There is ${pastEventsList.size.toString()} past events by now")
+    }
+
 
     private fun coneverttoeventsbypast(pastEventsList: List<PastEvents>): List<events> {
         val events= mutableListOf<events>()
@@ -583,6 +657,11 @@ class GdgChapterDetails : Fragment() {
         }
         return events
     }
+    override fun onDestroy() {
+        textToSpeech.speechStop()
+        super.onDestroy()
+    }
+
     private fun coneverttoeventsbyupcoming(upEventsList: List<UpcomingEvents>): List<events> {
         val events= mutableListOf<events>()
         for( i in upEventsList){

@@ -13,8 +13,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Switch
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.findNavController
+import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentSettingsBinding
 import java.util.Locale
@@ -26,6 +28,9 @@ class Settings : Fragment() {
     private lateinit var sharedPref:SharedPreferences
     private lateinit var prefEditor:SharedPreferences.Editor
     private lateinit var arrayAdapter:ArrayAdapter<String>
+    private lateinit var ttsSharedPreferences: SharedPreferences
+    private lateinit var ttsEditor:SharedPreferences.Editor
+    private lateinit var ttsSwitch:Switch
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +38,7 @@ class Settings : Fragment() {
         binding=FragmentSettingsBinding.inflate(layoutInflater,container,false)
         val view=binding.root
 
+        ttsSwitch=binding.ttsSwitch
         sharedPref=activity?.getSharedPreferences("Theme",Context.MODE_PRIVATE)!!
         prefEditor=sharedPref.edit()
         val night=sharedPref.getBoolean("Night",false)
@@ -40,6 +46,23 @@ class Settings : Fragment() {
         if(night){
             binding.themeMode.isChecked=true
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+
+        ttsSharedPreferences=activity?.getSharedPreferences("TextToSpeechSwitch",Context.MODE_PRIVATE)!!
+        ttsEditor=ttsSharedPreferences.edit()
+        val ttsOn=ttsSharedPreferences.getBoolean("TTS",false)
+
+        if(ttsOn){
+            ttsSwitch.isChecked=true
+        }
+        ttsSwitch.setOnCheckedChangeListener{buttonView,isChecked->
+            if(!isChecked){
+                ttsEditor.putBoolean("TTS",false)
+                ttsEditor.apply()
+            }else{
+                ttsEditor.putBoolean("TTS",true)
+                ttsEditor.apply()
+            }
         }
 
 
@@ -67,6 +90,28 @@ class Settings : Fragment() {
         }
 
         return view
+    }
+    override fun onResume() {
+        super.onResume()
+        val customAppBar = (activity as MainActivity).binding.appBarMain
+        val menuButton = customAppBar.menuButton
+        val backButton = customAppBar.backarrow
+
+        val navController = findNavController()
+        val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
+
+        if (isRootFragment) {
+            menuButton?.visibility = View.VISIBLE
+            backButton?.visibility = View.GONE
+        } else {
+            menuButton?.visibility = View.GONE
+            backButton?.visibility = View.VISIBLE
+        }
+
+        backButton?.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
+
     }
     object LocaleHelper{
         fun setLocale(activity: Activity,languageCode:String){

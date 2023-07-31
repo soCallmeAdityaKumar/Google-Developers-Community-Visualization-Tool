@@ -11,8 +11,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentNotificationBinding
 import com.example.googledeveloperscommunityvisualisationtool.fragments.home.GdgChaptersAdapter
@@ -41,7 +43,7 @@ class Notification : Fragment() {
         recyclerView=binding.NotificationrecyclerView
         notificationAdapter = NotifyAdapter(notificationList)
         recyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = notificationAdapter
 
         noItemText.visibility=View.VISIBLE
@@ -50,6 +52,28 @@ class Notification : Fragment() {
 
 
         return view
+    }
+    override fun onResume() {
+        super.onResume()
+        val customAppBar = (activity as MainActivity).binding.appBarMain
+        val menuButton = customAppBar.menuButton
+        val backButton = customAppBar.backarrow
+
+        val navController = findNavController()
+        val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
+
+        if (isRootFragment) {
+            menuButton?.visibility = View.VISIBLE
+            backButton?.visibility = View.GONE
+        } else {
+            menuButton?.visibility = View.GONE
+            backButton?.visibility = View.VISIBLE
+        }
+
+        backButton?.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

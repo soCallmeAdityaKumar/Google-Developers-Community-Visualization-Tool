@@ -9,6 +9,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import android.view.animation.Animation
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.connection.LGCommand
@@ -25,6 +27,7 @@ import com.example.googledeveloperscommunityvisualisationtool.connection.LGConne
 import com.example.googledeveloperscommunityvisualisationtool.connection.LGConnectionSendFile
 import com.example.googledeveloperscommunityvisualisationtool.dialog.CustomDialogUtility
 import com.example.googledeveloperscommunityvisualisationtool.R
+import com.example.googledeveloperscommunityvisualisationtool.TextToSpeech.TextToSpeechClass
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.model.ActionController
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentConnectionBinding
@@ -48,6 +51,7 @@ class connection : Fragment() {
     private lateinit var saveKMLButton:Button
     private lateinit var resetRefreshButton:Button
     private lateinit var setRefreshButton:Button
+    lateinit var  textToSpeech:TextToSpeechClass
     var handler=Handler()
     var screenAmount=5
     override fun onCreateView(
@@ -73,6 +77,7 @@ class connection : Fragment() {
         resetRefreshButton=binding.ResetRefresh
         setRefreshButton=binding.SetRefresh
 
+
         val lgsharedPref=activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name,MODE_PRIVATE)!!
         val isConnected=lgsharedPref.getBoolean("IS_CONNECTED",false)
         if(isConnected){
@@ -81,8 +86,7 @@ class connection : Fragment() {
             lgnameEditText.setText(lgsharedPref.getString("USER_NAME",null))
         }
 
-        connectButton.setOnClickListener { connectionTest() }
-
+        connectButton.setOnClickListener { connectionTest()}
         buttTryAgain?.setOnClickListener(View.OnClickListener { view: View? ->
             changeToMainView()
             val editor = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)!!
@@ -155,7 +159,6 @@ class connection : Fragment() {
         startrebootLg()
 
     }
-
     private fun resetRefresh() {
         val password=passwordEditText.text.toString()
         val search = "<href>##LG_PHPIFACE##kml\\/slave_{{slave}}.kml<\\/href><refreshMode>onInterval<\\/refreshMode><refreshInterval>2<\\/refreshInterval>"
@@ -269,7 +272,27 @@ class connection : Fragment() {
 
     override fun onResume() {
         loadSharedData()
-        super.onResume()
+            super.onResume()
+            val customAppBar = (activity as MainActivity).binding.appBarMain
+            val menuButton = customAppBar.menuButton
+            val backButton = customAppBar.backarrow
+
+            val navController = findNavController()
+            val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
+
+            if (isRootFragment) {
+                menuButton?.visibility = View.VISIBLE
+                backButton?.visibility = View.GONE
+            } else {
+                menuButton?.visibility = View.GONE
+                backButton?.visibility = View.VISIBLE
+            }
+
+            backButton?.setOnClickListener {
+                (activity as MainActivity).onBackPressed()
+            }
+
+
     }
 
     private fun connectionTest() {

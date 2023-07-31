@@ -58,7 +58,7 @@ class TourGDGThread internal constructor(
         val poiCamera = POICamera(10.0, 0.0, 3000.0, "absolute", 4)
         val poi = POI().setPoiLocation(poiLocation).setPoiCamera(poiCamera)
         val balloon = Balloon()
-        val description = gdg.city+","+ gdg.country+"\n"+gdg.membersNumber+"\n"+gdg.about
+        val description = gdg.city+","+ gdg.country+"\n"
         balloon.setPoi(poi).setDescription(description)
             .setImageUri(Uri.parse(gdg.banner.path)).setImagePath(null).setVideoPath(null).setDuration(30)
         actionController!!.TourGDG(poi, balloon)

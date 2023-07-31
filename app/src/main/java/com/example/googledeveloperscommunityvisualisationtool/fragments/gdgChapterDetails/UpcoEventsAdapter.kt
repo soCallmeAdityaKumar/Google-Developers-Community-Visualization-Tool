@@ -39,7 +39,12 @@ class UpcoEventsAdapter(var Events:List<events>):RecyclerView.Adapter<UpcoEvents
                 binding.title.text = this.title
                 binding.date.text = this.date
             }
+            binding.date.setSelected(true)
+            binding.title.setSelected(true)
+
+
         }
+
     }
 
     fun refreshData(eventList: List<events>) {

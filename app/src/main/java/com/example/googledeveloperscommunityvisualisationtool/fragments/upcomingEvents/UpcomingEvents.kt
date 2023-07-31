@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -16,15 +18,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.airbnb.lottie.LottieAnimationView
+import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.Chapter
 import com.example.googledeveloperscommunityvisualisationtool.dataClass.volley.Result
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcomEventRepo
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcoEventViewMod
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcomingEventfactory
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentUpcomingEventsBinding
-import com.example.googledeveloperscommunityvisualisationtool.fragments.Calendar.CalendarFragment
 import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.DateAndUrl
+import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.UpcoEventDetailsModel
+import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.dataItem.upcomEventData
+import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.upcoEventsDetailsRepo
+import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.upcoeventDetailFactory
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroomfactory
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroommodel
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.weekEventEntity
@@ -36,13 +42,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.Date
 
 class UpcomingEvents : Fragment() {
     lateinit var binding:FragmentUpcomingEventsBinding
@@ -57,9 +58,12 @@ class UpcomingEvents : Fragment() {
     lateinit var thirdCardViewTextView: TextView
     lateinit var upcomingRecyclerView:RecyclerView
     lateinit var progressBar: ProgressBar
-    lateinit var refreshLayout: SwipeRefreshLayout
+    lateinit var scrollView:ScrollView
+    lateinit var upcomingEventViewModel:UpcoEventDetailsModel
     lateinit var lastweekroomViewModel:lastweekroommodel
     private var fragmentLifecycleOwner:LifecycleOwner?=null
+    lateinit var loadingAnimation:LottieAnimationView
+    lateinit var refreshButton:AppCompatButton
     val listOfDates= mutableListOf<String>()
 
 
@@ -72,16 +76,20 @@ class UpcomingEvents : Fragment() {
         binding=FragmentUpcomingEventsBinding.inflate(layoutInflater,container,false)
         val view= binding.root
 
-        refreshLayout=binding.refreshlayout
 
         progressBar=binding.progressBar
         progressBar.visibility=View.VISIBLE
+        loadingAnimation=binding.loadinLottieAnimation
+        loadingAnimation.visibility=View.VISIBLE
+        loadingAnimation.playAnimation()
 
 
         secondcardViewTextView=binding.secondcardviewTextView
         thirdCardViewTextView=binding.thirdcardviewTextView
         upcomingRecyclerView=binding.recyclerView
         lastweekRecyclerView=binding.lastweekRecyclerview
+        refreshButton=binding.RefreshButton
+        scrollView=binding.scrollView
 
 
 
@@ -118,6 +126,9 @@ class UpcomingEvents : Fragment() {
         val upcomEventRepo= UpcomEventRepo(requireContext())
         upcoEventViewMod= ViewModelProvider(this, UpcomingEventfactory(upcomEventRepo,requireContext())).get(UpcoEventViewMod::class.java)
 
+        val upcoEventDetailsRepo= upcoEventsDetailsRepo()
+        upcomingEventViewModel=ViewModelProvider(requireActivity(), upcoeventDetailFactory(upcoEventDetailsRepo)).get(
+            UpcoEventDetailsModel::class.java)
 
         //ViewModel for Database
         upcomingDatBaseViewModel=ViewModelProvider(this, UpcoEventRoomFactory(requireContext())).get(UpcoEventroomViewmodel::class.java)
@@ -125,6 +136,7 @@ class UpcomingEvents : Fragment() {
 
 
         lastweekroomViewModel=ViewModelProvider(this,lastweekroomfactory(requireContext())).get(lastweekroommodel::class.java)
+
 
 
         checkDatabase()
@@ -142,7 +154,7 @@ class UpcomingEvents : Fragment() {
 
     //if database is empty it will fetch data from the api otherwise refresh the adapter
     private fun checkDatabase() {
-            upcomingDatBaseViewModel.readAllEventViewModel.observe(fragmentLifecycleOwner!!, Observer {
+            upcomingDatBaseViewModel.readAllEventViewModel.observe(fragmentLifecycleOwner!!, Observer {it->
                 if (it.isEmpty()) {
                     CoroutineScope(Dispatchers.IO).launch {
                         networkCheckAndRun()
@@ -150,6 +162,7 @@ class UpcomingEvents : Fragment() {
                 } else {
                     Log.d("events", "inside the checkdatabase else part")
                     if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
+                    if(loadingAnimation.visibility==View.VISIBLE)loadingAnimation.visibility=View.GONE
                     if(secondcardViewTextView.visibility==View.GONE)secondcardViewTextView.visibility=View.VISIBLE
                     if(upcomingRecyclerView.visibility==View.GONE)upcomingRecyclerView.visibility=View.VISIBLE
                     secondcardViewTextView.startAnimation(AnimationUtils.loadAnimation(binding.root.context,android.R.anim.slide_in_left))
@@ -158,10 +171,11 @@ class UpcomingEvents : Fragment() {
 
                     eventlist = convertDataType(it).toMutableList()
                     adapter.refreshData(eventlist)
-                    refreshLayout.setOnRefreshListener {
+                    refreshButton.setOnClickListener {view->
                         checkexistingevent(it.toMutableList())
-                        refreshLayout.isRefreshing=false
+
                     }
+
                     adapter.setOnItemClickListener(object:UpcoEventsAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {
                             val action=UpcomingEventsDirections.actionUpcomingEventsToUpcomingEventDetails(DateAndUrl(eventlist[position].url,eventlist[position].start_date,
@@ -195,8 +209,33 @@ class UpcomingEvents : Fragment() {
 
 
     }
+    override fun onResume() {
+        super.onResume()
+        val customAppBar = (activity as MainActivity).binding.appBarMain
+        val menuButton = customAppBar.menuButton
+        val backButton = customAppBar.backarrow
+
+        val navController = findNavController()
+        val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
+
+        if (isRootFragment) {
+            menuButton?.visibility = View.VISIBLE
+            backButton?.visibility = View.GONE
+        } else {
+            menuButton?.visibility = View.GONE
+            backButton?.visibility = View.VISIBLE
+        }
+
+        backButton?.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
+
+    }
 
     private fun checkexistingevent(events: MutableList<UpcomingEventEntity>) {
+        scrollView.visibility=View.GONE
+        loadingAnimation.visibility=View.VISIBLE
+        loadingAnimation.playAnimation()
         val currentDate=LocalDateTime.now().atZone(ZoneId.systemDefault())
         for(i in 0 until events.size){
             val eventDate=LocalDateTime.parse(events[i].start_date.dropLast(6)).atZone(ZoneId.systemDefault())
@@ -227,7 +266,6 @@ class UpcomingEvents : Fragment() {
                     events[i].title,
                     events[i].url))
 
-
                 Log.d("lastweek","${events[i].title} added to database")
 
                 CoroutineScope(Dispatchers.Main).launch {
@@ -244,12 +282,26 @@ class UpcomingEvents : Fragment() {
                             }
                         })
                 }
+                CoroutineScope(Dispatchers.IO).launch {
+                    upcomingEventViewModel.getResponseModel(events[i].url,requireContext())
+                }
             }
         }
         Log.d("lastweek","before deleting the database")
         upcomingDatBaseViewModel.deleteAllevent()
-        checkDatabase()
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(3000)
+                checkDatabase()
+                scrollView.visibility=View.VISIBLE
+                loadingAnimation.visibility=View.GONE
+
+        }
+        val eventData= upcomingEventViewModel.returnEvents()
+
     }
+
+
+
     fun convertweekevententityToResult(weekEventEntity: List<weekEventEntity>):List<Result>{
         val result= mutableListOf<Result>()
         for(k in 0 until weekEventEntity.size){
@@ -286,6 +338,9 @@ class UpcomingEvents : Fragment() {
         //getting the event from api
         withContext(Dispatchers.Main) {
             if (progressBar.visibility == View.GONE) progressBar.visibility = View.VISIBLE
+            if(loadingAnimation.visibility==View.GONE)loadingAnimation.visibility=View.VISIBLE
+            loadingAnimation.playAnimation()
+
         }
         val job=CoroutineScope(Dispatchers.Main).launch {
 

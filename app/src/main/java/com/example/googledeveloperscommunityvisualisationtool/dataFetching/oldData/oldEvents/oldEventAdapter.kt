@@ -29,6 +29,10 @@ class oldEventAdapter(var eventList:List<Event>):RecyclerView.Adapter<oldEventAd
         holder.eventName.text=eventList[position].name
         holder.cityname.text=eventList[position].local_date
         holder.countryname.text=eventList[position].group.region
+        holder.eventName.setSelected(true)
+        holder.cityname.setSelected(true)
+        holder.countryname.setSelected(true)
+
     }
     fun refreshdata(eventlist:List<Event>){
         this.eventList=eventlist

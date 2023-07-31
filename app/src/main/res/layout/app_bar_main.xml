@@ -12,13 +12,14 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:textAlignment="center"
+        android:backgroundTint="@color/AppbackgroundColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/action_bar"
+            android:backgroundTint="@color/AppbackgroundColor"
             android:padding="5dp">
 
             <ImageButton
@@ -27,7 +28,19 @@
                 android:layout_height="50dp"
                 android:background="@color/transparent"
                 android:contentDescription="Menu"
+                android:visibility="visible"
                 android:src="@drawable/baseline_menu_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <ImageButton
+                android:id="@+id/backarrow"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@color/transparent"
+                android:contentDescription="Menu"
+                android:visibility="gone"
+                android:src="@drawable/backarrow"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -36,13 +49,13 @@
                 android:id="@+id/connection_status"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_marginStart="15dp"
                 android:fontFamily="@font/montserratmedium"
                 android:text="@string/not_connected"
                 android:textColor="@color/white"
+                android:layout_marginEnd="20dp"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/menu_button"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
 

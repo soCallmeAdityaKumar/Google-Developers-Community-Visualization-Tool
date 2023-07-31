@@ -1,5 +1,8 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.home
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -17,9 +20,11 @@ import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -77,6 +82,8 @@ class Home : Fragment() {
     private var fragmentLifecycleOwner: LifecycleOwner?=null
     private lateinit var themeSharedPreferences: SharedPreferences
     var sortedMap: HashMap<String,Int> = hashMapOf()
+    private lateinit var  objectsToAnimate: List<View>
+
 
     var flag2=0
 
@@ -149,6 +156,9 @@ class Home : Fragment() {
 
         sharedPref = activity?.getSharedPreferences("didShowPrompt", Context.MODE_PRIVATE)!!
         val prefEdit = sharedPref?.edit()
+
+//        objectsToAnimate= listOf(binding.cloudFlyingImage,binding.gdgImage)
+//        startFlyingAnimation(binding.avatarImageView)
 
 
         return view
@@ -248,6 +258,24 @@ class Home : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.d("home","onResume() called")
+        val customAppBar = (activity as MainActivity).binding.appBarMain
+        val menuButton = customAppBar.menuButton
+        val backButton = customAppBar.backarrow
+
+        val navController = findNavController()
+        val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
+
+        if (isRootFragment) {
+            menuButton?.visibility = View.VISIBLE
+            backButton?.visibility = View.GONE
+        } else {
+            menuButton?.visibility = View.GONE
+            backButton?.visibility = View.VISIBLE
+        }
+
+        backButton?.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
         checkurlDatabase()
 
     }
@@ -513,5 +541,33 @@ class Home : Fragment() {
         chapUrlroomViewModel.readAllChapterUrlViewModel.removeObserver{fragmentLifecycleOwner!!}
 
     }
+    private fun startFlyingAnimation(container: ImageView) {
+        val radius = container.width/3f
+        val centerX = container.width / 2f
+        val centerY = container.height.toFloat()
+
+        val totalObjects = objectsToAnimate.size
+        val angleIncrement = Math.PI.toFloat() / totalObjects.toFloat()
+
+        val animatorSet = AnimatorSet()
+
+        val animators = mutableListOf<ObjectAnimator>()
+        for ((index, view) in objectsToAnimate.withIndex()) {
+            val angle = angleIncrement * index
+            val x = centerX + radius * Math.cos(angle.toDouble()).toFloat()
+            val y = centerY - radius * Math.sin(angle.toDouble()).toFloat()
+
+            val animatorX = ObjectAnimator.ofFloat(view, View.TRANSLATION_X, view.translationX, x)
+            val animatorY = ObjectAnimator.ofFloat(view, View.TRANSLATION_Y, view.translationY, y)
+
+            animators.add(animatorX)
+            animators.add(animatorY)
+        }
+
+        animatorSet.playTogether(animators as MutableCollection<Animator>)
+        animatorSet.duration = 3000
+        animatorSet.start()
+    }
+
 
 }

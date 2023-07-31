@@ -20,8 +20,10 @@ import android.widget.GridView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.events.calendar.utils.EventsCalendarUtil.today
 import com.events.calendar.views.EventsCalendar
+import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcoEventViewMod
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcomEventRepo
@@ -58,6 +60,9 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        CoroutineScope(Dispatchers.Main).launch {
+
+        }
         binding=FragmentCalendarBinding.inflate(layoutInflater,container,false)
         val view=binding.root
 
@@ -107,6 +112,28 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
             }
         })
         eventsCalendar.setCallback(this)
+
+    }
+    override fun onResume() {
+        super.onResume()
+        val customAppBar = (activity as MainActivity).binding.appBarMain
+        val menuButton = customAppBar.menuButton
+        val backButton = customAppBar.backarrow
+
+        val navController = findNavController()
+        val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
+
+        if (isRootFragment) {
+            menuButton?.visibility = View.VISIBLE
+            backButton?.visibility = View.GONE
+        } else {
+            menuButton?.visibility = View.GONE
+            backButton?.visibility = View.VISIBLE
+        }
+
+        backButton?.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
 
     }
 

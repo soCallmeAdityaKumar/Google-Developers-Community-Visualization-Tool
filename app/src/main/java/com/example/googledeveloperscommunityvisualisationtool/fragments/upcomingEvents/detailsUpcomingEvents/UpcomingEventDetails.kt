@@ -21,13 +21,17 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.getSystemService
+import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.R.drawable
@@ -78,6 +82,7 @@ class UpcomingEventDetails : Fragment() {
     lateinit var organizersAdapter: OrganizersAdapter
     lateinit var aboutcardView:CardView
     lateinit var notifyButton:Button
+    lateinit var loadingAnimation:LottieAnimationView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,9 +93,12 @@ class UpcomingEventDetails : Fragment() {
 
         progressBar=binding.progressBar
         scrollView=binding.scrollview
+        loadingAnimation=binding.loadinLottieAnimation
 
-        progressBar.visibility=View.VISIBLE
+
+        progressBar.visibility=View.GONE
         scrollView.visibility=View.GONE
+        loadingAnimation.playAnimation()
 
 
         eventTitle=binding.eventsName
@@ -147,6 +155,7 @@ class UpcomingEventDetails : Fragment() {
         )
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,AlarmManager.INTERVAL_DAY,pendingIntent)
         Log.d("Alarm","Alarm set for $date")
+        Toast.makeText(requireContext(),"You will be notified for $title",Toast.LENGTH_SHORT).show()
     }
 
     private fun createNotificationChannel() {
@@ -184,6 +193,7 @@ class UpcomingEventDetails : Fragment() {
             withContext(Dispatchers.Main){
                 if(scrollView.visibility==View.GONE)scrollView.visibility=View.VISIBLE
                 if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
+                if(loadingAnimation.visibility==View.VISIBLE)loadingAnimation.visibility=View.GONE
                 val eventData= viewModel.returnEvents()
                 gdgName.text=eventData.gdgName
                 if(isAdded) {
@@ -264,12 +274,28 @@ class UpcomingEventDetails : Fragment() {
                     setAlarm(url.dateAndUrl.dateAndTime,eventData.title,url.dateAndUrl.logo,eventData.desc)
                 }
             }
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        val customAppBar = (activity as MainActivity).binding.appBarMain
+        val menuButton = customAppBar.menuButton
+        val backButton = customAppBar.backarrow
 
+        val navController = findNavController()
+        val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
 
-
+        if (isRootFragment) {
+            menuButton?.visibility = View.VISIBLE
+            backButton?.visibility = View.GONE
+        } else {
+            menuButton?.visibility = View.GONE
+            backButton?.visibility = View.VISIBLE
         }
 
+        backButton?.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
 
     }
-
 }

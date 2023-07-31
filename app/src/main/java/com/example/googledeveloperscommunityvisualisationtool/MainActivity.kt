@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setupWithNavController(navController)
         notifyImage=binding.appBarMain.notifyImage
 
-
         binding.appBarMain.menuButton.setOnClickListener {
             binding.drawerlayout.openDrawer(GravityCompat.START)
         }
@@ -92,6 +91,8 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
+
 
 
 

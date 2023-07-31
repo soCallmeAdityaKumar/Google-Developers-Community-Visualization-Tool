@@ -27,6 +27,10 @@ class pastEventAdapter(var Events:List<events>):RecyclerView.Adapter<pastEventAd
                 binding.title.text = this.title
                 binding.date.text = this.date
                 binding.description.text=this.typeORdescription
+                binding.date.setSelected(true)
+                binding.title.setSelected(true)
+                binding.description.setSelected(true)
+
             }
         }
     }
