@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,28 +13,53 @@
     tools:context=".fragments.settings.connection.connection">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView1"
+        android:id="@+id/materialCardViewipAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:backgroundTint="@color/CardViewTransparent"
         app:cardCornerRadius="20dp"
+        android:layout_margin="20dp"
         app:cardElevation="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/materialCardViewLgName">
 
         <EditText
             android:id="@+id/IpAddressEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/cardview"
-            android:hint="@string/lg_ip_address_port"
+            android:fontFamily="@font/poppins_medium"
+            android:hint="@string/lg_ip_address"
             android:padding="20dp"
             android:textAlignment="viewStart"
+            android:textColor="@color/MainHeadingText"
+            android:textSize="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardViewPort"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/CardViewTransparent"
+        app:cardCornerRadius="20dp"
+        android:layout_margin="20dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardViewipAddress">
+
+        <EditText
+            android:id="@+id/PortEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cardview"
             android:fontFamily="@font/poppins_medium"
+            android:hint="@string/port"
+            android:padding="20dp"
+            android:textAlignment="viewStart"
             android:textColor="@color/MainHeadingText"
             android:textSize="30dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,12 +81,13 @@
     <!--        android:background="@drawable/cardview"-->
     <!--        />-->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView2"
-        android:layout_width="match_parent"
+        android:id="@+id/materialCardViewLgName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView1"
-        tools:layout_editor_absoluteX="20dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <EditText
             android:id="@+id/LgNameEditText"
@@ -64,8 +95,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/cardview"
             android:backgroundTint="@color/CardViewTransparent"
-            android:hint="@string/lg_name"
             android:fontFamily="@font/poppins_medium"
+            android:hint="@string/lg_name"
             android:padding="20dp"
             android:textAlignment="viewStart"
             android:textColor="@color/MainHeadingText"
@@ -76,11 +107,13 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView3"
-        android:layout_width="match_parent"
+        android:id="@+id/materialCardViewpassword"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView2">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardViewPort">
 
         <EditText
             android:id="@+id/LgPassword"
@@ -88,10 +121,10 @@
             android:layout_height="wrap_content"
             android:background="@drawable/cardview"
             android:backgroundTint="@color/CardViewTransparent"
+            android:fontFamily="@font/poppins_medium"
             android:hint="@string/lg_password"
             android:padding="20dp"
             android:password="true"
-            android:fontFamily="@font/poppins_medium"
             android:textAlignment="viewStart"
             android:textColor="@color/MainHeadingText"
             android:textSize="30dp"
@@ -114,7 +147,7 @@
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView3" />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardViewpassword" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttTryAgain"
@@ -130,7 +163,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView3" />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardViewpassword" />
 
     <TextView
         android:id="@+id/ConnectingTextView"
@@ -139,37 +172,68 @@
         android:layout_margin="20dp"
         android:background="@drawable/cardview"
         android:backgroundTint="@color/ButtonColor"
+        android:fontFamily="@font/poppins_medium"
         android:padding="20dp"
         android:text="Connecting.."
-        android:fontFamily="@font/poppins_medium"
         android:textColor="@color/white"
         android:textSize="20dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView3" />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardViewpassword" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/CleanKMLs"
+        android:id="@+id/CleanLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
         android:background="@drawable/cardview"
         android:backgroundTint="@color/ButtonColor"
         android:fontFamily="@font/poppins_medium"
-        android:textColor="@color/white"
         android:padding="10dp"
-        android:text="@string/clean_kml"
+        android:text="Clean Logo"
+        android:textColor="@color/white"
         android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttTryAgain" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/CleanKMLs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/SaveKml" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/RelaunchLg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cardview"
+        android:backgroundTint="@color/ButtonColor"
+        android:fontFamily="@font/montserratmedium"
+        android:padding="10dp"
+        android:text="@string/relaunch_lg"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/PowerOffLg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ResetRefresh" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ResetRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cardview"
+        android:backgroundTint="@color/ButtonColor"
+        android:fontFamily="@font/montserratmedium"
+        android:padding="10dp"
+        android:text="@string/reset_refresh"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/PowerOffLg"
+        app:layout_constraintEnd_toStartOf="@+id/RelaunchLg"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/PowerOffLg" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/RebootLg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:background="@drawable/cardview"
         android:backgroundTint="@color/ButtonColor"
         android:fontFamily="@font/poppins_medium"
@@ -178,13 +242,15 @@
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintBaseline_toBaselineOf="@+id/CleanKMLs"
+        app:layout_constraintEnd_toStartOf="@+id/SetRefresh"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/CleanKMLs" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/PowerOffLg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/cardview"
         android:backgroundTint="@color/ButtonColor"
         android:fontFamily="@font/poppins_medium"
@@ -192,74 +258,15 @@
         android:text="@string/poweroff_lg"
         android:textColor="@color/white"
         android:textSize="20dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/RebootLg"
-        app:layout_constraintStart_toEndOf="@+id/RebootLg" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/SetRefresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/cardview"
-        android:backgroundTint="@color/ButtonColor"
-        android:fontFamily="@font/poppins_medium"
-        android:padding="10dp"
-        android:text="@string/set_refresh"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/PowerOffLg"
-        app:layout_constraintStart_toEndOf="@+id/PowerOffLg" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/ResetRefresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/cardview"
-        android:backgroundTint="@color/ButtonColor"
-        android:fontFamily="@font/montserratmedium"
-        android:padding="10dp"
-        android:text="@string/reset_refresh"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/SetRefresh"
-        app:layout_constraintStart_toEndOf="@+id/SetRefresh" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/CleanLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/cardview"
-        android:backgroundTint="@color/CardViewTransparent"
-        android:fontFamily="@font/poppins_medium"
-        android:padding="10dp"
-        android:text="Clean Logo"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/ResetRefresh"
-        app:layout_constraintStart_toEndOf="@+id/ResetRefresh" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/RelaunchLg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/cardview"
-        android:backgroundTint="@color/ButtonColor"
-        android:fontFamily="@font/montserratmedium"
-        android:padding="10dp"
-        android:text="@string/relaunch_lg"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/ResetRefresh"
-        app:layout_constraintStart_toEndOf="@+id/ResetRefresh" />
+        app:layout_constraintEnd_toStartOf="@+id/ResetRefresh"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CleanKMLs" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/SaveKml"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:background="@drawable/cardview"
         android:backgroundTint="@color/ButtonColor"
         android:fontFamily="@font/poppins_medium"
@@ -267,8 +274,44 @@
         android:text="@string/save_kml"
         android:textColor="@color/white"
         android:textSize="20dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/CleanLogo"
-        app:layout_constraintStart_toEndOf="@+id/RelaunchLg" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/CleanKMLs"
+        app:layout_constraintEnd_toStartOf="@+id/CleanLogo"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/SetRefresh" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/SetRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cardview"
+        android:backgroundTint="@color/ButtonColor"
+        android:fontFamily="@font/poppins_medium"
+        android:padding="10dp"
+        android:text="@string/set_refresh"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/CleanKMLs"
+        app:layout_constraintEnd_toStartOf="@+id/SaveKml"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/RebootLg" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/CleanKMLs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/cardview"
+        android:backgroundTint="@color/ButtonColor"
+        android:fontFamily="@font/poppins_medium"
+        android:padding="10dp"
+        android:text="@string/clean_kml"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/RebootLg"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ConnectLGButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
+</ScrollView>

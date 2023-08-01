@@ -1,5 +1,6 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.Notification
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -21,6 +22,7 @@ import com.example.googledeveloperscommunityvisualisationtool.fragments.home.Gdg
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.notificationRoom.NotifyEntity
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.notificationRoom.NotifyViewModel
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.notificationRoom.NotifyViewModelFactory
+import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 
 class Notification : Fragment() {
     lateinit var binding:FragmentNotificationBinding
@@ -55,6 +57,7 @@ class Notification : Fragment() {
     }
     override fun onResume() {
         super.onResume()
+        loadConnectionStatus()
         val customAppBar = (activity as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
         val backButton = customAppBar.backarrow
@@ -74,6 +77,23 @@ class Notification : Fragment() {
             (activity as MainActivity).onBackPressed()
         }
 
+    }
+    private fun loadConnectionStatus() {
+        val sharedPreferences = activity?.getSharedPreferences(
+            ConstantPrefs.SHARED_PREFS.name,
+            Context.MODE_PRIVATE
+        )
+
+        val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+        val act=activity as MainActivity
+        if (isConnected!!) {
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.connected)
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
+        } else {
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.not_connected)
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
+
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

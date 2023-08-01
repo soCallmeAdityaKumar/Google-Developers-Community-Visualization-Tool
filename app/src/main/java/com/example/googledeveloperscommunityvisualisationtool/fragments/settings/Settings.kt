@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentSettingsBinding
+import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import java.util.Locale
 
 class Settings : Fragment() {
@@ -93,6 +94,7 @@ class Settings : Fragment() {
     }
     override fun onResume() {
         super.onResume()
+        loadConnectionStatus()
         val customAppBar = (activity as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
         val backButton = customAppBar.backarrow
@@ -112,6 +114,23 @@ class Settings : Fragment() {
             (activity as MainActivity).onBackPressed()
         }
 
+    }
+    private fun loadConnectionStatus() {
+        val sharedPreferences = activity?.getSharedPreferences(
+            ConstantPrefs.SHARED_PREFS.name,
+            Context.MODE_PRIVATE
+        )
+
+        val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+        val act=activity as MainActivity
+        if (isConnected!!) {
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.connected)
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
+        } else {
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.not_connected)
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
+
+        }
     }
     object LocaleHelper{
         fun setLocale(activity: Activity,languageCode:String){

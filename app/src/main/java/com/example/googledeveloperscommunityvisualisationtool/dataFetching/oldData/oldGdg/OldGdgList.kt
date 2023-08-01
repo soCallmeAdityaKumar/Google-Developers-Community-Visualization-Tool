@@ -1,5 +1,6 @@
 package com.example.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldGdg
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,10 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.car.ui.recyclerview.CarUiListItemAdapterAdapterV1.ViewHolderWrapper
 import com.example.googledeveloperscommunityvisualisationtool.MainActivity
+import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentOldGdgListBinding
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.OldGDGEntity
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.oldGDGroomViewModel
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.oldGDGroomFactory
+import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -68,6 +71,7 @@ class OldGdgList : Fragment() {
     }
     override fun onResume() {
         super.onResume()
+        loadConnectionStatus()
         val customAppBar = (activity as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
         val backButton = customAppBar.backarrow
@@ -149,6 +153,23 @@ class OldGdgList : Fragment() {
             databaseOldGgd.add(list)
         }
         return databaseOldGgd
+    }
+    private fun loadConnectionStatus() {
+        val sharedPreferences = activity?.getSharedPreferences(
+            ConstantPrefs.SHARED_PREFS.name,
+            Context.MODE_PRIVATE
+        )
+
+        val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+        val act=activity as MainActivity
+        if (isConnected!!) {
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.connected)
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
+        } else {
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.not_connected)
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
+
+        }
     }
 
 

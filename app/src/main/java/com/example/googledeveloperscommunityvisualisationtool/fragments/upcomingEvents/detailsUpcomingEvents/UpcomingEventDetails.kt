@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Context.ALARM_SERVICE
 import android.content.Intent
 import android.opengl.Visibility
@@ -43,6 +44,7 @@ import com.example.googledeveloperscommunityvisualisationtool.fragments.gdgChapt
 import com.example.googledeveloperscommunityvisualisationtool.fragments.home.Organizers
 import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.AlarmReceiver
 import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.UpcomingEvents
+import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -278,6 +280,7 @@ class UpcomingEventDetails : Fragment() {
     }
     override fun onResume() {
         super.onResume()
+        loadConnectionStatus()
         val customAppBar = (activity as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
         val backButton = customAppBar.backarrow
@@ -297,5 +300,22 @@ class UpcomingEventDetails : Fragment() {
             (activity as MainActivity).onBackPressed()
         }
 
+    }
+    private fun loadConnectionStatus() {
+        val sharedPreferences = activity?.getSharedPreferences(
+            ConstantPrefs.SHARED_PREFS.name,
+            Context.MODE_PRIVATE
+        )
+
+        val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+        val act=activity as MainActivity
+        if (isConnected!!) {
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.connected)
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
+        } else {
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.not_connected)
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
+
+        }
     }
 }

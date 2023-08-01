@@ -61,9 +61,8 @@ class UpcoEventsAdapter(private var eventList:List<Result>):RecyclerView.Adapter
                     tag += this.tags[i]
                 }
                 binding.eventTitle.setSelected(true)
-                binding.GDGname.setSelected(true)
-                binding.city.setSelected(true)
-//                binding.tags.text=tag.toString()
+                binding.GDGname.setFocusable(true)
+                binding.city.setFocusable(true)
 
                 }
             }

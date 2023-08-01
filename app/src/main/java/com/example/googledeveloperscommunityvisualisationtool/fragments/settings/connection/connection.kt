@@ -40,6 +40,7 @@ class connection : Fragment() {
     private lateinit var sharedPref:SharedPreferences
     private lateinit var connectButton:Button
     private lateinit var lgipAddress:EditText
+    private lateinit var port:EditText
     private lateinit var passwordEditText: EditText
     private lateinit var lgnameEditText: EditText
     private lateinit var connectingTextView:TextView
@@ -66,6 +67,7 @@ class connection : Fragment() {
         lgipAddress=binding.IpAddressEditText
         passwordEditText=binding.LgPassword
         lgnameEditText=binding.LgNameEditText
+        port=binding.PortEditText
         connectButton=binding.ConnectLGButton
         connectingTextView=binding.ConnectingTextView
         buttTryAgain=binding.buttTryAgain
@@ -82,8 +84,13 @@ class connection : Fragment() {
         val isConnected=lgsharedPref.getBoolean("IS_CONNECTED",false)
         if(isConnected){
             passwordEditText.setText(lgsharedPref.getString("USER_PASSWORD",null))
-            lgipAddress.setText(lgsharedPref.getString("URI_TEXT",null))
+            val hostNPort = lgsharedPref.getString("URI_TEXT",null)!!.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            lgipAddress.setText(hostNPort[0])
+            port.setText(hostNPort[1])
             lgnameEditText.setText(lgsharedPref.getString("USER_NAME",null))
+        }
+        else{
+            loadSharedData()
         }
 
         connectButton.setOnClickListener { connectionTest()}
@@ -271,7 +278,6 @@ class connection : Fragment() {
     }
 
     override fun onResume() {
-        loadSharedData()
             super.onResume()
             val customAppBar = (activity as MainActivity).binding.appBarMain
             val menuButton = customAppBar.menuButton
@@ -296,11 +302,12 @@ class connection : Fragment() {
     }
 
     private fun connectionTest() {
-        val hostPort = lgipAddress!!.text.toString()
+        val port = port!!.text.toString()
+        val host=lgipAddress!!.text.toString()
         val usernameText = lgnameEditText!!.text.toString()
         val passwordText = passwordEditText!!.text.toString()
-        saveConnectionInfo(hostPort, usernameText, passwordText)
-        if (!isValidHostNPort(hostPort)) {
+        saveConnectionInfo(host,port, usernameText, passwordText)
+        if (!isValidHostNPort("$host:$port")) {
             CustomDialogUtility.showDialog(
                 requireActivity(),
                 resources.getString(R.string.activity_connection_host_port_error)
@@ -317,7 +324,7 @@ class connection : Fragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
         changeButtonTextConnecting()
-        createLgCommand(hostPort, usernameText, passwordText, dialog)
+        createLgCommand("$host:$port", usernameText, passwordText, dialog)
     }
     private fun createLgCommand(
         hostPort: String,
@@ -392,9 +399,9 @@ class connection : Fragment() {
         }, 2000)
     }
 
-    private fun saveConnectionInfo(hostPort: String, usernameText: String, passwordText: String) {
+    private fun saveConnectionInfo(host:String,Port: String, usernameText: String, passwordText: String) {
         val editor = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)?.edit()
-        editor?.putString(ConstantPrefs.URI_TEXT.name, hostPort)
+        editor?.putString(ConstantPrefs.URI_TEXT.name, "$host:$Port")
         editor?.putString(ConstantPrefs.USER_NAME.name, usernameText)
         editor?.putString(ConstantPrefs.USER_PASSWORD.name, passwordText)
         editor?.putBoolean(ConstantPrefs.TRY_TO_RECONNECT.name, false)
@@ -449,12 +456,15 @@ class connection : Fragment() {
         if (isConnected!!) {
             changeToNewView()
         } else {
-            val text = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name, "")
+            val hostNport = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name, "")!!.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            val iptext=hostNport[0]
+            val porttext=hostNport[1]
             val usernameText = sharedPreferences.getString(ConstantPrefs.USER_NAME.name, "")
             val passwordText = sharedPreferences.getString(ConstantPrefs.USER_PASSWORD.name, "")
             val isTryToReconnect =
                 sharedPreferences.getBoolean(ConstantPrefs.TRY_TO_RECONNECT.name, false)
-            if (text != "") lgipAddress!!.setText(text)
+            if (iptext != "") lgipAddress!!.setText(iptext)
+            if(porttext!="") port!!.setText(porttext)
             if (usernameText != "") lgnameEditText!!.setText(usernameText)
             if (passwordText != "") passwordEditText!!.setText(passwordText)
             if (isTryToReconnect) connectButton!!.text =

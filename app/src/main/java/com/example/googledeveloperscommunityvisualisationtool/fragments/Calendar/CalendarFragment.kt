@@ -4,7 +4,9 @@ import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
+import android.graphics.fonts.Font
 import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -32,6 +34,7 @@ import com.example.googledeveloperscommunityvisualisationtool.databinding.Fragme
 import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.UpcomingEvents
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.upcomingEvents.UpcoEventRoomFactory
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.upcomingEvents.UpcoEventroomViewmodel
+import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -73,7 +76,6 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
         editor?.apply()
 
         listOfCalendar= arrayOf()
-
             val start=Calendar.getInstance()
             val end=Calendar.getInstance()
             end.add(Calendar.YEAR,2)
@@ -82,9 +84,9 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
                 .setMonthRange(start, end)
                 .setWeekStartDay(Calendar.SUNDAY, false)
                 .setCurrentSelectedDate(today)
-                .setDateTextFontSize(16f)
-                .setMonthTitleFontSize(26f)
-                .setWeekHeaderFontSize(26f)
+                .setDateTextFontSize(26f)
+                .setMonthTitleFontSize(30f)
+                .setWeekHeaderFontSize(20f)
                 .setCallback(this)
          .build()
 
@@ -116,6 +118,7 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
     }
     override fun onResume() {
         super.onResume()
+        loadConnectionStatus()
         val customAppBar = (activity as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
         val backButton = customAppBar.backarrow
@@ -135,6 +138,23 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
             (activity as MainActivity).onBackPressed()
         }
 
+    }
+    private fun loadConnectionStatus() {
+        val sharedPreferences = activity?.getSharedPreferences(
+            ConstantPrefs.SHARED_PREFS.name,
+            Context.MODE_PRIVATE
+        )
+
+        val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+        val act=activity as MainActivity
+        if (isConnected!!) {
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.connected)
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
+        } else {
+            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.not_connected)
+            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
+
+        }
     }
 
     override fun onDayLongPressed(selectedDate: Calendar?) {

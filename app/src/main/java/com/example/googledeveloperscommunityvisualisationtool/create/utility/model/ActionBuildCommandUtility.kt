@@ -48,7 +48,7 @@ object ActionBuildCommandUtility {
      */
     @JvmStatic
     fun buildWriteBalloonFile(): String {
-        val command = "echo 'http://lg1:81/balloon.kml'  > " +
+        val command = "echo 'http://lg2:81/balloon.kml'  > " +
                 BASE_PATH +
                 "kmls.txt"
         Log.w(TAG_DEBUG, "command: $command")
@@ -172,7 +172,7 @@ object ActionBuildCommandUtility {
      */
     @JvmStatic
     fun buildWriteShapeFile(): String {
-        val command = "echo 'http://lg1:81/shape.kml' > " +
+        val command = "echo 'http://lg2:81/shape.kml' > " +
                 BASE_PATH +
                 "kmls.txt"
         Log.w(TAG_DEBUG, "command: $command")
