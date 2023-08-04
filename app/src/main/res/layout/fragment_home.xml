@@ -172,7 +172,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/SecondcardView"
                 android:layout_width="wrap_content"
-                android:layout_height="400dp"
+                android:layout_height="300dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
@@ -193,8 +193,8 @@
 
                     <org.eazegraph.lib.charts.PieChart
                         android:id="@+id/PieChart"
-                        android:layout_width="350dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:layout_marginStart="40dp"
                         android:layout_weight="1"
                         android:padding="6dp"
@@ -208,6 +208,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/montserratmedium"
                         android:text="@string/max_groups_in_countries"

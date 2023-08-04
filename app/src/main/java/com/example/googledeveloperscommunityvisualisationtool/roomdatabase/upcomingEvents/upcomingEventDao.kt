@@ -10,8 +10,7 @@ import com.example.googledeveloperscommunityvisualisationtool.fragments.upcoming
 
 
 @Dao
-interface upcomingEventDao
-{
+interface upcomingEventDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addEvents(upcomingEventEntity: UpcomingEventEntity)

@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:context=".fragments.upcomingEvents.lastWeekEventDetails.lastWeekDetails">
+            tools:context=".fragments.upcomingEvents.lastWeekEventDetails.LastWeekEventDetails">
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 app:cardCornerRadius="30dp"
@@ -131,12 +131,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="30dp"
-                            android:visibility="gone"
                             android:backgroundTint="@color/OrganizerColorList"
                             android:fontFamily="@font/robotocondensedbold"
                             android:text="@string/notify_for_the_events"
                             android:textColor="@color/MainHeadingText"
                             app:elevation="500dp"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:strokeColor="@color/black"
@@ -206,6 +206,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/staatlichesregular"
                 android:text="@string/members"
+                android:visibility="gone"
                 android:textColor="@color/MainHeadingText"
                 android:textSize="42dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -218,6 +219,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="10dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/MemeberstextView"
                 tools:layout_editor_absoluteX="20dp" />

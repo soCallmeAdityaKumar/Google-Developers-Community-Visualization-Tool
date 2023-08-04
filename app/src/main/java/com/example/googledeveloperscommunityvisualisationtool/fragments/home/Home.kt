@@ -195,10 +195,10 @@ class Home : Fragment() {
                 CoroutineScope(Dispatchers.IO).launch {
                     if(countryList.isNotEmpty()) {
                         mostChaptersCountry.clear()
-                        delay(5000)
                         for (i in 0 until countryList.size) {
                             increment(mostChaptersCountry, countryList[i].country)
                         }
+                        delay(6000)
                         withContext(Dispatchers.Main) {
                             setDataToPie()
                             if (progressBar.visibility == View.VISIBLE) progressBar.visibility =
@@ -232,10 +232,24 @@ class Home : Fragment() {
     private fun setDataToPieFromPref() {
         var j=0
         val listOfColor= listOf("#FFA726","#66BB6A","#EF5350","#29B6F6","#FFC8DD","#2B2D42","#8D99AE","#D5BDAF","#E4C1F9","#7400B8")
-        pieSharePref.all.forEach {map->
-            pieChart.addPieSlice(PieModel(map.key,map.value as Float,Color.parseColor(listOfColor[j])))
-            countryCount.add(CountryCountData(listOfColor[j],map.key,Integer.parseInt(map.value.toString().dropLast(2))))
-            j++
+        if(pieSharePref.all.size==10) {
+            pieSharePref.all.forEach { map ->
+                pieChart.addPieSlice(
+                    PieModel(
+                        map.key,
+                        map.value as Float,
+                        Color.parseColor(listOfColor[j])
+                    )
+                )
+                countryCount.add(
+                    CountryCountData(
+                        listOfColor[j],
+                        map.key,
+                        Integer.parseInt(map.value.toString().dropLast(2))
+                    )
+                )
+                j++
+            }
         }
         pieChartAdapter.refreshData(countryCount)
         statisticsText.visibility = View.VISIBLE
@@ -384,7 +398,7 @@ class Home : Fragment() {
         val listOfColor= listOf("#FFA726","#66BB6A","#EF5350","#29B6F6","#FFC8DD","#2B2D42","#8D99AE","#D5BDAF","#E4C1F9","#7400B8")
         Log.d("size",mostChaptersCountry.size.toString())
 
-        if(mostChaptersCountry.size>10){
+        if(mostChaptersCountry.size>11){
             mostChaptersCountry.entries.sortedByDescending { it.value }.take(10).forEach{ sortedMap[it.key] = it.value}
             sortedMap.forEach{(k,v)->Log.d("sorted","$k->$v")}
             sortedMap.forEach { (k, v) ->

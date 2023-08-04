@@ -39,7 +39,6 @@
     <string name="alarm_notification">अलार्म अधिसूचना</string>
     <string name="clear_database">डेटाबेस साफ़ करें</string>
     <string name="night_mode">रात का मोड</string>
-    <string name="lg_ip_address_port">एलजी आईपी पता: पोर्ट</string>
     <string name="lg_name">एलजी नाम</string>
     <string name="lg_password">एलजी नाम</string>
     <string name="connecting">कनेक्ट हो रहा है...</string>

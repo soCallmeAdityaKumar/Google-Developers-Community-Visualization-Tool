@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,7 @@ import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcom
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcoEventViewMod
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.upcomingEvents.UpcomingEventfactory
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentUpcomingEventsBinding
+import com.example.googledeveloperscommunityvisualisationtool.fragments.home.Organizers
 import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.DateAndUrl
 import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.UpcoEventDetailsModel
 import com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.dataItem.upcomEventData
@@ -36,6 +38,10 @@ import com.example.googledeveloperscommunityvisualisationtool.fragments.upcoming
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroomfactory
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroommodel
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.weekEventEntity
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.lastWeekEvent.LastEventEntity
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.lastWeekEvent.LastEventModelFact
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.lastWeekEvent.LastEventViewModel
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.lastWeekEvent.OrganizerList
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.upcomingEvents.UpcomingEventEntity
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.upcomingEvents.UpcoEventRoomFactory
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.upcomingEvents.UpcoEventroomViewmodel
@@ -45,6 +51,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jsoup.select.CombiningEvaluator.Or
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -62,6 +69,7 @@ class UpcomingEvents : Fragment() {
     lateinit var upcomingRecyclerView:RecyclerView
     lateinit var progressBar: ProgressBar
     lateinit var scrollView:ScrollView
+    lateinit var lastEventViewModel:LastEventViewModel
     lateinit var upcomingEventViewModel:UpcoEventDetailsModel
     lateinit var lastweekroomViewModel:lastweekroommodel
     private var fragmentLifecycleOwner:LifecycleOwner?=null
@@ -140,7 +148,7 @@ class UpcomingEvents : Fragment() {
 
         lastweekroomViewModel=ViewModelProvider(this,lastweekroomfactory(requireContext())).get(lastweekroommodel::class.java)
 
-
+        lastEventViewModel=ViewModelProvider(this,LastEventModelFact(requireContext())).get(LastEventViewModel::class.java)
 
         checkDatabase()
 
@@ -203,8 +211,8 @@ class UpcomingEvents : Fragment() {
                 lastweekadapter.refreshData(result)
                 lastweekadapter.setOnItemClickListener(object :UpcoEventsAdapter.onItemClickListener{
                     override fun onItemClick(position: Int) {
-//                        val action=UpcomingEventsDirections.actionUpcomingEventsToUpcomingEventDetails(lastweekeventslist[position].url)
-//                        findNavController().navigate(action)
+                        val action=UpcomingEventsDirections.actionUpcomingEventsToLastWeekEventDetails(result[position].title)
+                        findNavController().navigate(action)
                     }
                 })
             }
@@ -318,7 +326,13 @@ class UpcomingEvents : Fragment() {
 
         }
         val eventData= upcomingEventViewModel.returnEvents()
-
+        val setOfOrganizers= mutableListOf<OrganizerList>()
+        for(org in eventData.mentors){
+            setOfOrganizers.add(OrganizerList(org.organizername,org.organizercompany,org.organizerTitle,org.organizerimage))
+        }
+        val lastEventData=LastEventEntity(0,eventData.title,eventData.address,eventData.gdgName,eventData.dateAndTime,eventData.rsvp,eventData.desc,eventData.duration)
+        lastEventViewModel.addEventViewModel(lastEventData)
+        Log.d("lastEvent","${lastEventData.title} event added to Database")
     }
 
 

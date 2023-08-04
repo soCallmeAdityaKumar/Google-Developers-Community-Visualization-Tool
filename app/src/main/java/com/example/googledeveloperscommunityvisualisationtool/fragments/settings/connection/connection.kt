@@ -90,7 +90,10 @@ class connection : Fragment() {
             lgnameEditText.setText(lgsharedPref.getString("USER_NAME",null))
         }
         else{
-            loadSharedData()
+            if(lgsharedPref.contains("URI_TEXT")){
+                loadSharedData()
+            }
+
         }
 
         connectButton.setOnClickListener { connectionTest()}

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_upcomingEvents_to_upcomingEventDetails"
             app:destination="@id/upcomingEventDetails" />
+        <action
+            android:id="@+id/action_upcomingEvents_to_lastWeekEventDetails"
+            app:destination="@id/lastWeekEventDetails" />
     </fragment>
     <fragment
         android:id="@+id/home"
@@ -120,4 +123,12 @@
         android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.Notification.Notification"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/lastWeekEventDetails"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.lastWeekEventDetails.LastWeekEventDetails"
+        android:label="LastWeekEventDetails" >
+        <argument
+            android:name="eventTitle"
+            app:argType="string" />
+    </fragment>
 </navigation>

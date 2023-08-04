@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             binding.drawerlayout.openDrawer(GravityCompat.START)
         }
         themeSharedPreferences=this.getSharedPreferences("Theme",Context.MODE_PRIVATE)
-        val night=themeSharedPreferences.getBoolean("Night",true)
+        val night=themeSharedPreferences.getBoolean("Night",false)
         if(night){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             binding.appBarMain.notifyImage.setImageDrawable(resources.getDrawable(R.drawable.notify_dark_logo))
