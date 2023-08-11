@@ -11,6 +11,9 @@ interface OldGDGdao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addoldChapters(oldChapter: OldGDGEntity)
 
-    @Query("SELECT * FROM old_gdg_group")
+    @Query("SELECT * FROM old_gdg_group  ORDER BY name")
     fun readAlloldGDG(): LiveData<List<OldGDGEntity>>
+
+    @Query("DELETE FROM old_gdg_group")
+    suspend fun deleteallOldData()
 }

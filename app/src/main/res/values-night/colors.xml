@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="AppbackgroundColor">#12101A</color>
+    <color name="AppbackgroundColor">#0e1012</color>
     <color name="MainHeadingText">@color/white</color>
-    <color name="CardViewTransparent">#292E33</color>
-    <color name="OrganizerColorList">#292E33</color>
+    <color name="CardViewTransparent">#171a1d</color>
+    <color name="OrganizerColorList">#171a1d</color>
     <color name="strokeColor">#949FA6</color>
     <color name="subText">#748AA1</color>
     <color name="GDGCitynameList">#748AA1</color>

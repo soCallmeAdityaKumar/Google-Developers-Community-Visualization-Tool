@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_settings_to_connection"
             app:destination="@id/connection" />
+        <action
+            android:id="@+id/action_settings_to_lgTask"
+            app:destination="@id/lgTask" />
     </fragment>
     <fragment
         android:id="@+id/teamDetails"
@@ -131,4 +134,9 @@
             android:name="eventTitle"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/lgTask"
+        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.settings.LgTask"
+        android:label="fragment_lg_task"
+        tools:layout="@layout/fragment_lg_task" />
 </navigation>

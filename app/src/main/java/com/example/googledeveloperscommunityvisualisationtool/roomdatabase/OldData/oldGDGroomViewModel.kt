@@ -23,4 +23,9 @@ class oldGDGroomViewModel(context: Context):ViewModel() {
             repo.addoldgdgRepo(oldGDGEntity)
         }
     }
+    fun deleteAllOldGDGChapterModel(){
+        viewModelScope.launch (Dispatchers.IO){
+            repo.deleteAllOldGDG()
+        }
+    }
 }

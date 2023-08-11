@@ -13,4 +13,6 @@ interface lastWeekDao {
 
     @Query("SELECT * FROM last_week_event Order By start_date")
     fun readlastweekEvent(): LiveData<List<weekEventEntity>>
+    @Query("DELETE FROM last_week_event")
+    suspend fun deleteAllLastweek()
 }

@@ -64,10 +64,14 @@
     <string name="members">Members</string>
     <string name="notify_for_the_events">Notify For the Events</string>
     <string name="last_week_events">Last Week Events</string>
-    <string name="not_connected">Not Connected</string>
-    <string name="connected">Connected</string>
+    <string name="not_connected">LG Not Connected</string>
+    <string name="connected">LG Connected</string>
     <string name="notification">NOTIFICATION</string>
-    <string name="port">22</string>
+    <string name="port" translatable="false">22</string>
+    <string name="old_event" translatable="false">OLD EVENT</string>
+    <string name="event_details" translatable="false">EVENT DETAILS</string>
+    <string name="upcomingevent_details" translatable="false">EVENT DETAILS</string>
+    <string name="clearDatabaseMessage" translatable="false">This will delete the complete data from app download fresh data! Would you like to Delete it</string>
 
     <string-array name="languages">
         <item>English</item>

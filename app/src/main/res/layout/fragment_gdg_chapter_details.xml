@@ -71,7 +71,7 @@
                         android:layout_width="700dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:fontFamily="@font/poppins_medium"
+                        android:fontFamily="@font/leaguespartan_medium"
                         android:textAlignment="center"
                         android:textColor="#1090CB"
                         android:textSize="50dp"
@@ -92,7 +92,7 @@
                         android:textColor="@color/subText"
                         android:textSize="20dp"
                         android:textStyle="bold"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/StarttourGdgButton"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/StartOrbitGdgButton"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -132,14 +132,15 @@
                         app:layout_constraintTop_toBottomOf="@+id/gdgname" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/StarttourGdgButton"
+                        android:id="@+id/StartOrbitGdgButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
                         android:backgroundTint="@color/OrganizerColorList"
                         android:elevation="20dp"
                         android:fontFamily="@font/montserratmedium"
-                        android:text="@string/start_tour_gdg"
+                        android:text="Orbit"
+                        android:padding="5dp"
                         android:textColor="@color/MainHeadingText"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -147,14 +148,15 @@
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/StoptourGdgButton"
+                        android:id="@+id/StopOrbitGdgButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
                         android:background="@drawable/cardview"
                         android:backgroundTint="@color/ButtonColor"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@string/stop_tour_gdg"
+                        android:text="Stop Orbit"
+                        android:padding="5dp"
                         android:textColor="@color/white"
                         android:visibility="invisible"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -176,7 +178,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/StoptourGdgButton"
+                        app:layout_constraintTop_toBottomOf="@+id/StopOrbitGdgButton"
                         app:strokeWidth="1dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -260,7 +262,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -331,7 +332,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

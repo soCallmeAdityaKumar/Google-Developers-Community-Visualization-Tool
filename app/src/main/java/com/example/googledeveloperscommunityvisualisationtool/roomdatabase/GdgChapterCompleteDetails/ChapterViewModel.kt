@@ -20,5 +20,14 @@ class ChapterViewModel(context: Context):ViewModel() {
             repo.addChaptersRepo(chapterEntity)
         }
     }
-
+    fun deleteAllChapterViewModel(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.deleteAllChapter()
+        }
+    }
+    fun deletAllChapterUrlViewModel(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.deleteAllChapter()
+        }
+    }
 }

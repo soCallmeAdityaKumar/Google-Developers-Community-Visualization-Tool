@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.car.ui.recyclerview.CarUiListItemAdapterAdapterV1.ViewHolderWrapper
@@ -22,11 +24,13 @@ import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldDa
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.oldGDGroomViewModel
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.oldGDGroomFactory
 import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 class OldGdgList : Fragment() {
     private lateinit var binding:FragmentOldGdgListBinding
@@ -36,6 +40,7 @@ class OldGdgList : Fragment() {
     private lateinit var gdglist:List<oldGdgDataItem>
     private lateinit var oldGdgDatabaseViewModel:oldGDGroomViewModel
     lateinit var progressBar: ProgressBar
+    lateinit var searchView:androidx.appcompat.widget.SearchView
     lateinit var recyclerViewcardView:CardView
 
     override fun onCreateView(
@@ -47,6 +52,7 @@ class OldGdgList : Fragment() {
 
         progressBar=binding.progressBar
         recyclerView=binding.recyclerView2
+        searchView=binding.searchView
 
         progressBar.visibility=View.VISIBLE
         recyclerView.visibility=View.GONE
@@ -54,6 +60,7 @@ class OldGdgList : Fragment() {
         oldgdgAdapter= oldgdgAdapter(listOf())
         recyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         recyclerView.adapter=oldgdgAdapter
+
         return view
     }
 
@@ -109,6 +116,34 @@ class OldGdgList : Fragment() {
             if(recyclerView.visibility==View.GONE)recyclerView.visibility=View.VISIBLE
 
             oldgdgAdapter.refreshdata(it)
+            val newAdapterList=it.toMutableList()
+            searchView.setOnQueryTextListener(object :
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    newAdapterList.clear()
+                    val searchtext = newText!!.toLowerCase(Locale.getDefault())
+                    if (searchtext.isNotEmpty()) {
+                        it.forEach {
+
+                            if (it.name.lowercase(Locale.getDefault()).contains(searchtext)||
+                                it.city.lowercase(Locale.getDefault()).contains(searchtext)||
+                                it.country.lowercase(Locale.getDefault()).contains(searchtext)) {
+                                newAdapterList.add(it)
+                            }
+                        }
+                        oldgdgAdapter.refreshdata(newAdapterList)
+                    } else {
+                        newAdapterList.clear()
+                        newAdapterList.addAll(it)
+                        oldgdgAdapter.refreshdata(newAdapterList)
+                    }
+                    return false
+                }
+            })
                 oldgdgAdapter.setOnItemClickListener(object :oldgdgAdapter.onItemClickListener{
                     override fun onItemClick(position: Int) {
                         val action=OldGdgListDirections.actionOldGdgListToOldEvent(it[position])

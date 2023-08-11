@@ -23,5 +23,10 @@ class ChapUrlroomViewModel(context: Context):ViewModel() {
             repo.addChapterUrlRepo(chapter)
         }
     }
+    fun deleteAllChapterUrlViewModel(){
+        viewModelScope.launch (Dispatchers.IO){
+            repo.deleteChapterUrl()
+        }
+    }
 
 }

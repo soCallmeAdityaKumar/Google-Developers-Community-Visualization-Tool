@@ -18,8 +18,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 class TourGDGThread internal constructor(
     private val infoScraping: ChapterEntity,
     private val activity: FragmentActivity,
-    private val buttTour: Button,
-    private val buttStopTour: Button
 ) : Runnable {
     private val running = AtomicBoolean(false)
     fun start() {
@@ -47,10 +45,10 @@ class TourGDGThread internal constructor(
         }
         actionController!!.cleanFileKMLs(0)
         Log.w(TAG_DEBUG, "END")
-        activity.runOnUiThread {
-            buttTour.visibility = View.VISIBLE
-            buttStopTour.visibility = View.INVISIBLE
-        }
+//        activity.runOnUiThread {
+//            buttTour.visibility = View.VISIBLE
+//            buttStopTour.visibility = View.INVISIBLE
+//        }
     }
 
     private fun sendInformationLG(gdg: ChapterEntity, actionController: ActionController?) {
@@ -58,7 +56,7 @@ class TourGDGThread internal constructor(
         val poiCamera = POICamera(10.0, 0.0, 3000.0, "absolute", 4)
         val poi = POI().setPoiLocation(poiLocation).setPoiCamera(poiCamera)
         val balloon = Balloon()
-        val description = gdg.city+","+ gdg.country+"\n"
+        val description = gdg.city+","+ gdg.country+"\n"+gdg.about
         balloon.setPoi(poi).setDescription(description)
             .setImageUri(null).setImagePath(null).setVideoPath(null).setDuration(30)
         actionController!!.TourGDG(poi, balloon)

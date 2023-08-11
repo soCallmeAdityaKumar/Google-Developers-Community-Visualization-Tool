@@ -9,4 +9,7 @@ class oldgdgroomRepo(val dao:OldGDGdao) {
     {
         dao.addoldChapters(oldGDGEntity)
     }
+    suspend fun deleteAllOldGDG(){
+        dao.deleteallOldData()
+    }
 }

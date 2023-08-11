@@ -1,6 +1,7 @@
 package com.example.googledeveloperscommunityvisualisationtool.fragments.settings
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -14,12 +15,29 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Switch
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.AppCompatButton
 import androidx.navigation.fragment.findNavController
 import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentSettingsBinding
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapViewModelFact
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterViewModel
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroomfactory
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.LastWeekDatabase.lastweekroommodel
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.oldGDGroomFactory
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.oldGDGroomViewModel
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.gdgChapters.ChapUrlroomViewModel
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.gdgChapters.ChapUrlroomfactory
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.lastWeekEvent.LastEventModelFact
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.lastWeekEvent.LastEventViewModel
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.notificationRoom.NotifyViewModel
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.notificationRoom.NotifyViewModelFactory
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.upcomingEvents.UpcoEventRoomFactory
+import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.upcomingEvents.UpcoEventroomViewmodel
 import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
+import com.google.android.material.card.MaterialCardView
 import java.util.Locale
 
 class Settings : Fragment() {
@@ -29,8 +47,17 @@ class Settings : Fragment() {
     private lateinit var sharedPref:SharedPreferences
     private lateinit var prefEditor:SharedPreferences.Editor
     private lateinit var arrayAdapter:ArrayAdapter<String>
+    private lateinit var fourthCardView: MaterialCardView
     private lateinit var ttsSharedPreferences: SharedPreferences
     private lateinit var ttsEditor:SharedPreferences.Editor
+    lateinit var fifthCardView:MaterialCardView
+    lateinit var gdgChapterRoomModel:ChapterViewModel
+    lateinit var chapterUrlRoomModel: ChapUrlroomViewModel
+    lateinit var lasteWeekRoomModel:lastweekroommodel
+    lateinit var lastWeekEventRoomModel:LastEventViewModel
+    lateinit var notificatioModel:NotifyViewModel
+    lateinit var oldGDGRoomViewModel:oldGDGroomViewModel
+    lateinit var upcomingEventRoomModel:UpcoEventroomViewmodel
     private lateinit var ttsSwitch:Switch
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +67,8 @@ class Settings : Fragment() {
         val view=binding.root
 
         ttsSwitch=binding.ttsSwitch
+        fifthCardView=binding.FifthcardView
+        fourthCardView=binding.FourthcardView
         sharedPref=activity?.getSharedPreferences("Theme",Context.MODE_PRIVATE)!!
         prefEditor=sharedPref.edit()
         val night=sharedPref.getBoolean("Night",false)
@@ -73,6 +102,10 @@ class Settings : Fragment() {
         binding.ThirdcardView.setOnClickListener {
             findNavController().navigate(R.id.action_settings_to_alarm_notification)
         }
+        fourthCardView.setOnClickListener{
+            findNavController().navigate(R.id.action_settings_to_lgTask)
+        }
+
 
         binding.themeMode.setOnCheckedChangeListener{buttonView,isChecked->
             if(!isChecked){
@@ -89,9 +122,13 @@ class Settings : Fragment() {
 //                mainActivity.binding.drawerlayout.setBackgroundResource(R.drawable.dark_background)
             }
         }
+        fifthCardView.setOnClickListener {
+            showAlertDialog()
+        }
 
         return view
     }
+
     override fun onResume() {
         super.onResume()
         loadConnectionStatus()
@@ -132,34 +169,57 @@ class Settings : Fragment() {
 
         }
     }
-    object LocaleHelper{
-        fun setLocale(activity: Activity,languageCode:String){
-            val locale= Locale(languageCode)
-            Locale.setDefault(locale)
-            val configuration= Configuration()
-            configuration.setLocale(locale)
-            activity.baseContext.resources.updateConfiguration(configuration,activity.baseContext.resources.displayMetrics)
-        }
-    }
-    private fun updateAppLanguage(languageCode: String) {
-        // Use the LocaleHelper from the previous example to change the app's language
-        LocaleHelper.setLocale(requireActivity(), languageCode)
 
-    }
-
-    private fun getLanguageCodeFromPosition(position: Int): String {
-        // Map the position to the corresponding language code
-        return when (position) {
-            0 -> "en"
-            1 -> "hi"
-            else -> "en"
-        }
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        gdgChapterRoomModel=ViewModelProvider(requireActivity(),
+            ChapViewModelFact(requireContext())
+        ).get(ChapterViewModel::class.java)
+        chapterUrlRoomModel=ViewModelProvider(requireActivity(), ChapUrlroomfactory(requireContext())).get(
+            ChapUrlroomViewModel::class.java)
+        lasteWeekRoomModel=ViewModelProvider(requireActivity(), lastweekroomfactory(requireContext())).get(
+            lastweekroommodel::class.java)
+        lastWeekEventRoomModel=ViewModelProvider(requireActivity(),
+            LastEventModelFact(requireContext())
+        ).get(LastEventViewModel::class.java)
+        notificatioModel=ViewModelProvider(requireActivity(), NotifyViewModelFactory(requireContext())).get(
+            NotifyViewModel::class.java)
+        oldGDGRoomViewModel=ViewModelProvider(requireActivity(), oldGDGroomFactory(requireContext())).get(
+            oldGDGroomViewModel::class.java)
+        upcomingEventRoomModel=ViewModelProvider(requireActivity(), UpcoEventRoomFactory(requireContext())).get(
+            UpcoEventroomViewmodel::class.java)
+
+    }
+    private fun deleteAllDatabase() {
+        gdgChapterRoomModel.deleteAllChapterViewModel()
+        chapterUrlRoomModel.deleteAllChapterUrlViewModel()
+        lastWeekEventRoomModel.deleteAllevent()
+        lasteWeekRoomModel.deleteAlllastWeekViewModel()
+        notificatioModel.deleteAllNotification()
+        oldGDGRoomViewModel.deleteAllOldGDGChapterModel()
+        upcomingEventRoomModel.deleteAllevent()
+
+        Toast.makeText(requireContext(),"ALl Databases are cleared! Now fresh data will be downloaded",
+            Toast.LENGTH_LONG).show()
+    }
+    private fun showAlertDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.clean_database_alert, null)
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+        dialogView.findViewById<AppCompatButton>(R.id.confirm).setOnClickListener {
+            deleteAllDatabase()
+            alertDialog.cancel()
+        }
+        dialogView.findViewById<AppCompatButton>(R.id.Cancel).setOnClickListener{
+            alertDialog.cancel()
+        }
+
+        alertDialog.show()
     }
 
 }

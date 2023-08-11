@@ -9,4 +9,8 @@ class lastweekroomRepo(val dao:lastWeekDao) {
     {
         dao.addlastweekEvents(WeekEventEntity)
     }
+
+    suspend fun deleteLastWeekroom(){
+        dao.deleteAllLastweek()
+    }
 }

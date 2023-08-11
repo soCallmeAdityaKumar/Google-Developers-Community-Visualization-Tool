@@ -75,9 +75,9 @@ private constructor() {
      * @param listener Listener
      */
     @Synchronized
-    fun cleanOrbit(poi: POI?, listener: LGCommand.Listener?) {
+    fun cleanOrbit(poi: POI?) {
         cleanFileKMLs(0)
-        orbit(poi, listener)
+        orbit(poi,null)
     }
 
     /**
@@ -86,7 +86,7 @@ private constructor() {
      * @param poi      POI
      * @param listener Listener
      */
-    fun orbit(poi: POI?, listener: LGCommand.Listener?) {
+    fun orbit(poi: POI?,listener: LGCommand.Listener?) {
         val lgCommandOrbit = LGCommand(
             buildCommandOrbit(poi),
             LGCommand.CRITICAL_MESSAGE,

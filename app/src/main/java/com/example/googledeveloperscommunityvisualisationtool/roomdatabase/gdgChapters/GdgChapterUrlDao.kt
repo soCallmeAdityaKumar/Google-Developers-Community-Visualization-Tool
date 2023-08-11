@@ -14,6 +14,7 @@ interface GdgChapterUrlDao {
     @Query("SELECT * FROM Chapter_url")
     fun readAllChaptersurl(): LiveData<List<ChaptersUrlEntity>>
 
-
+    @Query("DELETE FROM Chapter_url")
+    suspend fun deleteAlChapterUrl()
 
 }

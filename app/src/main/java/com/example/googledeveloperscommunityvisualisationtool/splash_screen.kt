@@ -19,11 +19,11 @@ class splash_screen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        val handler=Handler(Looper.getMainLooper())
+        val handler=Handler()
         handler.postDelayed({
             startActivity(Intent(this@splash_screen,MainActivity::class.java))
             finish()
-        },5000)
+        },3000)
     }
 
 

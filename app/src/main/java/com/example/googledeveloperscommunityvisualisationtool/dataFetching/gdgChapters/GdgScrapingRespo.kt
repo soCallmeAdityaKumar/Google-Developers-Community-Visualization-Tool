@@ -28,7 +28,8 @@ class GdgScrapingRespo {
             html="$html"
             val obj= JSONArray(html)
             for(i in 0 until obj.length()){
-                val avatar=obj.getJSONObject(i).getString("avatar")
+                var avatar=obj.getJSONObject(i).getString("avatar")
+                if(avatar.isNullOrEmpty())avatar=""
                 var thumbnailUrl= obj.getJSONObject(i).getString("banner").drop(10).dropLast(2).replace(Regex("</.*:?\n<p></p>>"), "").replace(Regex("\\\\"),"")
                 val city=obj.getJSONObject(i).getString("city")
                 val cityName=obj.getJSONObject(i).getString("city_name")

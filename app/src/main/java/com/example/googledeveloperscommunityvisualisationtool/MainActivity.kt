@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var themeSharedPreferences: SharedPreferences
     lateinit var notifyImage:ImageView
     var storedgdgData=0
+    var mainActivityPieMaking=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +65,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.gdgChapterDetails -> resources.getString(R.string.GDG_ChapterDetails)
                 R.id.notification->resources.getString(R.string.notification)
                 R.id.connection->resources.getString(R.string.connection)
+                R.id.oldEvent->resources.getString(R.string.old_event)
+                R.id.lastWeekEventDetails->getString(R.string.event_details)
+                R.id.upcomingEventDetails->getString(R.string.upcomingevent_details)
                 else -> resources.getString(R.string.app_name)
             }
             binding.appBarMain.notifyImage.setImageDrawable(getDrawable(R.drawable.notify_light_logo))
@@ -83,10 +87,10 @@ class MainActivity : AppCompatActivity() {
 
         val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         if (isConnected!!) {
-            binding.appBarMain.connectionStatus.text="Connected"
+            binding.appBarMain.connectionStatus.text="LG Connected"
             binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
         } else {
-            binding.appBarMain.connectionStatus.text="Not Connected"
+            binding.appBarMain.connectionStatus.text="LG Not Connected"
             binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
 
         }

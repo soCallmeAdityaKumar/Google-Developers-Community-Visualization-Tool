@@ -10,4 +10,8 @@ class ChapterRespository(val dao: ChapterDao) {
         dao.addChapters(chapterEntity)
     }
 
+    suspend fun deleteAllChapter(){
+        dao.deleteAllGDGChapter()
+    }
+
 }

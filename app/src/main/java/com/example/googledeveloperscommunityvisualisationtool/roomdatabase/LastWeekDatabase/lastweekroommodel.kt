@@ -22,4 +22,9 @@ class lastweekroommodel(context: Context): ViewModel() {
             repo.addEventsRepo(event)
         }
     }
+    fun deleteAlllastWeekViewModel(){
+        viewModelScope.launch(Dispatchers.IO){
+            repo.deleteLastWeekroom()
+        }
+    }
 }

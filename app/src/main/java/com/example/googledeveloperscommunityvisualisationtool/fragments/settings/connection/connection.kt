@@ -10,7 +10,10 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.speech.tts.TextToSpeech
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
+import android.view.Display.Mode
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +21,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
@@ -45,14 +49,10 @@ class connection : Fragment() {
     private lateinit var lgnameEditText: EditText
     private lateinit var connectingTextView:TextView
     private lateinit var buttTryAgain:Button
-    private lateinit var rebootLGButton:Button
-    private lateinit var powerOffLgButton:Button
-    private lateinit var cleanKmlButton:Button
-    private lateinit var relaunchLgButton:Button
-    private lateinit var saveKMLButton:Button
-    private lateinit var resetRefreshButton:Button
-    private lateinit var setRefreshButton:Button
     lateinit var  textToSpeech:TextToSpeechClass
+    private lateinit var passwordEye:ImageView
+    private lateinit var passwordSharePref:SharedPreferences
+    private lateinit var passwordEditor:SharedPreferences.Editor
     var handler=Handler()
     var screenAmount=5
     override fun onCreateView(
@@ -71,14 +71,36 @@ class connection : Fragment() {
         connectButton=binding.ConnectLGButton
         connectingTextView=binding.ConnectingTextView
         buttTryAgain=binding.buttTryAgain
-        rebootLGButton=binding.RebootLg
-        powerOffLgButton=binding.PowerOffLg
-        cleanKmlButton=binding.CleanKMLs
-        relaunchLgButton=binding.RelaunchLg
-        saveKMLButton=binding.SaveKml
-        resetRefreshButton=binding.ResetRefresh
-        setRefreshButton=binding.SetRefresh
 
+        passwordEye=binding.PasswordEye
+
+        passwordSharePref=activity?.getSharedPreferences("PasswordEye",Context.MODE_PRIVATE)!!
+        passwordEditor=passwordSharePref.edit()
+        passwordEditor.apply {
+            putBoolean("EYEClose",true)
+            apply()
+        }
+        if(passwordSharePref.getBoolean("EYEClose",true)){
+            passwordEye.setImageDrawable(resources.getDrawable(R.drawable.eye_close))
+            passwordEditText.transformationMethod=PasswordTransformationMethod.getInstance()
+        }
+        passwordEye.setOnClickListener {
+            if(passwordSharePref.getBoolean("EYEClose",true)){
+                passwordEye.setImageDrawable(resources.getDrawable(R.drawable.eye_close))
+                passwordEditText.transformationMethod=PasswordTransformationMethod.getInstance()
+                passwordEditor.apply{
+                    putBoolean("EYEClose",false)
+                    apply()
+                }
+            }else{
+                passwordEye.setImageDrawable(resources.getDrawable(R.drawable.eye_open))
+                passwordEditText.transformationMethod=HideReturnsTransformationMethod.getInstance()
+                passwordEditor.apply{
+                    putBoolean("EYEClose",true)
+                    apply()
+                }
+            }
+        }
 
         val lgsharedPref=activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name,MODE_PRIVATE)!!
         val isConnected=lgsharedPref.getBoolean("IS_CONNECTED",false)
@@ -105,180 +127,11 @@ class connection : Fragment() {
             editor.apply()
         })
 
-        rebootLGButton.setOnClickListener {
-            startrebootLg()
-        }
-
-        powerOffLgButton.setOnClickListener {
-            startPowerOff()
-        }
-
-        cleanKmlButton.setOnClickListener {
-            startCleaningKML()
-        }
-        relaunchLgButton.setOnClickListener {
-            relaunch()
-        }
-        resetRefreshButton.setOnClickListener {
-            resetRefresh()
-        }
-        setRefreshButton.setOnClickListener {
-            setRefresh()
-        }
-
 
         return view
     }
 
-    private fun setRefresh() {
-        val password=passwordEditText.text.toString()
-        var search = "<href>##LG_PHPIFACE##kml\\/slave_{{slave}}.kml<\\/href>"
-        var replace =
-            "<href>##LG_PHPIFACE##kml\\/slave_{{slave}}.kml<\\/href><refreshMode>onInterval<\\/refreshMode><refreshInterval>2<\\/refreshInterval>"
-        var command =
-            "echo $ | sudo -S sed -i \"s/$search/$replace/\" ~/earth/kml/slave/myplaces.kml"
 
-        var clear =
-        "echo $password | sudo -S sed -i \"s/$replace/$search/\" ~/earth/kml/slave/myplaces.kml"
-
-        for (i in 2 ..screenAmount){
-            var clearCmd = clear.replace("{{slave}}", i.toString())
-            var cmd = command.replace("{{slave}}", i.toString())
-            var query = "sshpass -p $password ssh -t lg$i \'{{cmd}}\'"
-
-            try {
-                val firstlgCommand=LGCommand(query.replace("{{cmd}}",clearCmd),LGCommand.CRITICAL_MESSAGE,object :LGCommand.Listener{
-                    override fun onResponse(response: String?) {
-                    }
-                })
-                val lgConnectionManager = LGConnectionManager.getInstance()
-                lgConnectionManager!!.startConnection()
-                lgConnectionManager!!.addCommandToLG(firstlgCommand)
-                val secondlgCommand=LGCommand(query.replace("{{cmd}}",cmd),LGCommand.CRITICAL_MESSAGE,object :LGCommand.Listener{
-                    override fun onResponse(response: String?) {
-                    }
-                })
-                lgConnectionManager!!.addCommandToLG(secondlgCommand)
-
-
-            }catch(e:Exception){
-                println(e)
-            }
-
-        }
-        startrebootLg()
-
-    }
-    private fun resetRefresh() {
-        val password=passwordEditText.text.toString()
-        val search = "<href>##LG_PHPIFACE##kml\\/slave_{{slave}}.kml<\\/href><refreshMode>onInterval<\\/refreshMode><refreshInterval>2<\\/refreshInterval>"
-        val replace = "<href>##LG_PHPIFACE##kml\\/slave_{{slave}}.kml<\\/href>"
-
-        val clear = "echo $password | sudo -S sed -i \"s/$search/$replace/\" ~/earth/kml/slave/myplaces.kml"
-
-        for(i in 2..screenAmount){
-            val command=clear.replace("{{slave}}",i.toString())
-            val query="sshpass -p $password ssh -t lg$i '$command'"
-
-            try {
-                val lgCommand=LGCommand(query,LGCommand.CRITICAL_MESSAGE,object :LGCommand.Listener{
-                    override fun onResponse(response: String?) {
-                    }
-                })
-                val lgConnectionManager = LGConnectionManager.getInstance()
-                lgConnectionManager!!.startConnection()
-                lgConnectionManager!!.addCommandToLG(lgCommand)
-            }catch (e:Exception){
-                println(e)
-            }
-        }
-        startrebootLg()
-    }
-
-    private fun relaunch() {
-        val password=passwordEditText.text.toString()
-        val username=lgnameEditText.text.toString()
-        try{
-            for(i in screenAmount downTo 1){
-                val secondrelaunch = "RELAUNCH_CMD="+
-                  "if [ -f /etc/init/lxdm.conf ]; then\n"+
-                    "export SERVICE=lxdm\n"+
-                  "elif [ -f /etc/init/lightdm.conf ]; then\n"+
-                    "export SERVICE=lightdm\n"+
-                  "else\n"+
-                    "exit 1\n"+
-                  "fi\n"+
-                  "if  [[ \\\$(service \\\$SERVICE status) =~ 'stop' ]]; then\n"+
-                    "echo $password | sudo -S service \\\$SERVICE start\n"+
-                  "else "+
-                    "echo $password | sudo -S service \\\$SERVICE restart\n"+
-                  "fi\n"+
-                  " && sshpass -p $password ssh -x -t lg@lg$i  \"\$RELAUNCH_CMD\""
-                val firstrelunch= "\"/home/$username/bin/lg-relaunch\" > /home/$username/log.txt"
-                val lgConnectionManager = LGConnectionManager.getInstance()
-                lgConnectionManager!!.startConnection()
-                val firstRelaunch = LGCommand(
-                    firstrelunch,
-                    LGCommand.CRITICAL_MESSAGE, object : LGCommand.Listener {
-                        override fun onResponse(response: String?) {
-                        }
-                    })
-                lgConnectionManager.addCommandToLG(firstRelaunch)
-                val secondRelaunch=LGCommand(
-                    secondrelaunch,
-                    LGCommand.CRITICAL_MESSAGE, object : LGCommand.Listener {
-                        override fun onResponse(response: String?) {
-                        }
-                    })
-                lgConnectionManager.addCommandToLG(secondRelaunch)
-
-            }
-        }catch (e:Exception){
-
-        }
-
-    }
-
-    private fun startCleaningKML() {
-        try {
-            val lgConnectionManager = LGConnectionManager.getInstance()
-            lgConnectionManager!!.startConnection()
-            val lgCommand = LGCommand(
-                ActionBuildCommandUtility.buildCommandCleanSlaves(),
-                LGCommand.CRITICAL_MESSAGE, object : LGCommand.Listener {
-                    override fun onResponse(response: String?) {
-
-                    }
-                })
-            lgConnectionManager.addCommandToLG(lgCommand)
-        }catch (e:Exception){
-            println("Could not connect to LG")
-        }
-    }
-    private fun startPowerOff() {
-        val dialog = CustomDialogUtility.getDialog(requireActivity(), resources.getString(R.string.ShutdownLG))
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.show()
-        val password=passwordEditText.text.toString()
-        for(i in screenAmount downTo 1){
-            try{
-                val command=
-                    "sshpass -p $password ssh -t lg$i \"echo $password | sudo -S poweroff\" "
-                val lgCommand=LGCommand(command,LGCommand.CRITICAL_MESSAGE,object :LGCommand.Listener{
-                    override fun onResponse(response: String?) {
-                        dialog.dismiss()
-                    }
-                })
-                val lgConnectionManager = LGConnectionManager.getInstance()
-                lgConnectionManager!!.startConnection()
-                lgConnectionManager!!.addCommandToLG(lgCommand)
-            }catch (e:Exception){
-                println("Could not ShutDown to LG")
-                throw e
-            }
-        }
-    }
 
     override fun onResume() {
             super.onResume()
@@ -304,7 +157,7 @@ class connection : Fragment() {
 
     }
 
-    private fun connectionTest() {
+     private fun connectionTest() {
         val port = port!!.text.toString()
         val host=lgipAddress!!.text.toString()
         val usernameText = lgnameEditText!!.text.toString()
@@ -345,29 +198,6 @@ class connection : Fragment() {
         sendMessageError(lgCommand, dialog)
     }
 
-    private fun startrebootLg(){
-        val dialog = CustomDialogUtility.getDialog(requireActivity(), resources.getString(R.string.rebootLG))
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.show()
-        val password=passwordEditText.text.toString()
-        for(i in screenAmount downTo 1){
-            Log.d("reboot","trying for $i")
-            try{
-                val lgCommand=LGCommand(ActionBuildCommandUtility.buildRebootSlaves(password,i),LGCommand.CRITICAL_MESSAGE,object :LGCommand.Listener{
-                    override fun onResponse(response: String?) {
-                        dialog.dismiss()
-                    }
-                })
-                val lgConnectionManager = LGConnectionManager.getInstance()
-                lgConnectionManager!!.startConnection()
-                lgConnectionManager!!.addCommandToLG(lgCommand)
-            }catch (e:Exception){
-                println("Could not reboot to LG")
-                throw e
-            }
-        }
-    }
 
     private fun sendMessageError(lgCommand: LGCommand, dialog: Dialog) {
         handler.postDelayed({

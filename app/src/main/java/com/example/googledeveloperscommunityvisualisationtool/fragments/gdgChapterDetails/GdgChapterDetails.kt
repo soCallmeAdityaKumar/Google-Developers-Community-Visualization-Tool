@@ -30,6 +30,7 @@ import com.example.googledeveloperscommunityvisualisationtool.MainActivity
 import com.example.googledeveloperscommunityvisualisationtool.R
 import com.example.googledeveloperscommunityvisualisationtool.TextToSpeech.TextToSpeechClass
 import com.example.googledeveloperscommunityvisualisationtool.connection.LGCommand
+import com.example.googledeveloperscommunityvisualisationtool.connection.LGConnectionManager
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgChapModelFactory
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgScrapingRespo
 import com.example.googledeveloperscommunityvisualisationtool.dataFetching.gdgChapters.GdgViewModel
@@ -41,6 +42,7 @@ import com.example.googledeveloperscommunityvisualisationtool.fragments.home.Upc
 import com.example.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.connection.LGConnectionTest.testPriorConnection
 import com.example.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility
+import com.example.googledeveloperscommunityvisualisationtool.create.utility.model.ActionController
 import com.example.googledeveloperscommunityvisualisationtool.databinding.FragmentGdgChapterDetailsBinding
 import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity
 import com.google.gson.Gson
@@ -67,6 +69,7 @@ class GdgChapterDetails : Fragment() {
     lateinit var pasteventsRecycler:RecyclerView
     lateinit var pastEventsList:List<events>
     lateinit var tourGDG:TourGDGThread
+    lateinit var oribitGDG:OrbitGDGThread
     lateinit var upcomingEventlist:List<events>
     lateinit var eventsAdapterpast: pastEventAdapter
     lateinit var upcoEventsAdapterupcoming: UpcoEventsAdapter
@@ -77,8 +80,8 @@ class GdgChapterDetails : Fragment() {
     lateinit var organizerAdapter:OrganizersAdapter
     lateinit var organizerList:List<Organizers>
     lateinit var noUpcomingEventTextView:TextView
-    lateinit var starttourGdgButton:Button
-    lateinit var stoptourGgdButton:Button
+    lateinit var startOrbitGdgButton:Button
+    lateinit var stopOrbitGgdButton:Button
     lateinit var sharedPref:SharedPreferences
     lateinit var editor:SharedPreferences.Editor
     lateinit var progressBar: ProgressBar
@@ -184,18 +187,41 @@ class GdgChapterDetails : Fragment() {
          eventsAdapterpast= pastEventAdapter(pastEventsList)
          pasteventsRecycler.adapter=eventsAdapterpast
 
-         starttourGdgButton=binding.StarttourGdgButton
-         stoptourGgdButton=binding.StoptourGdgButton
-         starttourGdgButton.setOnClickListener { tour() }
-         stoptourGgdButton.setOnClickListener { stopTour() }
+         startOrbitGdgButton=binding.StartOrbitGdgButton
+         stopOrbitGgdButton=binding.StopOrbitGdgButton
 
+         startOrbitGdgButton.setOnClickListener { orbit() }
+         startOrbitGdgButton.setOnClickListener { orbit() }
 
 
         return view
     }
+
+    private fun stopOrbit() {
+    }
+
+    private fun orbit() {
+        Log.d("Orbit","Inside the orbit ")
+        val isConnected = AtomicBoolean(false)
+        testPriorConnection(requireActivity(), isConnected)
+        val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
+        handler.postDelayed({
+            if (isConnected.get()) {
+                oribitGDG = OrbitGDGThread(
+                    args.chapter,
+                )
+                oribitGDG!!.start()
+            }
+            loadConnectionStatus(sharedPreferences!!)
+        }, 1200)
+    }
+
     override fun onResume() {
         super.onResume()
         loadConnectionStatus()
+
+        tour()
+
         val customAppBar = (activity as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
         val backButton = customAppBar.backarrow
@@ -233,8 +259,6 @@ class GdgChapterDetails : Fragment() {
 
     private fun stopTour() {
         tourGDG!!.stop()
-        starttourGdgButton!!.visibility = View.VISIBLE
-        stoptourGgdButton!!.visibility = View.INVISIBLE
     }
 
     private fun tour() {
@@ -243,16 +267,26 @@ class GdgChapterDetails : Fragment() {
         val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
         handler.postDelayed({
             if (isConnected.get()) {
-                showDialog(requireActivity(), "Starting the GDG TOUR")
+                try {
+                    val lgConnectionManager = LGConnectionManager.getInstance()
+                    lgConnectionManager!!.startConnection()
+                    val lgCommand = LGCommand(
+                        ActionBuildCommandUtility.buildCommandCleanSlaves(),
+                        LGCommand.CRITICAL_MESSAGE, object : LGCommand.Listener {
+                            override fun onResponse(response: String?) {
+
+                            }
+                        })
+                    lgConnectionManager.addCommandToLG(lgCommand)
+                }catch (e:Exception){
+                    println("Could not connect to LG")
+                }
+//                showDialog(requireActivity(), "Starting the GDG TOUR")
                 tourGDG = TourGDGThread(
                     args.chapter as ChapterEntity,
                     requireActivity(),
-                    starttourGdgButton!!,
-                    stoptourGgdButton!!
                 )
                 tourGDG!!.start()
-                starttourGdgButton!!.visibility = View.INVISIBLE
-                stoptourGgdButton!!.visibility = View.VISIBLE
             }
             loadConnectionStatus(sharedPreferences!!)
         }, 1200)
@@ -261,9 +295,9 @@ class GdgChapterDetails : Fragment() {
         val isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         val act=activity as MainActivity
         if (isConnected) {
-            act.binding.appBarMain.connectionStatus.text="Connected"
+            act.binding.appBarMain.connectionStatus.text="LG Connected"
         } else {
-            act.binding.appBarMain.connectionStatus.text="Not Connected"
+            act.binding.appBarMain.connectionStatus.text="LG Not Connected"
         }
     }
 

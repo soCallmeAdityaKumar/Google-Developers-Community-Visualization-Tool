@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.lifecycle.createSavedStateHandle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -83,7 +84,7 @@ class Home : Fragment() {
     private lateinit var themeSharedPreferences: SharedPreferences
     var sortedMap: HashMap<String,Int> = hashMapOf()
     private lateinit var  objectsToAnimate: List<View>
-
+    var forPieMaking=0
 
     var flag2=0
 
@@ -123,6 +124,7 @@ class Home : Fragment() {
         statisticsText.visibility=View.GONE
         activeChapterText.visibility=View.GONE
         progressBar.visibility=View.VISIBLE
+        statisticsImageView.visibility=View.GONE
 
 
         pieChart=binding.PieChart
@@ -170,7 +172,8 @@ class Home : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         // Chapter URL Database ViewModel
-        chapUrlroomViewModel = ViewModelProvider(requireActivity(), ChapUrlroomfactory(requireContext())).get(ChapUrlroomViewModel::class.java)
+        chapUrlroomViewModel = ViewModelProvider(requireActivity(), ChapUrlroomfactory(requireContext())).get(
+            ChapUrlroomViewModel::class.java)
 
         //For Chapter Scraping
         val gdgChapterRepo = GdgScrapingRespo()
@@ -182,52 +185,136 @@ class Home : Fragment() {
         Log.d("coroutines", "before checkurldatabase")
 
         loadConnectionStatus()
+        forPieMaking=(activity as MainActivity).mainActivityPieMaking
+//        startPieChartmaking()
 
-        startPieChartmaking()
 
     }
+    private fun checkurlDatabase() {
+        var flag1=0
+        var urlListsize=0
+        chapterDatabaseViewModel.readAllChaptersViewModel.observe(fragmentLifecycleOwner!!,Observer{chapterList->
+            Log.d("checkurlDatabase","inside the chapterDatabaseViewModel")
+            if(flag1==0){
+                chapUrlroomViewModel.readAllChapterUrlViewModel.observe(fragmentLifecycleOwner!!,Observer { urlList ->
+                    Log.d("checkurlDatabase", "inside the chapUrlroomViewModel->${urlList.size}")
+                    urlListsize=urlList.size
+                    if(flag1==0){
+                        flag1++
+                        CoroutineScope(Dispatchers.IO).launch {
+                            networkCheck()
+                            Log.d("checkurlDatabase","after the network check->${urlList.size}")
+                            delay(5000)
+                            if (urlListsize == chapterList.size) {
+                                Log.d("checkurlDatabase","urlList.size == chapterList.size ${urlList.size} ${chapterList.size}")
+                                getChapterFromDatabase()
 
-    private fun startPieChartmaking() {
-        var countryList:List<ChaptersUrlEntity> = listOf()
-        if(pieSharePref.all.size<10){
-            chapUrlroomViewModel.readAllChapterUrlViewModel.observe(fragmentLifecycleOwner!!, Observer {
-                countryList=it
-                CoroutineScope(Dispatchers.IO).launch {
-                    if(countryList.isNotEmpty()) {
-                        mostChaptersCountry.clear()
-                        for (i in 0 until countryList.size) {
-                            increment(mostChaptersCountry, countryList[i].country)
-                        }
-                        delay(6000)
-                        withContext(Dispatchers.Main) {
-                            setDataToPie()
-                            if (progressBar.visibility == View.VISIBLE) progressBar.visibility =
-                                View.GONE
-                            statisticsText.visibility = View.VISIBLE
-                            secondcardview.visibility = View.VISIBLE
-                            statisticsText.startAnimation(
-                                AnimationUtils.loadAnimation(
-                                    requireContext(),
-                                    android.R.anim.slide_in_left
-                                )
-                            )
-                            secondcardview.startAnimation(
-                                AnimationUtils.loadAnimation(
-                                    requireContext(),
-                                    android.R.anim.slide_in_left
-                                )
-                            )
+                            } else {
+                                Log.d("checkurlDatabase","urlList.size != chapterList.size ${urlList.size} ${chapterList.size}")
+                                getAllGdgChapter(chapterList.size)
+
+                            }
                         }
                     }
+                })
+            }
+            getChapterFromDatabase()
+//            CoroutineScope(Dispatchers.IO).launch {
+//                delay(10000)
+//                withContext(Dispatchers.Main){
+//                    startPieChartmaking()
+//                }
+//            }
+
+        })
+    }
+    private fun startPieChartmaking(){
+        var countryList:ArrayList<GdgDataClass> = arrayListOf()
+        if(forPieMaking==0||pieSharePref.all.size!=0){
+            forPieMaking=1
+            (activity as MainActivity).mainActivityPieMaking=1
+            CoroutineScope(Dispatchers.IO).launch {
+                gdgChaptersViewModel.getChaptersViewModel()
+                delay(3000)
+                countryList=gdgChaptersViewModel.returnGDGChapterViewModel()
+                if (countryList.isNotEmpty()) {
+                    mostChaptersCountry.clear()
+                    for (i in 0 until countryList.size) {
+                        increment(mostChaptersCountry, countryList[i].country)
+                    }
                 }
-            })
-        }
-        else{
+                delay(5000)
+                withContext(Dispatchers.Main){
+                    setDataToPie()
+                    if (progressBar.visibility == View.VISIBLE) progressBar.visibility =
+                        View.GONE
+                    statisticsImageView.visibility = View.VISIBLE
+                    statisticsText.visibility = View.VISIBLE
+                    secondcardview.visibility = View.VISIBLE
+                    statisticsText.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            binding.root.context,
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                    secondcardview.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            android.R.anim.slide_in_left
+                        )
+                    )
+                }
+            }
+
+        }else{
             setDataToPieFromPref()
         }
-
-
     }
+
+
+//    private  fun startPieChartmaking() {
+//        var countryList:List<ChaptersUrlEntity> = listOf()
+//            if(forPieMaking==0){
+//                forPieMaking=1
+//                Log.d("startPieChartmaking","Pie making starting ")
+//                        chapUrlroomViewModel..observe(
+//                            fragmentLifecycleOwner!!,
+//                            Observer {
+//                                countryList = it
+//                                CoroutineScope(Dispatchers.IO).launch {
+//                                    if (countryList.isNotEmpty()) {
+//                                        mostChaptersCountry.clear()
+//                                        for (i in 0 until countryList.size) {
+//                                            increment(mostChaptersCountry, countryList[i].country)
+//                                        }
+//                                    }
+//                                }
+//                            })
+//                        setDataToPie()
+//                        if (progressBar.visibility == View.VISIBLE) progressBar.visibility =
+//                        View.GONE
+//                        statisticsImageView.visibility = View.VISIBLE
+//                        statisticsText.visibility = View.VISIBLE
+//                    secondcardview.visibility = View.VISIBLE
+//                    statisticsText.startAnimation(
+//                        AnimationUtils.loadAnimation(
+//                            binding.root.context,
+//                            android.R.anim.slide_in_left
+//                        )
+//                    )
+//                    secondcardview.startAnimation(
+//                        AnimationUtils.loadAnimation(
+//                            requireContext(),
+//                            android.R.anim.slide_in_left
+//                        )
+//                    )
+//            } else {
+//                setDataToPieFromPref()
+//            }
+//        }
+
+
+
 
     private fun setDataToPieFromPref() {
         var j=0
@@ -304,10 +391,10 @@ class Home : Fragment() {
         val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         val act=activity as MainActivity
         if (isConnected!!) {
-            act.binding.appBarMain.connectionStatus.text="Connected"
+            act.binding.appBarMain.connectionStatus.text="LG Connected"
             act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
         } else {
-            act.binding.appBarMain.connectionStatus.text="Not Connected"
+            act.binding.appBarMain.connectionStatus.text="LG Not Connected"
             act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
 
         }
@@ -315,47 +402,10 @@ class Home : Fragment() {
 
 
     //Check if chapter_url database is empty then fetch data and if
-    private fun checkurlDatabase() {
-        var flag1=0
-        var urlListsize=0
-         chapterDatabaseViewModel.readAllChaptersViewModel.observe(fragmentLifecycleOwner!!,Observer{chapterList->
-             Log.d("coroutines","inside the checkurldatabase")
-
-             if(flag1==0){
-                 chapUrlroomViewModel.readAllChapterUrlViewModel.observe(fragmentLifecycleOwner!!,Observer { urlList ->
-                     Log.d("coroutines", "inside the chapterUrlDatabase->${urlList.size}")
-
-                     urlListsize=urlList.size
-                     if(flag1==0){
-                         flag1++
-                         CoroutineScope(Dispatchers.IO).launch {
-                             val job = CoroutineScope(Dispatchers.IO).launch {
-                                 networkCheck()
-                             }
-                             job.join()
-                             Log.d("coroutines","inside the chapterUrlDatabase->${urlList.size}")
-                             delay(5000)
-                             if (urlListsize == chapterList.size) {
-                                 Log.d("coroutines","urlList.size == chapterList.size ${urlList.size} ${chapterList.size}")
-                                 getChapterFromDatabase()
-
-                             } else {
-                                 Log.d("coroutines","urlList.size != chapterList.size ${urlList.size} ${chapterList.size}")
-                                 getAllGdgChapter(chapterList.size)
-
-                             }
-                         }
-                     }
-                 })
-             }
-             getChapterFromDatabase()
-
-         })
-    }
 
 
     private fun getAllGdgChapter(j:Int) {
-        Log.d("coroutines", "beforedelay")
+        Log.d("getAllGdgChapter", "beforedelay")
         val job4=CoroutineScope(Dispatchers.Main).launch {
            chapUrlroomViewModel.readAllChapterUrlViewModel.observe(fragmentLifecycleOwner!!,
                Observer{ gdgURlChapterEntity ->
@@ -364,7 +414,7 @@ class Home : Fragment() {
                         for (i in j until gdgURlChapterEntity.size) {
                             gdgChaptersViewModel.getCompleteGDGdetails(gdgURlChapterEntity[i].url)
                             val details=gdgChaptersViewModel.getdetails()
-                            Log.d("gdgdetails","gdgdetials response got")
+                            Log.d("getAllGdgChapter","gdgdetials response got")
                             chapterDatabaseViewModel.addChaptersViewModel(
                                 ChapterEntity(
                                     gdgURlChapterEntity[i].avatar,
@@ -382,7 +432,7 @@ class Home : Fragment() {
                             )
 
 
-                            Log.d("gdgddetails","gdgdetials response added to database")
+                            Log.d("getAllGdgChapter","gdgdetials response added to database")
                         }
                     }
                 })
@@ -398,8 +448,10 @@ class Home : Fragment() {
         val listOfColor= listOf("#FFA726","#66BB6A","#EF5350","#29B6F6","#FFC8DD","#2B2D42","#8D99AE","#D5BDAF","#E4C1F9","#7400B8")
         Log.d("size",mostChaptersCountry.size.toString())
 
-        if(mostChaptersCountry.size>11){
-            mostChaptersCountry.entries.sortedByDescending { it.value }.take(10).forEach{ sortedMap[it.key] = it.value}
+        if(mostChaptersCountry.size>11) {
+            mostChaptersCountry.entries.sortedByDescending { it.value }.take(10)
+                .forEach { sortedMap[it.key] = it.value }
+        }
             sortedMap.forEach{(k,v)->Log.d("sorted","$k->$v")}
             sortedMap.forEach { (k, v) ->
                 pieEditor.apply{
@@ -409,9 +461,9 @@ class Home : Fragment() {
                 pieChart.addPieSlice(PieModel(k, v.toFloat(),Color.parseColor(listOfColor[j])))
                 countryCount.add(CountryCountData(listOfColor[j],k,v))
                 j++
-            }
+
             pieChartAdapter.refreshData(countryCount)
-            pieChart.startAnimation()
+                pieChart.startAnimation()
         }
     }
 
@@ -459,9 +511,9 @@ class Home : Fragment() {
                         val searchtext = newText!!.toLowerCase(Locale.getDefault())
                         if (searchtext.isNotEmpty()) {
                             adapterlist.forEach {
-                                if (it.gdgName.lowercase(Locale.getDefault())
-                                        .contains(searchtext)
-                                ) {
+                                if (it.gdgName.lowercase(Locale.getDefault()).contains(searchtext)||
+                                        it.country.lowercase(Locale.getDefault()).contains(searchtext)||
+                                        it.city.lowercase(Locale.getDefault()).contains(searchtext)) {
                                     newadapterlist.add(it)
                                 }
                             }
@@ -491,7 +543,7 @@ class Home : Fragment() {
     }
 
     private suspend fun networkCheck() {
-        Log.d("coroutines", "inside network check")
+        Log.d("networkCheck", "inside network check")
         if (gdgChaptersViewModel.isNetworkAvailable()) {
                 storeUrlinDatabase()
         } else {
@@ -502,49 +554,50 @@ class Home : Fragment() {
 
 
     private suspend fun storeUrlinDatabase() {
-        Log.d("coroutines","beforedelay")
-        Log.d("coroutines", "inside store url database")
+        Log.d("storeUrlinDatabase","beforedelay")
+        Log.d("storeUrlinDatabase", "inside store url database")
         val job1=CoroutineScope(Dispatchers.IO).launch {
-            Log.d("coroutines","Inside the Job1 started")
+            Log.d("storeUrlinDatabase","Inside the Job1 started")
             val job2=CoroutineScope(Dispatchers.IO).launch {
-                Log.d("coroutines","Inside the Job2 started ${Thread.currentThread().name}")
-
+                Log.d("storeUrlinDatabase","Inside the Job2 started ${Thread.currentThread().name}")
                 gdgChaptersViewModel.getChaptersViewModel()
-                Log.d("coroutines","Inside the Job2 ended")
+                Log.d("storeUrlinDatabase","Inside the Job2 ended")
             }
             delay(3000)
             job2.join()
-            Log.d("coroutines","After the Job2 join")
+            job2.cancel()
+            Log.d("storeUrlinDatabase","After the Job2 join")
             gdgChaptersList=gdgChaptersViewModel.returnGDGChapterViewModel()
             val gdgChapterEntityList = convertGdgDataTypes(gdgChaptersList)
-            Log.d("coroutines","before database ${gdgChapterEntityList.size}")
+            Log.d("storeUrlinDatabase","before database ${gdgChapterEntityList.size}")
             for (chapter in gdgChapterEntityList) {
                 chapUrlroomViewModel.addChapterUrlViewModel(chapter)
             }
-
+            Log.d("storeUrlinDatabase","After the Job2 join")
 
         }
-        Log.d("coroutines","Inside the Job1 ended")
+        Log.d("storeUrlinDatabase","Inside the Job1 ended")
         job1.join()
         job1.cancel()
 
-        Log.d("coroutines","job1 is ${job1.isActive} || ${job1.isCancelled}||${job1.isCompleted}")
-        Log.d("coroutines","job1 is ${job1.isActive} || ${job1.isCancelled}||${job1.isCompleted}")
-        Log.d("coroutines"," after the Job1 join")
+        Log.d("storeUrlinDatabase","job1 is ${job1.isActive} || ${job1.isCancelled}||${job1.isCompleted}")
+        Log.d("storeUrlinDatabase","job1 is ${job1.isActive} || ${job1.isCancelled}||${job1.isCompleted}")
+        Log.d("storeUrlinDatabase"," after the Job1 join")
     }
 
     private fun convertGdgDataTypes(gdgChaptersList: ArrayList<GdgDataClass>):ArrayList<ChaptersUrlEntity> {
         val chaptersUrlEntityList= ArrayList<ChaptersUrlEntity>()
         for(chapter in gdgChaptersList){
-            val gdgchapter=ChaptersUrlEntity(
+            val gdgchapter= ChaptersUrlEntity(
                 chapter.avatar,
-            chapter.banner,
-            chapter.city_name,
-            chapter.city,
-            chapter.country,
-            chapter.latitude,
-            chapter.longitude,
-            chapter.url)
+                chapter.banner,
+                chapter.city_name,
+                chapter.city,
+                chapter.country,
+                chapter.latitude,
+                chapter.longitude,
+                chapter.url
+            )
             chaptersUrlEntityList.add(gdgchapter)
         }
         return chaptersUrlEntityList

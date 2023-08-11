@@ -297,8 +297,9 @@ class UpcomingEvents : Fragment() {
 
                 Log.d("lastweek","${events[i].title} added to database")
 
-                CoroutineScope(Dispatchers.Main).launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     delay(3000)
+                    withContext(Dispatchers.Main){
                     lastweekroomViewModel.readlastweekEventViewModel.observe(fragmentLifecycleOwner!!,
                         Observer {
                             if(it.isNotEmpty()){
@@ -309,7 +310,7 @@ class UpcomingEvents : Fragment() {
                                 lastweekadapter.refreshData(result)
                                 Log.d("lastweek","lastweekeventslist size->${result.size}")
                             }
-                        })
+                        })}
                 }
                 CoroutineScope(Dispatchers.IO).launch {
                     upcomingEventViewModel.getResponseModel(events[i].url,requireContext())
@@ -318,12 +319,13 @@ class UpcomingEvents : Fragment() {
         }
         Log.d("lastweek","before deleting the database")
         upcomingDatBaseViewModel.deleteAllevent()
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             delay(3000)
+            withContext(Dispatchers.Main) {
                 checkDatabase()
-                scrollView.visibility=View.VISIBLE
-                loadingAnimation.visibility=View.GONE
-
+                scrollView.visibility = View.VISIBLE
+                loadingAnimation.visibility = View.GONE
+            }
         }
         val eventData= upcomingEventViewModel.returnEvents()
         val setOfOrganizers= mutableListOf<OrganizerList>()

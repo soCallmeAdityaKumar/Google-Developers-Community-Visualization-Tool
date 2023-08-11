@@ -48,7 +48,7 @@ object ActionBuildCommandUtility {
      */
     @JvmStatic
     fun buildWriteBalloonFile(): String {
-        val command = "echo 'http://lg1:81/balloon.kml'  > " +
+        val command = "echo 'http://lg1:81/slave_2.kml'  > " +
                 BASE_PATH +
                 "kmls.txt"
         Log.w(TAG_DEBUG, "command: $command")
@@ -77,7 +77,7 @@ object ActionBuildCommandUtility {
                 "  <overlayXY x=\"0\" y=\"1\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
                 "  <screenXY x=\"0.02\" y=\"0.95\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
                 "  <rotationXY x=\"0\" y=\"0\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
-                "  <size x=\"0.8\" y=\"0.8\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
+                "  <size x=\"500\" y=\"500\" xunits=\"pixels\" yunits=\"fraction\"/> \n" +
                 "  </ScreenOverlay> \n" +
                 " </Folder> \n" +
                 "</Document> \n" +
@@ -93,7 +93,69 @@ object ActionBuildCommandUtility {
      * Build the command to paint a balloon in Liquid Galaxy
      * @param balloon Balloon with the information to be send
      * @return String with command
-     */
+  */
+//    @JvmStatic
+//    fun buildCommandBalloonTest(balloon: Balloon): String {
+//        val poi = balloon.poi
+//        val TEST_PLACE_MARK_ID = "testPlaceMark12345"
+//        val startCommand = "echo '"+
+//                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+//                "<kml xmlns=\"http://www.opengis.net/kml/2.2\"\n" +
+//                " xmlns:gx=\"http://www.google.com/kml/ext/2.2\">\n" +
+//                "\n" +
+//                " <Document>\n" +
+//                " <Placemark id=\"" + TEST_PLACE_MARK_ID + "\">\n" +
+//                "    <name>" + balloon.poi?.poiLocation?.name + "</name>\n" +
+//                "    <description>\n" +
+//                "<![CDATA[\n" +
+//                "  <head>\n" +
+//                "    <!-- Required meta tags -->\n" +
+//                "    <meta charset=\"UTF-8\">\n" +
+//                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
+//                "\n" +
+//                "    <!-- Bootstrap CSS -->\n" +
+//                "    <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\" integrity=\"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm\" crossorigin=\"anonymous\">\n" +
+//                "\n" +
+//                "  </head>\n" +
+//                "  <body>\n" +
+//                "    <div class=\"p-lg-5\" align=\"center\">\n" +
+//                "\n"
+//        var description = ""
+//        if (balloon.description != "") {
+//            description =  "        <h5>" + balloon.description + "</h5>\n" +
+//                    "        <br>\n"
+//        }
+//        var imageCommand = ""
+//        if (balloon.imagePath != null && balloon.imagePath != "") {
+//            imageCommand =  "        <img src=\"./resources/" + getFileName(balloon.imagePath) + "\"> \n" +
+//                    "        <br>\n"
+//        }
+//        var videoCommand = ""
+//        if (balloon.videoPath != null && balloon.videoPath != "") {
+//            videoCommand = "<iframe" +
+//                    " src=\""+ balloon.videoPath + "\" frameborder=\"0\"" +
+//                    " allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen>" +
+//                    "</iframe>"
+//        }
+//        val endCommand = "    </div>\n    <script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>\n" +
+//                "    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\" integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\" crossorigin=\"anonymous\"></script>\n" +
+//                "    <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\" crossorigin=\"anonymous\"></script>\n" +
+//                "  </body>\n" +
+//                "]]>" +
+//                "    </description>\n" +
+//                "    <gx:balloonVisibility>1</gx:balloonVisibility>\n" +
+//                "    <Point>\n" +
+//                "      <coordinates>" + poi?.poiLocation?.longitude + "," + poi?.poiLocation?.latitude + "</coordinates>\n" +
+//                "    </Point>\n" +
+//                "  </Placemark>\n" +
+//                "</Document>\n" +
+//                "</kml>" +
+//                "' > " +
+//                BASE_PATH +
+//                "kml/slave_2.kml"
+//        Log.w(TAG_DEBUG, startCommand + description + imageCommand + videoCommand + endCommand)
+//        return startCommand + description + imageCommand + videoCommand + endCommand
+//    }
     @JvmStatic
     fun buildCommandBalloonTest(balloon: Balloon): String {
         val poi = balloon.poi
@@ -102,45 +164,56 @@ object ActionBuildCommandUtility {
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<kml xmlns=\"http://www.opengis.net/kml/2.2\"\n" +
                 " xmlns:gx=\"http://www.google.com/kml/ext/2.2\">\n" +
-                "\n" +
                 " <Document>\n" +
+                "    <name>helloBalloon.kml</name>\n" +
+                "<Style id=\"purple_paddle\">\n"+
+                "<IconStyle>\n"+
+                "<Icon>\n"+
+                "<href>"+balloon.imagePath.toString()+"</href>\n"+
+                "</Icon>\n"+
+                "</IconStyle>\n"+
+                "<BalloonStyle>\n"+
+                "<text>"+balloon.description+"</text>\n"+
+                "<bgColor>ff1e1e1e</bgColor>\n"+
+                "</BalloonStyle>\n"+
+                "</Style>\n"+
                 " <Placemark id=\"" + TEST_PLACE_MARK_ID + "\">\n" +
-                "    <name>" + balloon.poi?.poiLocation?.name + "</name>\n" +
-                "    <description>\n" +
+                "<name>Google Developer Group Details</name>\n"+
+                "<Snippet maxLines=\"0\"></Snippet>\n"+
+                "<description>\n" +
                 "<![CDATA[\n" +
-                "  <head>\n" +
-                "    <!-- Required meta tags -->\n" +
-                "    <meta charset=\"UTF-8\">\n" +
-                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
-                "\n" +
-                "    <!-- Bootstrap CSS -->\n" +
-                "    <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\" integrity=\"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm\" crossorigin=\"anonymous\">\n" +
-                "\n" +
-                "  </head>\n" +
-                "  <body>\n" +
-                "    <div class=\"p-lg-5\" align=\"center\">\n" +
-                "\n"
-        var description = ""
-        if (balloon.description != "") {
-            description =  "        <h5>" + balloon.description + "</h5>\n" +
-                    "        <br>\n"
-        }
-        var imageCommand = ""
-        if (balloon.imagePath != null && balloon.imagePath != "") {
-            imageCommand =  "        <img src=\"./resources/" + getFileName(balloon.imagePath) + "\"> \n" +
-                    "        <br>\n"
-        }
-        var videoCommand = ""
-        if (balloon.videoPath != null && balloon.videoPath != "") {
-            videoCommand = "<iframe" +
-                    " src=\""+ balloon.videoPath + "\" frameborder=\"0\"" +
-                    " allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen>" +
-                    "</iframe>"
-        }
-        val endCommand = "    </div>\n    <script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>\n" +
-                "    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\" integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\" crossorigin=\"anonymous\"></script>\n" +
-                "    <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\" crossorigin=\"anonymous\"></script>\n" +
-                "  </body>\n" +
+                "<table width=\"400\" border=\"0\" cellspacing=\"0\" cellpadding=\"5\">\n"+
+                "<tr>\n"+
+                "<td colspan=\"2\" align=\"center\">\n"+
+                "<img src=\"https://raw.githubusercontent.com/yashrajbharti/kml-images/main/volcano.png\" alt=\"picture\" width=\"150\" height=\"150\" />\n"+
+                "</td>\n"+
+                "</tr>\n"+
+                "<tr>\n"+
+                "<td colspan=\"2\" align=\"center\">\n"+
+                "<h2><font color=\'#00CC99\'>Historic Track Map</font></h2>\n"+
+                "<h3><font color=\'#00CC99\'>Various years between 1480 and 2021</font></h3>\n"+
+                "</td>\n"+
+                "</tr>\n"+
+                "<tr>\n"+
+                "<td colspan=\"2\" align=\"center\">\n"+
+                "<img src=\"https://raw.githubusercontent.com/yashrajbharti/kml-images/main/historic_infographic.png\" alt=\"picture\" width=\"400\" height=\"240\" />    </td>\n"+
+                "</tr>\n"+
+                "<tr>\n"+
+                "<td colspan=\"2\">\n"+
+                "<p><font color=\"#3399CC\">"+balloon.description+"</font></p>\n"+
+                "</td>\n"+
+                "</tr>\n"+
+                "<tr>\n"+
+                "<td align=\"center\">\n"+
+                "<a href=\"#\">COPERNICUS, ResearchGate, Global Volcanism Program </a>\n"+
+                "</td>\n"+
+                "</tr>\n"+
+                "<tr>\n"+
+                "<td colspan=\"2\" align=\"center\">\n"+
+                "<font color=\"#999999\">@Google Developer Viuslisation Tool 2023</font>\n"+
+                "</td>\n"+
+                "</tr>\n"+
+                "</table>"+
                 "]]>" +
                 "    </description>\n" +
                 "    <gx:balloonVisibility>1</gx:balloonVisibility>\n" +
@@ -152,10 +225,90 @@ object ActionBuildCommandUtility {
                 "</kml>" +
                 "' > " +
                 BASE_PATH +
-                "kml/bolloon.kml"
-        Log.w(TAG_DEBUG, startCommand + description + imageCommand + videoCommand + endCommand)
-        return startCommand + description + imageCommand + videoCommand + endCommand
+                "kml/slave_2.kml"
+        Log.w(TAG_DEBUG, startCommand )
+        return startCommand
     }
+//    @JvmStatic
+//    fun buildCommandBalloonTest(balloon: Balloon): String {
+//        val poi = balloon.poi
+//        val TEST_PLACE_MARK_ID = "testPlaceMark12345"
+//        val startCommand = "echo '"+
+//        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
+//        "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n"+
+//        "<Document>\n"+
+//        "<name>historic.kml</name>\n"+
+//        "<Style id=\"purple_paddle\">\n"+
+//        "<IconStyle>\n"+
+//        "<Icon>\n"+
+//        "<href>https://raw.githubusercontent.com/yashrajbharti/kml-images/main/molten.png</href>\n"+
+//        "</Icon>\n"+
+//        "</IconStyle>\n"+
+//        "<BalloonStyle>\n"+
+//        "<text>$[description]</text>\n"+
+//        "<bgColor>ff1e1e1e</bgColor>\n"+
+//        "</BalloonStyle>\n"+
+//        "</Style>\n"+
+//        "<Placemark id=\""+TEST_PLACE_MARK_ID+"\">\n"+
+//        "<name>Historic Track Map</name>\n"+
+//        "<Snippet maxLines=\"0\"></Snippet>\n"+
+//        "<description><![CDATA[" +
+//        "<!-- BalloonStyle background color:\"ffffffff\"-->\n"+
+//        "<!-- Icon URL:\"http://maps.google.com/mapfiles/kml/paddle/purple-blank.png\"-->"+
+//        "<table width=\"400\" border=\"0\" cellspacing=\"0\" cellpadding=\"5\">\n"+
+//        "<tr>\n"+
+//        "<td colspan=\"2\" align=\"center\">\n"+
+//        "<img src=\"https://raw.githubusercontent.com/yashrajbharti/kml-images/main/volcano.png\" alt=\"picture\" width=\"150\" height=\"150\" />\n"+
+//        "</td>\n"+
+//        "</tr>\n"+
+//        "<tr>\n"+
+//        "<td colspan=\"2\" align=\"center\">\n"+
+//        "<h2><font color=\'#00CC99\'>Historic Track Map</font></h2>\n"+
+//        "<h3><font color=\'#00CC99\'>Various years between 1480 and 2021</font></h3>\n"+
+//        "</td>\n"+
+//        "</tr>\n"+
+//        "<tr>\n"+
+//        "<td colspan=\"2\" align=\"center\">\n"+
+//        "<img src=\"https://raw.githubusercontent.com/yashrajbharti/kml-images/main/historic_infographic.png\" alt=\"picture\" width=\"400\" height=\"240\" />    </td>\n"+
+//        "</tr>\n"+
+//        "<tr>\n"+
+//        "<td colspan=\"2\">\n"
+//        "<p><font color=\"#3399CC\">"+balloon.description+"</font></p>\n"+
+//        "</td>\n"+
+//        "</tr>\n"+
+//        "<tr>\n"+
+//        "<td align=\"center\">\n"+
+//        "<a href=\"#\">COPERNICUS, ResearchGate, Global Volcanism Program </a>\n"+
+//        "</td>\n"+
+//        "</tr>\n"+
+//        "<tr>\n"+
+//        "<td colspan=\"2\" align=\"center\">\n"+
+//        "<font color=\"#999999\">@La Palma Volcano Tracker 2022</font>\n"+
+//        "</td>\n"+
+//        "</tr>\n"+
+//        "</table>]]></description>\n"+
+//        "<LookAt>\n"+
+//        "<longitude>\""+poi?.poiLocation?.longitude+"\"</longitude>\n"+
+//        "<latitude>\""+poi?.poiLocation?.longitude+"\"</latitude>\n"+
+//        "<altitude>0</altitude>\n"+
+//        "<heading>0</heading>\n"+
+//        "<tilt>0</tilt>\n"+
+//        "<range>24000</range>\n"+
+//        "</LookAt>\n"+
+//        "<styleUrl>#purple_paddle</styleUrl>\n"+
+//        "<gx:balloonVisibility>1</gx:balloonVisibility>\n"+
+//        "<Point>\n"+
+//        "<coordinates>"+poi?.poiLocation?.latitude+","+poi?.poiLocation?.longitude+"0"+"</coordinates>\n"+
+//        "</Point>\n"+
+//        "</Placemark>\n"+
+//        "</Document>\n"+
+//        "</kml>\n" +
+//                "' > " +
+//                BASE_PATH +
+//                "kml/slave_2.kml"
+//        Log.w(TAG_DEBUG, startCommand )
+//        return startCommand
+//    }
 
     /**
      * Get the absolute path of the file

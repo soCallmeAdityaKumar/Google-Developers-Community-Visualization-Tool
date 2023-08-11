@@ -2,7 +2,7 @@ package com.example.googledeveloperscommunityvisualisationtool.roomdatabase.gdgC
 
 import androidx.lifecycle.LiveData
 
-class ChapUrlroomRespo(val dao:GdgChapterUrlDao) {
+class ChapUrlroomRespo(val dao: GdgChapterUrlDao) {
 
     val readChapterurlRepo: LiveData<List<ChaptersUrlEntity>> =dao.readAllChaptersurl()
 
@@ -11,5 +11,8 @@ class ChapUrlroomRespo(val dao:GdgChapterUrlDao) {
         dao.addChaptersUrl(chaptersUrlEntity)
     }
 
+    suspend fun deleteChapterUrl(){
+        dao.deleteAlChapterUrl()
+    }
 
 }

@@ -4,5 +4,5 @@ import com.example.googledeveloperscommunityvisualisationtool.roomdatabase.gdgCh
 
 data class GdgAllDetails(
     val gdgDetails: GDGDetails,
-    val gdgGroupDataItem:ChaptersUrlEntity
+    val gdgGroupDataItem: ChaptersUrlEntity
 )
