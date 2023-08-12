@@ -11,11 +11,11 @@ android {
         exclude 'META-INF/INDEX.LIST'
 
     }
-    namespace 'com.example.googledeveloperscommunityvisualisationtool'
+    namespace 'com.aditya.googledeveloperscommunityvisualisationtool'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.googledeveloperscommunityvisualisationtool"
+        applicationId "com.aditya.googledeveloperscommunityvisualisationtool"
         minSdk 28
         targetSdk 33
         versionCode 1

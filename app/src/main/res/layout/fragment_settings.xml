@@ -82,18 +82,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:fontFamily="@font/poppins_medium"
                 android:text="@string/text_to_speech"
                 android:textAlignment="viewStart"
                 android:textColor="@color/MainHeadingText"
                 android:textSize="30dp"
-                android:fontFamily="@font/poppins_medium"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Switch
                 android:id="@+id/ttsSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:showText="false"
+                android:thumb="@drawable/tts_thumb"
+                android:track="@drawable/tts_toggle"
                 app:layout_constraintBaseline_toBaselineOf="@+id/ThirdcardviewTextView"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

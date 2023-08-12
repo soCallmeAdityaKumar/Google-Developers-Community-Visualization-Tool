@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/upcomingEvents"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.UpcomingEvents"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.UpcomingEvents"
         android:label="fragment_upcoming_events"
         tools:layout="@layout/fragment_upcoming_events" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/home"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.home.Home"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.Home"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -49,12 +49,12 @@
     </fragment>
     <fragment
         android:id="@+id/maps"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.maps.maps"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.maps.maps"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" />
     <fragment
         android:id="@+id/settings"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.settings.Settings"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.settings.Settings"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
@@ -69,20 +69,20 @@
     </fragment>
     <fragment
         android:id="@+id/teamDetails"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.teamDetails.teamDetails"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.teamDetails.teamDetails"
         android:label="fragment_team_details"
         tools:layout="@layout/fragment_team_details" />
     <fragment
         android:id="@+id/alarm_notification"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.settings.alarmNotification.Alarm_notification"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.settings.alarmNotification.Alarm_notification"
         android:label="Alarm_notification" />
     <fragment
         android:id="@+id/connection"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.settings.connection.connection"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.settings.connection.connection"
         android:label="connection" />
     <fragment
         android:id="@+id/oldGdgList"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldGdg.OldGdgList"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldGdg.OldGdgList"
         android:label="fragment_old_gdg_list"
         tools:layout="@layout/fragment_old_gdg_list" >
         <action
@@ -91,44 +91,44 @@
     </fragment>
     <fragment
         android:id="@+id/gdgChapterDetails"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails.GdgChapterDetails"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails.GdgChapterDetails"
         android:label="fragment_gdg_chapter_details"
         tools:layout="@layout/fragment_gdg_chapter_details" >
         <argument
             android:name="chapter"
-            app:argType="com.example.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity" />
+            app:argType="com.aditya.googledeveloperscommunityvisualisationtool.roomdatabase.GdgChapterCompleteDetails.ChapterEntity" />
     </fragment>
     <fragment
         android:id="@+id/oldEvent"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldEvents.oldEvent"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldEvents.oldEvent"
         android:label="fragment_old_event"
         tools:layout="@layout/fragment_old_event" >
         <argument
             android:name="chaptername"
-            app:argType="com.example.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.OldGDGEntity" />
+            app:argType="com.aditya.googledeveloperscommunityvisualisationtool.roomdatabase.OldData.OldGDGEntity" />
     </fragment>
     <fragment
         android:id="@+id/upcomingEventDetails"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.UpcomingEventDetails"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.UpcomingEventDetails"
         android:label="fragment_upcoming_event_details"
         tools:layout="@layout/fragment_upcoming_event_details" >
         <argument
             android:name="dateAndUrl"
-            app:argType="com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.DateAndUrl" />
+            app:argType="com.aditya.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.detailsUpcomingEvents.DateAndUrl" />
     </fragment>
     <fragment
         android:id="@+id/calender"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.Calendar.CalendarFragment"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.Calendar.CalendarFragment"
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" />
     <fragment
         android:id="@+id/notification"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.Notification.Notification"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.Notification.Notification"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
     <fragment
         android:id="@+id/lastWeekEventDetails"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.lastWeekEventDetails.LastWeekEventDetails"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.upcomingEvents.lastWeekEventDetails.LastWeekEventDetails"
         android:label="LastWeekEventDetails" >
         <argument
             android:name="eventTitle"
@@ -136,7 +136,7 @@
     </fragment>
     <fragment
         android:id="@+id/lgTask"
-        android:name="com.example.googledeveloperscommunityvisualisationtool.fragments.settings.LgTask"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.settings.LgTask"
         android:label="fragment_lg_task"
         tools:layout="@layout/fragment_lg_task" />
 </navigation>
