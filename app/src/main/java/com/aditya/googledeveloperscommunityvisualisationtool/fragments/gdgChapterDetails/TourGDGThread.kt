@@ -65,8 +65,8 @@ class TourGDGThread internal constructor(
         val balloon = Balloon()
         var imageUri=""
         val description = gdg.about
-        setValueFromPref(balloon.name.toString())
-
+        setValueFromPref(gdg.gdgName)
+        Log.d("ballon",gdg.gdgName.toString())
         if(gdg.banner.path.isEmpty())imageUri="https://raw.githubusercontent.com/soCallmeAdityaKumar/Google-Developers-Community-Visualization-Tool/main/app/src/main/res/drawable/googledeveloper_placemark.png"
         else imageUri=gdg.banner.path
         balloon.setPoi(poi).setDescription(description)
@@ -76,10 +76,16 @@ class TourGDGThread internal constructor(
     }
 
     private fun setValueFromPref(gdgName: String) {
-        val pref=activity.getSharedPreferences(gdgName.toString(), Context.MODE_PRIVATE)
-         organizerList=pref.getString("organzierslist","")!!
+        val pref=activity.getSharedPreferences(gdgName, Context.MODE_PRIVATE)
+        organizerList=pref.getString("organzierslist","")!!
+        Log.d("ballon",organizerList)
+
         pastEventList=pref.getString("pasteventslist","")!!
+        Log.d("ballon",pastEventList)
+
         upcomingEventList=pref.getString("upcomingeventlist","")!!
+        Log.d("ballon",upcomingEventList)
+
     }
 
 

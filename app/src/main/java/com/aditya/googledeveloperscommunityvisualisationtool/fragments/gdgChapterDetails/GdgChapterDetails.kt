@@ -97,11 +97,7 @@ class GdgChapterDetails : Fragment() {
     lateinit var textToSpeech: TextToSpeechClass
     lateinit var ttsSharedPreferences: SharedPreferences
 
-
-
     var handler=Handler()
-
-
 
      override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -219,27 +215,29 @@ class GdgChapterDetails : Fragment() {
         super.onResume()
         loadConnectionStatus()
 
+        CoroutineScope(Dispatchers.IO).launch {
+            getDetails()
+        }
         tour()
 
         val customAppBar = (activity as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
-        val backButton = customAppBar.backarrow
 
         val navController = findNavController()
         val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
 
         if (isRootFragment) {
-            menuButton?.visibility = View.VISIBLE
-            backButton?.visibility = View.GONE
+            menuButton.setBackgroundResource(R.drawable.baseline_menu_24)
+//            menuButton?.visibility = View.VISIBLE
+//            backButton?.visibility = View.GONE
         } else {
-            menuButton?.visibility = View.GONE
-            backButton?.visibility = View.VISIBLE
+            menuButton.setBackgroundResource(R.drawable.backarrow)
+//            menuButton?.visibility = View.GONE
+//            backButton?.visibility = View.VISIBLE
+            menuButton?.setOnClickListener {
+                (activity as MainActivity).onBackPressed()
+            }
         }
-
-        backButton?.setOnClickListener {
-            (activity as MainActivity).onBackPressed()
-        }
-
     }
     private fun loadConnectionStatus() {
         val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
@@ -247,12 +245,11 @@ class GdgChapterDetails : Fragment() {
         val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         val act=activity as MainActivity
         if (isConnected!!) {
-            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.connected)
-            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
+            act.binding.appBarMain.LGConnected.visibility=View.VISIBLE
+            act.binding.appBarMain.LGNotConnected.visibility=View.INVISIBLE
         } else {
-            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.not_connected)
-            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
-
+            act.binding.appBarMain.LGConnected.visibility=View.INVISIBLE
+            act.binding.appBarMain.LGNotConnected.visibility=View.VISIBLE
         }
     }
 
@@ -293,10 +290,12 @@ class GdgChapterDetails : Fragment() {
     private fun loadConnectionStatus(sharedPreferences: SharedPreferences) {
         val isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         val act=activity as MainActivity
-        if (isConnected) {
-            act.binding.appBarMain.connectionStatus.text="LG Connected"
+        if (isConnected!!) {
+            act.binding.appBarMain.LGConnected.visibility=View.VISIBLE
+            act.binding.appBarMain.LGNotConnected.visibility=View.INVISIBLE
         } else {
-            act.binding.appBarMain.connectionStatus.text="LG Not Connected"
+            act.binding.appBarMain.LGConnected.visibility=View.INVISIBLE
+            act.binding.appBarMain.LGNotConnected.visibility=View.VISIBLE
         }
     }
 
@@ -309,11 +308,8 @@ class GdgChapterDetails : Fragment() {
 
         Log.d("content","content visible")
 
-
-        CoroutineScope(Dispatchers.IO).launch {
-            getDetails()
-        }
     }
+
 
     private suspend fun getDetails() {
         val store=(activity as MainActivity)
@@ -453,12 +449,6 @@ class GdgChapterDetails : Fragment() {
                     ),
                 )
             }
-
-
-
-
-
-
             withContext(Dispatchers.Main){
                 if(upcomingEventlist.size!=0){
                     upcoEventsAdapterupcoming.refreshData(upcomingEventlist)
@@ -547,6 +537,7 @@ class GdgChapterDetails : Fragment() {
                 }
                 if (store.storedgdgData<2) {
                     store.storedgdgData+=1
+                    storeDetailsinPref()
                     editor.apply {
                         putString("gdgname", gdgDetails.gdgName)
                         putString("cityname", args.chapter.city_name)
@@ -670,6 +661,10 @@ class GdgChapterDetails : Fragment() {
             }
         }
 
+
+    }
+
+    private fun storeDetailsinPref() {
 
     }
 

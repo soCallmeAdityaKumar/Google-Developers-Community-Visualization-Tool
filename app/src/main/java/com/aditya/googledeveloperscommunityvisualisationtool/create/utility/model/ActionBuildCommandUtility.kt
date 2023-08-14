@@ -167,19 +167,19 @@ object ActionBuildCommandUtility {
         val poi = balloon.poi
         val organizerlistType=object : TypeToken<List<Organizers>>() {}.type
         val eventlistType=object : TypeToken<List<events>>() {}.type
-//        var organizersList= mutableListOf<Organizers>()
-//        var upcomingEventList= listOf<events>()
-//        var pastEventList= listOf<events>()
-//        if(balloon.stringOrganizser!!.isNotEmpty())
-//         organizersList=Gson().fromJson(balloon.stringOrganizser,organizerlistType)
-//        if(balloon.stringUpcomingEvent!!.isNotEmpty())
-//         upcomingEventList=Gson().fromJson(balloon.stringUpcomingEvent,eventlistType)
-//        if(balloon.stringPastEvent!!.isNotEmpty())
-//         pastEventList=Gson().fromJson(balloon.stringPastEvent,eventlistType)
-        Log.d("build",balloon.stringOrganizser.toString())
+        var organizersList= mutableListOf<Organizers>()
+        var upcomingEventList= listOf<events>()
+        var pastEventList= listOf<events>()
+        if(balloon.stringOrganizser!!.isNotEmpty())
+         organizersList=Gson().fromJson(balloon.stringOrganizser,organizerlistType)
+        if(balloon.stringUpcomingEvent!!.isNotEmpty())
+         upcomingEventList=Gson().fromJson(balloon.stringUpcomingEvent,eventlistType)
+        if(balloon.stringPastEvent!!.isNotEmpty())
+         pastEventList=Gson().fromJson(balloon.stringPastEvent,eventlistType)
+        Log.d("build",balloon.stringOrganizser.toString()+","+organizersList.size)
 
         val TEST_PLACE_MARK_ID = "testPlaceMark12345"
-        val startCommand = "echo '"+
+        var startCommand = "echo '"+
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<kml xmlns=\"http://www.opengis.net/kml/2.2\"\n" +
                 " xmlns:gx=\"http://www.google.com/kml/ext/2.2\">\n" +
@@ -227,38 +227,67 @@ object ActionBuildCommandUtility {
                 "<p><font color=\"#3399CC\">"+balloon.description+"</font></p>\n"+
                 "</td>\n"+
                 "</tr>\n"+
-//                "<tr>\n"+
-//                "<td colspan=\"2\">\n"+
-//                "<p>Organizers</p>\n"+
-//                "</td>\n"+
-//                "</tr>\n"+
-//                "<script>\n"+
-//                "organizersList.forEach(item=>{\n"+
-//                "document.write(\n"+
-//                "<tr>\n"+
-//                "<td>\${item.name}</td>\n"+
-//                "</tr>\n"+
-//                ");\n"+
-//                "});\n"+
-//                "</script>\n"+
-//                "<tr>\n"+
-//                "<td colspan=\"2\">\n"+
-//                "<p>Upcoming Events</p>\n"+
-//                "</td>\n"+
-//                "</tr>\n"+
-//                "<tr>\n"+
-//                "<td colspan=\"2\">\n"+
-//                "<p>Past Events</p>\n"+
-//                "</td>\n"+
-//                "</tr>\n"+
-//                "<tr>\n"+
-//                "<td align=\"center\">\n"+
-//                "<a href=\"#\">COPERNICUS, ResearchGate, Global Volcanism Program </a>\n"+
-//                "</td>\n"+
-//                "</tr>\n"+
+                "<tr>\n"+
+                "<td colspan=\"2\">\n"+
+                "<p>Organizers</p>\n"+
+                "</td>\n"+
+                "</tr>\n"+
+                "<tr>\n"
+                var organizersNameCommand=""
+                for(organisers in organizersList){
+                   organizersNameCommand+="<td>"+organisers.organizername+"</td>"
+                }
+                organizersNameCommand+="</tr>\n<tr>\n"
+                var orgCompanyCommand=""
+                for(company in organizersList){
+                    orgCompanyCommand+="<td>"+company.organizercompany+"</td>"
+                }
+                orgCompanyCommand+="</tr>\n<tr>\n"
+                var orgImgCommand=""
+                for(image in organizersList){
+                    orgImgCommand+="<td><img src="+image.organizerimage+" alt=\"picture\" width=\"50\" height=\"50\"  /></td>"
+                }
+                orgImgCommand+="</tr>\n"+
+                "<tr>\n"+
+                "<td colspan=\"2\">\n"+
+                "<p>Past Events</p>\n"+
+                "</td>\n"+
+                "</tr>\n"+
+                "<tr>\n"
+                var pasteventname=""
+                 for(event in pastEventList){
+                      pasteventname+="<td>"+event.title+"</td>"
+                 }
+                 pasteventname+="/tr>\n<tr>\n"
+                 var pastEventType=""
+                 for(type in pastEventList){
+                     pastEventType+="<td>"+type.typeORdescription+"</td>"
+                 }
+                 pastEventType+="</tr>\n<tr>\n"
+                 var pastDateEvent=""
+                 for(date in pastEventList){
+                     pastDateEvent+="<td>"+date.date+"</td>"
+                 }
+                 pastDateEvent+="</tr>\n"+
+                "<tr>\n"+
+                "<td colspan=\"2\">\n"+
+                "<p>Upcoming Events</p>\n"+
+                "</td>\n"+
+                "</tr>\n"+
+                "<tr>\n"
+                var upcoEventName=""
+                for(event in upcomingEventList){
+                    upcoEventName+="<td>"+event.title+"</td>"
+                }
+                upcoEventName+="/tr>\n<tr>\n"
+                var upcoDateEvent=""
+                for(date in upcomingEventList){
+                    upcoDateEvent+="<td>"+date.date+"</td>"
+                }
+                upcoDateEvent+="</tr>\n"+
                 "<tr>\n"+
                 "<td colspan=\"2\" align=\"center\">\n"+
-                "<font color=\"#999999\">@Google Developer Viuslisation Tool 2023</font>\n"+
+                "<font color=\"#999999\">@Google Developer Visualization Tool 2023</font>\n"+
                 "</td>\n"+
                 "</tr>\n"+
                 "</table>"+
@@ -274,8 +303,8 @@ object ActionBuildCommandUtility {
                 "' > " +
                 BASE_PATH +
                 "kml/slave_2.kml"
-        Log.w(TAG_DEBUG, startCommand )
-        return startCommand
+        Log.w(TAG_DEBUG, startCommand +organizersNameCommand+orgCompanyCommand+orgImgCommand+pasteventname+pastEventType+pastDateEvent+upcoEventName+upcoDateEvent)
+        return startCommand +organizersNameCommand+orgCompanyCommand+orgImgCommand+pasteventname+pastEventType+pastDateEvent+upcoEventName+upcoDateEvent
     }
 
 

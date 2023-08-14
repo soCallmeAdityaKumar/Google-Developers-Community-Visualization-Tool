@@ -24,39 +24,50 @@
 
             <ImageButton
                 android:id="@+id/menu_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:background="@color/transparent"
                 android:contentDescription="Menu"
                 android:visibility="visible"
-                android:src="@drawable/baseline_menu_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <ImageButton
-                android:id="@+id/backarrow"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@color/transparent"
-                android:contentDescription="Menu"
-                android:visibility="invisible"
-                android:src="@drawable/backarrow"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/connection_status"
+                android:id="@+id/LGNotConnected"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="3dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/montserratmedium"
                 android:text="LG Not Connected"
-                android:textColor="@color/white"
+                android:textAlignment="viewStart"
+                android:textColor="@color/NotConnected"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/menu_button"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/LGConnected"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="50dp"
+                android:fontFamily="@font/montserratmedium"
+                android:text="LG Connected"
+                android:visibility="invisible"
+                android:textAlignment="viewStart"
+                android:textColor="@color/Connected"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/menu_button"
                 app:layout_constraintTop_toTopOf="parent" />
 
 

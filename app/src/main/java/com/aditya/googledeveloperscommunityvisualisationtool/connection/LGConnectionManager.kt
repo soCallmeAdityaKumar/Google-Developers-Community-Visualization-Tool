@@ -91,10 +91,10 @@ class LGConnectionManager private constructor() : Runnable {
      */
     private fun sendLGCommand(lgCommand: LGCommand?): Boolean {
         lgCommandToReSend = lgCommand
-        Log.d("ConnectionManager", "sending a lgcommand: " + lgCommand!!.command)
+        Log.d("LGConnectionManager", "sending a lgcommand: " + lgCommand!!.command)
         val session = getSession()
         if (session == null || !session.isConnected) {
-            Log.d("ConnectionManager", "session not connected: " + lgCommand.command)
+            Log.d("LGConnectionManager", "session not connected: " + lgCommand.command)
             return false
         }
         return try {

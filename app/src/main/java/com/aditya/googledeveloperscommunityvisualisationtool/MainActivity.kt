@@ -1,10 +1,14 @@
 package com.aditya.googledeveloperscommunityvisualisationtool
 
+import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
@@ -16,7 +20,16 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import com.aditya.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import com.aditya.googledeveloperscommunityvisualisationtool.R
+import com.aditya.googledeveloperscommunityvisualisationtool.connection.LGCommand
+import com.aditya.googledeveloperscommunityvisualisationtool.connection.LGConnectionManager
+import com.aditya.googledeveloperscommunityvisualisationtool.connection.LGConnectionSendFile
+import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionController
 import com.aditya.googledeveloperscommunityvisualisationtool.databinding.ActivityMainBinding
+import com.aditya.googledeveloperscommunityvisualisationtool.dialog.CustomDialogUtility
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -29,6 +42,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var notifyImage:ImageView
     var storedgdgData=0
     var mainActivityPieMaking=0
+    var handler=Handler()
+    var delayMillis:Long=10000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +69,13 @@ class MainActivity : AppCompatActivity() {
             binding.appBarMain.notifyImage.setImageDrawable(resources.getDrawable(R.drawable.notify_light_logo))
 
         }
+
+        var handle=handler.postDelayed(object : Runnable {
+            override fun run() {
+                checkConnection()
+                handler.postDelayed(this, delayMillis)
+            }
+        }, delayMillis)
 //        loadConnectionStatus()
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
@@ -79,6 +101,83 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkConnection() {
+        var connectionPref = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, Context.MODE_PRIVATE)
+            if (connectionPref.getString(ConstantPrefs.URI_TEXT.name, "")!!.isNotEmpty()) {
+                var timeout=0
+                val hostNport =
+                    connectionPref.getString(ConstantPrefs.URI_TEXT.name, "")!!.split(":".toRegex())
+                        .dropLastWhile { it.isEmpty() }.toTypedArray()
+                var iptext = ""
+                var porttext = 0
+                if (hostNport.isNotEmpty()) {
+                    iptext = hostNport[0]
+                    porttext = hostNport[1].toInt()
+                }
+                val usernameText = connectionPref.getString(ConstantPrefs.USER_NAME.name, "")
+                val passwordText = connectionPref.getString(ConstantPrefs.USER_PASSWORD.name, "")
+//            val isTryToReconnect =
+//                connectionPref.getBoolean(ConstantPrefs.TRY_TO_RECONNECT.name, false)
+                if (iptext.isNotEmpty() && porttext.toString()
+                        .isNotEmpty() && usernameText!!.isNotEmpty() && passwordText!!.isNotEmpty()
+                ) {
+                    Log.d("ConnectionMain LGConnectionManager", "not empty")
+                    val command = "echo 'connection';"
+                    val lgCommand =
+                        LGCommand(command, LGCommand.CRITICAL_MESSAGE, object : LGCommand.Listener {
+                            override fun onResponse(response: String?) {
+                                timeout=1
+                                delayMillis=10000
+                                val editor =
+                                    getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)?.edit()
+                                editor?.putBoolean(ConstantPrefs.IS_CONNECTED.name, true)
+                                editor?.apply()
+                                Log.d("ConnectionMain LGConnectionManager","timeout->$timeout   response->$response  username->$usernameText  password->$passwordText ip->$iptext   port->$porttext"  )
+                                loadConnectionStatus()
+                            }
+                        })
+                    val lgConnectionManager = LGConnectionManager.getInstance()
+                    lgConnectionManager!!.setData(usernameText, passwordText, iptext, porttext)
+                    lgConnectionManager.startConnection()
+                    lgConnectionManager.addCommandToLG(lgCommand)
+                    LGConnectionSendFile.getInstance()
+                        ?.setData(usernameText, passwordText, iptext, porttext)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(2000)
+                        sendMessageError(lgCommand,timeout)
+                    }
+
+                }
+            }
+    }
+
+        private fun sendMessageError(lgCommand: LGCommand,timeOut:Int) {
+            handler.postDelayed({
+                if (timeOut==0) {
+                    LGConnectionManager.getInstance()?.removeCommandFromLG(lgCommand)
+                    val editor =
+                        getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)?.edit()
+                    editor?.putBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+                    editor?.apply()
+                    delayMillis=5000
+                    Log.d("ConnectionMain LGConnectionManager","Not connected $delayMillis  $timeOut")
+                    loadConnectionStatus()
+
+                } else if(timeOut==1) {
+                    delayMillis=10000
+                    val editor =
+                        getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)?.edit()
+                    editor?.putBoolean(ConstantPrefs.IS_CONNECTED.name, true)
+                    editor?.apply()
+                    Log.d("ConnectionMain LGConnectionManager","connected  $delayMillis")
+                    loadConnectionStatus()
+                }
+            },2000)
+
+        }
+
+
+
     override fun onSupportNavigateUp(): Boolean {
         val navController=findNavController(R.id.fragmentContainerView)
         return navController.navigateUp(appBarConfiguration)|| super.onSupportNavigateUp()
@@ -88,17 +187,17 @@ class MainActivity : AppCompatActivity() {
 
         val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         if (isConnected!!) {
-            binding.appBarMain.connectionStatus.text="LG Connected"
-            binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
+            binding.appBarMain.LGConnected.visibility=View.VISIBLE
+            binding.appBarMain.LGNotConnected.visibility=View.INVISIBLE
         } else {
-            binding.appBarMain.connectionStatus.text="LG Not Connected"
-            binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
-
+            binding.appBarMain.LGConnected.visibility=View.INVISIBLE
+            binding.appBarMain.LGNotConnected.visibility=View.VISIBLE
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
 
-
-
-
+    }
 }

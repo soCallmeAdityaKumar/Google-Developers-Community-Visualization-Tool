@@ -134,22 +134,24 @@ class Settings : Fragment() {
         loadConnectionStatus()
         val customAppBar = (activity as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
-        val backButton = customAppBar.backarrow
 
         val navController = findNavController()
         val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
 
         if (isRootFragment) {
-            menuButton?.visibility = View.VISIBLE
-            backButton?.visibility = View.GONE
+            menuButton.setBackgroundResource(R.drawable.baseline_menu_24)
+//            menuButton?.visibility = View.VISIBLE
+//            backButton?.visibility = View.GONE
         } else {
-            menuButton?.visibility = View.GONE
-            backButton?.visibility = View.VISIBLE
+            menuButton.setBackgroundResource(R.drawable.backarrow)
+//            menuButton?.visibility = View.GONE
+//            backButton?.visibility = View.VISIBLE
+            menuButton?.setOnClickListener {
+                (activity as MainActivity).onBackPressed()
+            }
         }
 
-        backButton?.setOnClickListener {
-            (activity as MainActivity).onBackPressed()
-        }
+
 
     }
     private fun loadConnectionStatus() {
@@ -161,12 +163,11 @@ class Settings : Fragment() {
         val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         val act=activity as MainActivity
         if (isConnected!!) {
-            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.connected)
-            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.Connected))
+            act.binding.appBarMain.LGConnected.visibility=View.VISIBLE
+            act.binding.appBarMain.LGNotConnected.visibility=View.INVISIBLE
         } else {
-            act.binding.appBarMain.connectionStatus.text=resources.getString(R.string.not_connected)
-            act.binding.appBarMain.connectionStatus.setTextColor(resources.getColor(R.color.NotConnected))
-
+            act.binding.appBarMain.LGConnected.visibility=View.INVISIBLE
+            act.binding.appBarMain.LGNotConnected.visibility=View.VISIBLE
         }
     }
 
