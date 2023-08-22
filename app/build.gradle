@@ -142,4 +142,6 @@ dependencies {
     //Fast Scrollbar
     implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.1'
 
+    implementation 'ru.cleverpumpkin:crunchycalendar:2.6.0'
+
 }

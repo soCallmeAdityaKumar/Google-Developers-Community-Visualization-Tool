@@ -11,6 +11,8 @@ import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.mode
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.poi.POICamera
 import com.aditya.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails.events
 import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.Organizers
+import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.PastEvents
+import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.UpcomingEvents
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -30,7 +32,8 @@ object ActionBuildCommandUtility {
         val poiCamera = poi.poiCamera
         return "echo 'flytoview=" +
                 "<gx:duration>" + poiCamera!!.duration + "</gx:duration>" +
-                "<gx:flyToMode>smooth</gx:flyToMode><LookAt>" +
+                "<gx:flyToMode>smooth</gx:flyToMode>" +
+                "<LookAt>" +
                 "<longitude>" + poiLocation!!.longitude + "</longitude>" +
                 "<latitude>" + poiLocation.latitude + "</latitude>" +
                 "<altitude>" + poiLocation.altitude + "</altitude>" +
@@ -166,17 +169,20 @@ object ActionBuildCommandUtility {
     fun buildCommandBalloonTest(balloon: Balloon): String {
         val poi = balloon.poi
         val organizerlistType=object : TypeToken<List<Organizers>>() {}.type
-        val eventlistType=object : TypeToken<List<events>>() {}.type
+        val pasteventlistType=object : TypeToken<List<PastEvents>>() {}.type
+        val upcoeventlistType=object : TypeToken<List<UpcomingEvents>>() {}.type
         var organizersList= mutableListOf<Organizers>()
-        var upcomingEventList= listOf<events>()
-        var pastEventList= listOf<events>()
+        var upcomingEventList= listOf<UpcomingEvents>()
+        var pastEventList= listOf<PastEvents>()
         if(balloon.stringOrganizser!!.isNotEmpty())
          organizersList=Gson().fromJson(balloon.stringOrganizser,organizerlistType)
         if(balloon.stringUpcomingEvent!!.isNotEmpty())
-         upcomingEventList=Gson().fromJson(balloon.stringUpcomingEvent,eventlistType)
+         upcomingEventList=Gson().fromJson(balloon.stringUpcomingEvent,upcoeventlistType)
         if(balloon.stringPastEvent!!.isNotEmpty())
-         pastEventList=Gson().fromJson(balloon.stringPastEvent,eventlistType)
+         pastEventList=Gson().fromJson(balloon.stringPastEvent,pasteventlistType)
         Log.d("build",balloon.stringOrganizser.toString()+","+organizersList.size)
+        Log.d("build",balloon.stringPastEvent.toString()+","+pastEventList.size)
+        Log.d("build",balloon.stringUpcomingEvent.toString()+","+upcomingEventList.size)
 
         val TEST_PLACE_MARK_ID = "testPlaceMark12345"
         var startCommand = "echo '"+
@@ -197,11 +203,11 @@ object ActionBuildCommandUtility {
                 "</BalloonStyle>\n"+
                 "</Style>\n"+
                 " <Placemark id=\"" + TEST_PLACE_MARK_ID + "\">\n" +
-                "<name>Google Developer Group Details</name>\n"+
+                "<name>Google Developer Group</name>\n"+
                 "<Snippet maxLines=\"0\"></Snippet>\n"+
                 "<description>\n" +
                 "<![CDATA[\n" +
-                "<table width=\"400\" border=\"0\" cellspacing=\"0\" cellpadding=\"5\">\n"+
+                "<table width=\"400\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n"+
                 "<tr>\n"+
                 "<td colspan=\"2\" align=\"center\">\n"+
                 "<img src="+ balloon.imageUri+" alt=\"picture\" width=\"400\" height=\"150\" />\n"+
@@ -231,61 +237,69 @@ object ActionBuildCommandUtility {
                 "<td colspan=\"2\">\n"+
                 "<p>Organizers</p>\n"+
                 "</td>\n"+
-                "</tr>\n"+
-                "<tr>\n"
-                var organizersNameCommand=""
-                for(organisers in organizersList){
-                   organizersNameCommand+="<td>"+organisers.organizername+"</td>"
+                "</tr>\n"
+                var organizersCommand="<tr>No Organizers</tr>\n"
+                if(organizersList.isNotEmpty()){
+                    var organizersNameCommand="<tr>\n"
+                    for(organisers in organizersList){
+                        organizersNameCommand+="<td>"+organisers.organizername+"</td>"
+                    }
+                    organizersNameCommand+="</tr>\n<tr>\n"
+                    var orgCompanyCommand=""
+                    for(company in organizersList){
+                        orgCompanyCommand+="<td>"+company.organizercompany+"</td>"
+                    }
+                    orgCompanyCommand+="</tr>\n<tr>\n"
+                    var orgImgCommand=""
+                    for(image in organizersList){
+                        orgImgCommand+="<td><img src="+image.organizerimage+" alt=\"picture\" width=\"50\" height=\"50\"  /></td>"
+                    }
+                    orgImgCommand+="</tr>\n"
+                    organizersCommand=organizersNameCommand+orgCompanyCommand+orgImgCommand
                 }
-                organizersNameCommand+="</tr>\n<tr>\n"
-                var orgCompanyCommand=""
-                for(company in organizersList){
-                    orgCompanyCommand+="<td>"+company.organizercompany+"</td>"
-                }
-                orgCompanyCommand+="</tr>\n<tr>\n"
-                var orgImgCommand=""
-                for(image in organizersList){
-                    orgImgCommand+="<td><img src="+image.organizerimage+" alt=\"picture\" width=\"50\" height=\"50\"  /></td>"
-                }
-                orgImgCommand+="</tr>\n"+
-                "<tr>\n"+
+                var pastDec=("<tr>\n"+
                 "<td colspan=\"2\">\n"+
                 "<p>Past Events</p>\n"+
                 "</td>\n"+
-                "</tr>\n"+
-                "<tr>\n"
-                var pasteventname=""
-                 for(event in pastEventList){
-                      pasteventname+="<td>"+event.title+"</td>"
-                 }
-                 pasteventname+="/tr>\n<tr>\n"
-                 var pastEventType=""
-                 for(type in pastEventList){
-                     pastEventType+="<td>"+type.typeORdescription+"</td>"
-                 }
-                 pastEventType+="</tr>\n<tr>\n"
-                 var pastDateEvent=""
-                 for(date in pastEventList){
-                     pastDateEvent+="<td>"+date.date+"</td>"
-                 }
-                 pastDateEvent+="</tr>\n"+
-                "<tr>\n"+
+                "</tr>\n")
+                var pastEventCommand="<tr>No Past Events</tr>\n"
+                if(pastEventList.isNotEmpty()){
+                    var pasteventname="<tr>\n"
+                    for(event in pastEventList){
+                        pasteventname+="<td>"+event.pastEventstitle+"</td>"
+                    }
+                    pasteventname+="/tr>\n<tr>\n"
+                    var pastEventType=""
+                    for(type in pastEventList){
+                        pastEventType+="<td>"+type.pastEventstype+"</td>"
+                    }
+                    pastEventType+="</tr>\n<tr>\n"
+                    var pastDateEvent=""
+                    for(date in pastEventList){
+                        pastDateEvent+="<td>"+date.pastEventsdate+"</td>"
+                    }
+                    pastDateEvent+="</tr>\n"
+                    pastEventCommand=pasteventname+pastEventType+pastDateEvent
+                }
+                val UpcoDec=("<tr>\n"+
                 "<td colspan=\"2\">\n"+
                 "<p>Upcoming Events</p>\n"+
                 "</td>\n"+
-                "</tr>\n"+
-                "<tr>\n"
-                var upcoEventName=""
-                for(event in upcomingEventList){
-                    upcoEventName+="<td>"+event.title+"</td>"
+                "</tr>\n")
+                var upcoEventcommand="<tr>No Upcoming Event</tr>\n"
+                if(upcomingEventList.isNotEmpty()){
+                    var upcoEventName="<tr>\n"
+                    for(event in upcomingEventList){
+                        upcoEventName+="<td>"+event.upcomingEventstitle+"</td>"
+                    }
+                    upcoEventName+="/tr>\n<tr>\n"
+                    var upcoDateEvent=""
+                    for(date in upcomingEventList){
+                        upcoDateEvent+="<td>"+date.upcomingEventsdate+"</td>"
+                    }
+                    upcoDateEvent+="</tr>\n"
                 }
-                upcoEventName+="/tr>\n<tr>\n"
-                var upcoDateEvent=""
-                for(date in upcomingEventList){
-                    upcoDateEvent+="<td>"+date.date+"</td>"
-                }
-                upcoDateEvent+="</tr>\n"+
-                "<tr>\n"+
+                val endCommand=("<tr>\n"+
                 "<td colspan=\"2\" align=\"center\">\n"+
                 "<font color=\"#999999\">@Google Developer Visualization Tool 2023</font>\n"+
                 "</td>\n"+
@@ -293,18 +307,19 @@ object ActionBuildCommandUtility {
                 "</table>"+
                 "]]>" +
                 "    </description>\n" +
+//                "    <styleUrl>#purple_paddle</styleUrl>\n"+
                 "    <gx:balloonVisibility>1</gx:balloonVisibility>\n" +
                 "    <Point>\n" +
-                "      <coordinates>" + poi?.poiLocation?.longitude + "," + poi?.poiLocation?.latitude + "</coordinates>\n" +
+                "      <coordinates>" + poi?.poiLocation?.longitude + "," + poi?.poiLocation?.latitude + ",0</coordinates>\n" +
                 "    </Point>\n" +
                 "  </Placemark>\n" +
                 "</Document>\n" +
                 "</kml>" +
                 "' > " +
                 BASE_PATH +
-                "kml/slave_2.kml"
-        Log.w(TAG_DEBUG, startCommand +organizersNameCommand+orgCompanyCommand+orgImgCommand+pasteventname+pastEventType+pastDateEvent+upcoEventName+upcoDateEvent)
-        return startCommand +organizersNameCommand+orgCompanyCommand+orgImgCommand+pasteventname+pastEventType+pastDateEvent+upcoEventName+upcoDateEvent
+                "kml/slave_2.kml")
+        Log.w(TAG_DEBUG, startCommand+organizersCommand+pastDec+pastEventCommand+UpcoDec+upcoEventcommand+endCommand)
+        return startCommand+organizersCommand+pastDec+pastEventCommand+UpcoDec+upcoEventcommand+endCommand
     }
 
 

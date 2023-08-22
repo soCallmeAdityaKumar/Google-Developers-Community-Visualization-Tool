@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="500dp"
+    android:backgroundTint="@color/CardViewTransparent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="50dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView2">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="500dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Select time to inform"
+            android:textAlignment="center"
+            android:textSize="35dp"
+            android:textColor="#1090CB"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/atTheSameTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Same Time"
+            android:textColor="@color/MainHeadingText"
+            android:textSize="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="42dp"
+            app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+        <TextView
+            android:id="@+id/sixHourText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Six Hour Before"
+            android:textSize="30dp"
+            android:textColor="@color/MainHeadingText"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/oneHourText" />
+
+        <TextView
+            android:id="@+id/oneHourText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="One Hour Before"
+            android:textSize="30dp"
+            android:textColor="@color/MainHeadingText"
+            android:layout_marginStart="30dp"
+            app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+            app:layout_constraintHorizontal_bias="0.517"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/thirtyMinutesText" />
+
+        <TextView
+            android:id="@+id/thirtyMinutesText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Thirty Minutes Before"
+            android:textColor="@color/MainHeadingText"
+            android:textSize="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/atTheSameTime" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5"
+            app:layout_constraintVertical_bias="0.16000003">
+
+            <RadioButton
+                android:id="@+id/zeroHourRadio"
+                android:layout_width="wrap_content"
+                android:checked="true"
+                app:buttonTint="#1090CB"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"/>
+
+            <RadioButton
+                android:id="@+id/thirtyminRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:buttonTint="#1090CB"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:layout_margin="10dp"/>
+
+            <RadioButton
+                android:id="@+id/onehourRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:buttonTint="#1090CB"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:layout_margin="10dp"/>
+            <RadioButton
+                android:id="@+id/sixhourRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:buttonTint="#1090CB"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:layout_margin="10dp"/>
+        </RadioGroup>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/notificationButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:text="Confirm"
+            android:textSize="15dp"
+            android:textColor="@color/white"
+            android:background="@drawable/cardview"
+            android:backgroundTint="@color/ButtonColor"
+            android:fontFamily="@font/poppins_medium"
+            android:padding="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

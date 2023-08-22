@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_home_to_notification"
             app:destination="@id/notification" />
+        <action
+            android:id="@+id/action_home_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/maps"
@@ -139,4 +142,9 @@
         android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.settings.LgTask"
         android:label="fragment_lg_task"
         tools:layout="@layout/fragment_lg_task" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.aditya.googledeveloperscommunityvisualisationtool.fragments.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
 </navigation>

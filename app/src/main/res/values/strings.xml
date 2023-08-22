@@ -42,7 +42,7 @@
     <string name="lg_ip_address" translatable="false">193.168.153.3</string>
     <string name="lg_name">LG Name</string>
     <string name="lg_password">LG Password</string>
-    <string name="activity_connection_error">It was not possible to connect to Liquid Galaxy. \n Please, go to the tab connect and try again.</string>
+    <string name="activity_connection_error">It was not possible to connect to Liquid Galaxy.</string>
     <string name="activity_connection_host_port_error">The format for the host and port is not valid.</string>
     <string name="rebootLG">Wait! LG is restarting</string>
     <string name="ShutdownLG">Lg will now ShutDown</string>
@@ -71,7 +71,7 @@
     <string name="old_event" translatable="false">OLD EVENT</string>
     <string name="event_details" translatable="false">EVENT DETAILS</string>
     <string name="upcomingevent_details" translatable="false">EVENT DETAILS</string>
-    <string name="clearDatabaseMessage" translatable="false">This will delete the complete data from app download fresh data! Would you like to Delete it</string>
+    <string name="clearDatabaseMessage" translatable="false"> Would you like to delete all data from database?</string>
 
     <string-array name="languages">
         <item>English</item>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import androidx.fragment.app.FragmentActivity
+import com.aditya.googledeveloperscommunityvisualisationtool.MainActivity
 import com.aditya.googledeveloperscommunityvisualisationtool.connection.LGCommand
 import com.aditya.googledeveloperscommunityvisualisationtool.connection.LGConnectionManager.Companion.getInstance
 import com.aditya.googledeveloperscommunityvisualisationtool.dialog.CustomDialogUtility
@@ -22,6 +23,7 @@ object LGConnectionTest {
     fun testPriorConnection(fragment:FragmentActivity, atomicBoolean: AtomicBoolean) {
         val dialog = CustomDialogUtility.getDialog(
             fragment,
+            R.drawable.warning_popup,
             fragment.resources.getString(R.string.test_connection)
         )
         dialog.setCanceledOnTouchOutside(false)
@@ -45,6 +47,8 @@ object LGConnectionTest {
                 editor.putBoolean(ConstantPrefs.IS_CONNECTED.name, false)
                 CustomDialogUtility.showDialog(
                     fragment,
+                    R.drawable.failed_poput,
+                    "OOPS!, Failed to Connect",
                     fragment.resources.getString(R.string.activity_connection_error)
                 )
                 atomicBoolean.set(false)

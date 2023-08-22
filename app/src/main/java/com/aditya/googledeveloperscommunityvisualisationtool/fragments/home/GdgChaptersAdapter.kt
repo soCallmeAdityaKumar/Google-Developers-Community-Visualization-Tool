@@ -12,7 +12,6 @@ import com.aditya.googledeveloperscommunityvisualisationtool.roomdatabase.GdgCha
 
 class GdgChaptersAdapter(var chapterList: List<ChapterEntity>):RecyclerView.Adapter<GdgChaptersAdapter.MyViewHolder>() {
     private lateinit var mListen:onItemClickListener
-    private val flippedStateMap = mutableMapOf<Int, Boolean>()
 
     interface  onItemClickListener {
          fun onItemClick(position: Int)

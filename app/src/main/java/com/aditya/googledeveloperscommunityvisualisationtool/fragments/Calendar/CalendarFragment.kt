@@ -36,12 +36,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.w3c.dom.Text
+import ru.cleverpumpkin.calendar.CalendarDate
+import ru.cleverpumpkin.calendar.CalendarView
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Year
+import java.time.ZonedDateTime
 import java.util.Calendar
 import java.util.Date
-import java.util.GregorianCalendar
 
 class CalendarFragment : Fragment() ,EventsCalendar.Callback{
 
@@ -86,6 +88,7 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
                 .setCallback(this)
          .build()
 
+
         return view
     }
 
@@ -93,15 +96,20 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
 
+        eventsCalendar.setCallback(this)
 
         eventsDatabaseViewModel=ViewModelProvider(this, UpcoEventRoomFactory(requireContext())).get(UpcoEventroomViewmodel::class.java)
         eventsDatabaseViewModel.readAllEventViewModel.observe(viewLifecycleOwner,Observer{it->
             for(i in it){
                 val calendar=Calendar.getInstance()
-                val formatter=SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
-                calendar.setTime(formatter.parse(i.start_date))
-                Log.d("Calendar","event.startdate->${i.start_date}+Calendar.time->${calendar.time}+Fulldate->${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]}-${calendar[Calendar.YEAR]}")
-                calendar.add(Calendar.DATE,0)
+//                val formatter=SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
+//                calendar.setTime(formatter.parse(i.start_date))
+                var originalFormatter = ZonedDateTime.parse(i.start_date)
+                val instant = originalFormatter.toInstant()
+                val date = Date.from(instant)
+                calendar.setTime(date)
+                Log.d("CalendarFragment","event.startdate->${i.start_date}+Calendar.time->${calendar.time}+Fulldate->${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]+1}-${calendar[Calendar.YEAR]}")
+                calendar.add(Calendar.DAY_OF_MONTH,0)
                 eventsCalendar.addEvent(calendar)
                 editor.apply {
                     editor.putString("${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]}-${calendar[Calendar.YEAR]}",i.title)
@@ -109,7 +117,6 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
                 }
             }
         })
-        eventsCalendar.setCallback(this)
 
     }
     override fun onResume() {
@@ -161,6 +168,14 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
 //        ${getDateString(selectedDate?.timeInMillis)}
         val dateString="${selectedDate?.get(Calendar.DATE)}-${selectedDate?.get(Calendar.MONTH)}-${selectedDate?.get(Calendar.YEAR)}"
         selectedDate!!.time
+        val calendar=Calendar.getInstance()
+//                val formatter=SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
+//                calendar.setTime(formatter.parse(i.start_date))
+        var originalFormatter = selectedDate.toInstant()
+        val date = Date.from(originalFormatter)
+        calendar.setTime(date)
+
+        Log.d("CalendarFragment","selected Date->$date,Date->${calendar.get(Calendar.DATE)},Month->${calendar.get(Calendar.MONTH)},Year->${calendar.get(Calendar.YEAR)}")
         if(eventsCalendar.hasEvent(selectedDate)){
             showEventDetail(dateString)
         }
@@ -175,7 +190,8 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
         val eventDate:TextView=dialog.findViewById(R.id.bottom_sheet_date)
         val evenTitle:TextView=dialog.findViewById(R.id.event_bottom_Title)
 
-        eventDate.text=date
+        eventDate.text=date.toString()
+        Log.d("CalendarFragment","Data selected for event ->$date")
         evenTitle.text=sharedPref.getString(date,"")
 
         dialog.show()

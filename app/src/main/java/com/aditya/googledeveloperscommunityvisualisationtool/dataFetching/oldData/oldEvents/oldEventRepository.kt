@@ -51,7 +51,7 @@ class oldEventRepository (val context:Context){
                     val localisedCountry=organizer.getJSONObject(j).getString("localized_country_name")
                     val name=organizer.getJSONObject(j).getString("name")
                     val photo=organizer.getJSONObject(j).optJSONObject("photo")
-                    val baseurl=photo.getString("photo_link")
+                    val baseurl=photo.optString("photo_link","")
                     val state=organizer.getJSONObject(j).optString("state","")
 
                     Log.d("oldeventdata"," organizers->${Organizer(country, GroupProfile(groupProfileLink,groupProfileRole),localisedCountry,name,

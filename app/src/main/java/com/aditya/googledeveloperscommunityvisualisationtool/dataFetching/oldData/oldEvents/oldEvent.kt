@@ -1,7 +1,9 @@
 package com.aditya.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldEvents
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,16 +24,26 @@ import com.airbnb.lottie.LottieAnimationView
 import com.android.car.ui.recyclerview.CarUiListItemAdapterAdapterV1.ViewHolderWrapper
 import com.aditya.googledeveloperscommunityvisualisationtool.MainActivity
 import com.aditya.googledeveloperscommunityvisualisationtool.R
+import com.aditya.googledeveloperscommunityvisualisationtool.connection.LGCommand
+import com.aditya.googledeveloperscommunityvisualisationtool.connection.LGConnectionManager
+import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.connection.LGConnectionTest
+import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility
 import com.aditya.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldEvents.oldEventsDataClass.Event
 import com.aditya.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldEvents.oldEventsDataClass.Organizer
 import com.aditya.googledeveloperscommunityvisualisationtool.databinding.FragmentOldEventBinding
 import com.aditya.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import com.aditya.googledeveloperscommunityvisualisationtool.dataFetching.oldData.oldEvents.oldEventArgs
+import com.aditya.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails.TourGDGThread
+import com.aditya.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails.tourGDGDataclass
+import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.Organizers
+import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.PastEvents
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
+import java.util.concurrent.atomic.AtomicBoolean
 
 class oldEvent : Fragment() {
     val endpoint: oldEventArgs by navArgs()
@@ -44,11 +56,13 @@ class oldEvent : Fragment() {
 //    lateinit var countryname:TextView
     lateinit var eventList:List<Event>
     lateinit var organizerList: List<Organizer>
+    lateinit var tourGDG:TourGDGThread
     lateinit var EventAdapter:oldEventAdapter
     lateinit var organizerAdapter:oldGdgOrganAdap
 //    lateinit var progressBar: ProgressBar
     lateinit var scrollView:ScrollView
     lateinit var loadingAnimation:LottieAnimationView
+    var handler=Handler()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -123,7 +137,6 @@ class oldEvent : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        loadConnectionStatus()
         val customAppBar = (activity as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
 
@@ -143,16 +156,63 @@ class oldEvent : Fragment() {
                 (activity as MainActivity).onBackPressed()
             }
         }
+
+        handler.postDelayed({
+            tour()
+        },5000)
     }
-    private fun loadConnectionStatus() {
-        val sharedPreferences = activity?.getSharedPreferences(
-            ConstantPrefs.SHARED_PREFS.name,
+
+
+    private fun tour() {
+        val isConnected = AtomicBoolean(false)
+        LGConnectionTest.testPriorConnection(requireActivity(), isConnected)
+        val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name,
             Context.MODE_PRIVATE
         )
+        val tourOrganizer=convertOrganizerToOrganizers(organizerList)
+        val tourPastEvent=convertEventToPastEvent(eventList)
+        handler.postDelayed({
+            if (isConnected.get()) {
+                try {
+                    val lgConnectionManager = LGConnectionManager.getInstance()
+                    lgConnectionManager!!.startConnection()
+                    val lgCommand = LGCommand(
+                        ActionBuildCommandUtility.buildCommandCleanSlaves(),
+                        LGCommand.CRITICAL_MESSAGE, object : LGCommand.Listener {
+                            override fun onResponse(response: String?) {
 
-        val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+                            }
+                        })
+                    lgConnectionManager.addCommandToLG(lgCommand)
+                }catch (e: Exception){
+                    println("Could not connect to LG")
+                }
+//                showDialog(requireActivity(), "Starting the GDG TOUR")
+                tourGDG = TourGDGThread(
+                    tourGDGDataclass(
+                        "",
+                        endpoint.chaptername.name,
+                        endpoint.chaptername.status,
+                        endpoint.chaptername.lat,
+                        endpoint.chaptername.lon,
+                        endpoint.chaptername.city,
+                        endpoint.chaptername.country,
+                        tourOrganizer,
+                        tourPastEvent,
+                        listOf()
+                    ) ,
+                    requireActivity(),
+                )
+                tourGDG!!.start()
+            }
+            loadConnectionStatus(sharedPreferences!!)
+        }, 5000)
+    }
+
+    private fun loadConnectionStatus(sharedPreferences: SharedPreferences) {
+        val isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         val act=activity as MainActivity
-        if (isConnected!!) {
+        if (isConnected) {
             act.binding.appBarMain.LGConnected.visibility=View.VISIBLE
             act.binding.appBarMain.LGNotConnected.visibility=View.INVISIBLE
         } else {
@@ -161,5 +221,21 @@ class oldEvent : Fragment() {
         }
     }
 
+    fun convertOrganizerToOrganizers(organizer: List<Organizer>):List<Organizers>{
+        var mutableList= mutableListOf<Organizers>()
+        for(org in organizer){
+            val s=Organizers(org.name,"","",org.photo.photo_link)
+            mutableList.add(s)
+        }
+        return mutableList.toList()
+    }
+    fun convertEventToPastEvent(event:List<Event>):List<PastEvents>{
+        val mutableList= mutableListOf<PastEvents>()
+        for(e in event){
+            val k=PastEvents(e.name,e.local_date,e.description,e.link)
+            mutableList.add(k)
+        }
+        return mutableList.toList()
+    }
 
 }

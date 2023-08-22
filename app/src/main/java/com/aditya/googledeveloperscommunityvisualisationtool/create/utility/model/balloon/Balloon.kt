@@ -5,21 +5,15 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.os.Parcel
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.IJsonPacker
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.Action
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionIdentifier
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.poi.POI
-import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.Organizers
-import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.PastEvents
-import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.UpcomingEvents
-import com.aditya.googledeveloperscommunityvisualisationtool.roomdatabase.lastWeekEvent.OrganizerList
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
@@ -28,7 +22,6 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
-import java.nio.charset.StandardCharsets
 
 class Balloon : Action, IJsonPacker<Any?>, Parcelable {
     var poi: POI? = null

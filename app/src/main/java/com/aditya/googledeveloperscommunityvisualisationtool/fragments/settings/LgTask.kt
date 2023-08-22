@@ -91,7 +91,7 @@ class LgTask : Fragment() {
     }
 
     private fun startrebootLg(){
-        val dialog = CustomDialogUtility.getDialog(requireActivity(), resources.getString(R.string.rebootLG))
+        val dialog = CustomDialogUtility.getDialog(requireActivity(),R.drawable.warning_popup, resources.getString(R.string.rebootLG))
         dialog.setCanceledOnTouchOutside(false)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
@@ -237,7 +237,7 @@ class LgTask : Fragment() {
         }
     }
     private fun startPowerOff() {
-        val dialog = CustomDialogUtility.getDialog(requireActivity(), resources.getString(R.string.ShutdownLG))
+        val dialog = CustomDialogUtility.getDialog(requireActivity(),R.drawable.warning_popup, resources.getString(R.string.ShutdownLG))
         dialog.setCanceledOnTouchOutside(false)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()

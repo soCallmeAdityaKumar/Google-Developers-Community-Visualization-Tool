@@ -132,26 +132,19 @@ class Settings : Fragment() {
     override fun onResume() {
         super.onResume()
         loadConnectionStatus()
-        val customAppBar = (activity as MainActivity).binding.appBarMain
-        val menuButton = customAppBar.menuButton
+
 
         val navController = findNavController()
         val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
 
-        if (isRootFragment) {
-            menuButton.setBackgroundResource(R.drawable.baseline_menu_24)
-//            menuButton?.visibility = View.VISIBLE
-//            backButton?.visibility = View.GONE
-        } else {
-            menuButton.setBackgroundResource(R.drawable.backarrow)
+        val customAppBar = (activity as MainActivity).binding.appBarMain
+        val menuButton = customAppBar.menuButton
+        menuButton.setBackgroundResource(R.drawable.backarrow)
 //            menuButton?.visibility = View.GONE
 //            backButton?.visibility = View.VISIBLE
-            menuButton?.setOnClickListener {
-                (activity as MainActivity).onBackPressed()
-            }
+        menuButton?.setOnClickListener{
+            (activity)?.onBackPressed()
         }
-
-
 
     }
     private fun loadConnectionStatus() {
@@ -202,13 +195,17 @@ class Settings : Fragment() {
         notificatioModel.deleteAllNotification()
         oldGDGRoomViewModel.deleteAllOldGDGChapterModel()
         upcomingEventRoomModel.deleteAllevent()
+        val edit=activity?.getSharedPreferences("Flags",Context.MODE_PRIVATE)!!.edit()
+        edit.apply{
+            putInt("flag1",0)
+        }
 
         Toast.makeText(requireContext(),"ALl Databases are cleared! Now fresh data will be downloaded",
             Toast.LENGTH_LONG).show()
     }
     private fun showAlertDialog() {
         val dialogView = layoutInflater.inflate(R.layout.clean_database_alert, null)
-
+        dialogView.setBackgroundResource(android.R.color.transparent)
         val alertDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()

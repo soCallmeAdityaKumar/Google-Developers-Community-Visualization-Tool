@@ -20,10 +20,10 @@ class GdgScrapingRespo {
     private  lateinit var gdgDetails: GDGDetails
     fun getGdgChapters(){
         try {
-            Log.d("home","inside the get chapter repo")
+            Log.d("GdgScrapingReso","inside the get chapter repo")
             val doc = Jsoup.connect(baseUrl).url(baseUrl).get()
 //            Log.d("home",doc.body().toString())
-            Log.d("value",doc.body().getElementsByTag("script")[1].toString())
+            Log.d("GdgScrapingReso","value->${doc.body().getElementsByTag("script")[1].toString()}")
             var html=doc.body().getElementsByTag("script")[1].html().replace("var localChapters = ","")
             html="$html"
             val obj= JSONArray(html)
@@ -51,9 +51,10 @@ class GdgScrapingRespo {
                 gdgChapters.add(gdgDataClass)
             }
 
+            Log.d("GdgScrapingRespo","Complete scraping")
         }
         catch (e:Exception){
-            Log.d("GDGScrapingUrl",e.message.toString())
+            Log.d("GDGScrapingUrl","error message->${e.message.toString()}")
         }
 
 //        Log.d("gdgChapters",gdgChapters.size.toString())

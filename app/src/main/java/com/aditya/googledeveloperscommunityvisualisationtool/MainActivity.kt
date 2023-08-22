@@ -26,10 +26,12 @@ import com.aditya.googledeveloperscommunityvisualisationtool.connection.LGConnec
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionController
 import com.aditya.googledeveloperscommunityvisualisationtool.databinding.ActivityMainBinding
 import com.aditya.googledeveloperscommunityvisualisationtool.dialog.CustomDialogUtility
+import com.aditya.googledeveloperscommunityvisualisationtool.fragments.settings.connection.connection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.regex.Pattern
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -44,6 +46,12 @@ class MainActivity : AppCompatActivity() {
     var mainActivityPieMaking=0
     var handler=Handler()
     var delayMillis:Long=10000
+
+    companion object {
+        //private static final String TAG_DEBUG = "MainActivity";
+        private val HOST_PORT =
+            Pattern.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+$")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +107,18 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+
+//        val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
+//        if(isRootFragment){
+//            binding.appBarMain.menuButton.setBackgroundResource(R.drawable.baseline_menu_24)
+//        }else{
+//            binding.appBarMain.menuButton.setBackgroundResource(R.drawable.backarrow)
+////            menuButton?.visibility = View.GONE
+////            backButton?.visibility = View.VISIBLE
+//            binding.appBarMain.menuButton?.setOnClickListener{
+//                this.onBackPressed()
+//            }
+//        }
     }
 
     private fun checkConnection() {
@@ -112,7 +132,11 @@ class MainActivity : AppCompatActivity() {
                 var porttext = 0
                 if (hostNport.isNotEmpty()) {
                     iptext = hostNport[0]
-                    porttext = hostNport[1].toInt()
+                    if(isValidHostNPort("${hostNport[0]}:${hostNport[1]}")){
+                        iptext=hostNport[0]
+                        porttext=hostNport[1].toInt()
+                    }
+
                 }
                 val usernameText = connectionPref.getString(ConstantPrefs.USER_NAME.name, "")
                 val passwordText = connectionPref.getString(ConstantPrefs.USER_PASSWORD.name, "")
@@ -193,6 +217,9 @@ class MainActivity : AppCompatActivity() {
             binding.appBarMain.LGConnected.visibility=View.INVISIBLE
             binding.appBarMain.LGNotConnected.visibility=View.VISIBLE
         }
+    }
+    private fun isValidHostNPort(hostPort: String): Boolean {
+        return MainActivity.HOST_PORT.matcher(hostPort).matches()
     }
 
     override fun onDestroy() {

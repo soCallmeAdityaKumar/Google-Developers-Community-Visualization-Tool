@@ -106,6 +106,7 @@ class GdgChapterDetails : Fragment() {
         // Inflate the layout for this fragment
          binding=FragmentGdgChapterDetailsBinding.inflate(layoutInflater,container, false)
          val view=binding.root
+         gdgDetails=GDGDetails("","","", listOf(), listOf(), listOf(),"","","","","")
 
 
          progressBar=binding.progressBar
@@ -215,11 +216,6 @@ class GdgChapterDetails : Fragment() {
         super.onResume()
         loadConnectionStatus()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            getDetails()
-        }
-        tour()
-
         val customAppBar = (activity as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
 
@@ -238,7 +234,14 @@ class GdgChapterDetails : Fragment() {
                 (activity as MainActivity).onBackPressed()
             }
         }
-    }
+        CoroutineScope(Dispatchers.IO).launch {
+                getDetails()
+            }
+        handler.postDelayed({
+            tour()
+        },5000)
+        }
+
     private fun loadConnectionStatus() {
         val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
 
@@ -258,8 +261,12 @@ class GdgChapterDetails : Fragment() {
     }
 
     private fun tour() {
+        Log.d("GDGChapterDetials","Starting Tour")
+
         val isConnected = AtomicBoolean(false)
-        testPriorConnection(requireActivity(), isConnected)
+        if(activity!=null){
+            testPriorConnection(requireActivity(), isConnected)
+        }
         val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
         handler.postDelayed({
             if (isConnected.get()) {
@@ -279,18 +286,18 @@ class GdgChapterDetails : Fragment() {
                 }
 //                showDialog(requireActivity(), "Starting the GDG TOUR")
                 tourGDG = TourGDGThread(
-                    args.chapter as ChapterEntity,
+                    tourGDGDataclass(args.chapter.banner.path,args.chapter.gdgName,args.chapter.about,args.chapter.latitude,args.chapter.longitude,args.chapter.city_name,args.chapter.country,gdgDetails.orgnaizersList,gdgDetails.pastEventsList,gdgDetails.upcomingEventsList) ,
                     requireActivity(),
                 )
                 tourGDG!!.start()
             }
             loadConnectionStatus(sharedPreferences!!)
-        }, 1200)
+        }, 5000)
     }
     private fun loadConnectionStatus(sharedPreferences: SharedPreferences) {
         val isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         val act=activity as MainActivity
-        if (isConnected!!) {
+        if (isConnected) {
             act.binding.appBarMain.LGConnected.visibility=View.VISIBLE
             act.binding.appBarMain.LGNotConnected.visibility=View.INVISIBLE
         } else {
@@ -319,6 +326,8 @@ class GdgChapterDetails : Fragment() {
         val job=CoroutineScope(Dispatchers.IO).launch {
             gdgViewModel.getCompleteGDGdetails(args.chapter.url)
         }
+        job.join()
+        gdgDetails = gdgViewModel.getdetails()
 
         if(sharedPref.getString("gdgname",null)==args.chapter.gdgName) {
             Log.d("storedargs",args.chapter.gdgName)
@@ -478,10 +487,9 @@ class GdgChapterDetails : Fragment() {
             }
         }
         else {
-            job.join()
+
             withContext(Dispatchers.Main) {
 
-                gdgDetails = gdgViewModel.getdetails()
                 gdgName.text=gdgDetails.gdgName
                 cityName.text = "${args.chapter.city_name}, ${args.chapter.country}"
                 aboutGdg.text = args.chapter.about
@@ -537,7 +545,6 @@ class GdgChapterDetails : Fragment() {
                 }
                 if (store.storedgdgData<2) {
                     store.storedgdgData+=1
-                    storeDetailsinPref()
                     editor.apply {
                         putString("gdgname", gdgDetails.gdgName)
                         putString("cityname", args.chapter.city_name)
@@ -560,6 +567,7 @@ class GdgChapterDetails : Fragment() {
                         putString("organzierslist", stringorganizer)
                         putString("pasteventslist", stringpastevent)
                         putString("upcomingeventlist", stringupcoming)
+                        Log.d("GDGChapterDetails","Stored")
                         apply()
                     }
                 }
@@ -661,10 +669,6 @@ class GdgChapterDetails : Fragment() {
             }
         }
 
-
-    }
-
-    private fun storeDetailsinPref() {
 
     }
 

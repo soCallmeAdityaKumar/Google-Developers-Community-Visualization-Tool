@@ -158,29 +158,44 @@ class connection : Fragment() {
     }
 
      private fun connectionTest() {
-        val port = port!!.text.toString()
-        val host=lgipAddress!!.text.toString()
-        val usernameText = lgnameEditText!!.text.toString()
-        val passwordText = passwordEditText!!.text.toString()
-        saveConnectionInfo(host,port, usernameText, passwordText)
-        if (!isValidHostNPort("$host:$port")) {
-            CustomDialogUtility.showDialog(
-                requireActivity(),
-                resources.getString(R.string.activity_connection_host_port_error)
-            )
-            val editor = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)!!
-                .edit()
-            editor.putBoolean(ConstantPrefs.IS_CONNECTED.name, false)
-            editor.apply()
-            loadConnectionStatus()
-            return
-        }
-        val dialog = CustomDialogUtility.getDialog(requireActivity(), resources.getString(R.string.connecting))
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.show()
-        changeButtonTextConnecting()
-        createLgCommand("$host:$port", usernameText, passwordText, dialog)
+         if(port.text.isEmpty()||lgipAddress.text.isEmpty()||lgnameEditText.text.isEmpty()||passwordEditText.text.isEmpty()){
+             if(port.text.isEmpty()){
+
+             }else if(lgipAddress.text.isEmpty()){
+
+             }else if(lgnameEditText.text.isEmpty()){
+
+             }else if(passwordEditText.text.isEmpty()){
+
+             }
+         }else{
+             val port = port!!.text.toString()
+             val host=lgipAddress!!.text.toString()
+             val usernameText = lgnameEditText!!.text.toString()
+             val passwordText = passwordEditText!!.text.toString()
+             saveConnectionInfo(host,port, usernameText, passwordText)
+             if (!isValidHostNPort("$host:$port")) {
+                 CustomDialogUtility.showDialog(
+                     requireActivity(),
+                     R.drawable.failed_poput,
+                     "OOPS!, Something went wrong",
+                     resources.getString(R.string.activity_connection_host_port_error)
+                 )
+                 val editor = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)!!
+                     .edit()
+                 editor.putBoolean(ConstantPrefs.IS_CONNECTED.name, false)
+                 editor.apply()
+                 loadConnectionStatus()
+                 return
+             }
+             val dialog = CustomDialogUtility.getDialog(requireActivity(),R.drawable.warning_popup, resources.getString(R.string.connecting))
+             dialog.setCanceledOnTouchOutside(false)
+             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+             dialog.show()
+             changeButtonTextConnecting()
+             createLgCommand("$host:$port", usernameText, passwordText, dialog)
+         }
+
     }
     private fun createLgCommand(
         hostPort: String,
@@ -206,6 +221,8 @@ class connection : Fragment() {
                 dialog.dismiss()
                 CustomDialogUtility.showDialog(
                     requireActivity(),
+                    R.drawable.failed_poput,
+                    "OOPS!, Failed to Connect",
                     resources.getString(R.string.activity_connection_error_connect)
                 )
                 val editor =
@@ -219,6 +236,8 @@ class connection : Fragment() {
             } else {
                 CustomDialogUtility.showDialog(
                     requireActivity(),
+                    R.drawable.success_popup,
+                    "Whoa! Connected to LG",
                     resources.getString(R.string.activity_connection_success),
                 )
                 val editor =

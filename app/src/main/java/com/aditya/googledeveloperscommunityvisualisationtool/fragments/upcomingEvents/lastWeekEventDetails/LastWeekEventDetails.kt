@@ -55,32 +55,29 @@ class LastWeekEventDetails : Fragment() {
             ViewModelProvider(requireActivity(), LastEventModelFact(requireContext())).get(
                 LastEventViewModel::class.java)
 
-        lastEventRoomViewModel.readAllEventViewModel.observe(fragmentLifecycleOwner!!, Observer {
+        lastEventRoomViewModel.readAllEventViewModel.observe(fragmentLifecycleOwner!!, Observer {list->
 
-            for( event in it) {
-                Log.d("lastWeekEventDetails","${title.eventTitle}==${event.title}")
-                if(event.title.equals(title.eventTitle)) {
-                    if (event.title.isNotEmpty()) {
-                        eventTitle.text = event.title
-                    }
-                    if (event.gdgName.isNotEmpty()) {
-                        gdgName.text = event.gdgName
-                    }
-                    if (event.rsvp.isNotEmpty()) {
-                        rsvp.text = event.rsvp
-                    }
-                    if (event.dateAndTime.isNotEmpty()) {
-                        dateAndTime.text = event.dateAndTime
-                    }
-                    if (event.desc.isNotEmpty()) {
-                        desc.text = event.desc
-                    }
-                    if (event.address.isNotEmpty()) {
-                        address.text = event.address
-                    }
+            val foundElement=list.find { it.eventName==title.eventTitle }
+            if(foundElement!=null){
+                if (foundElement.eventName.isNotEmpty()) {
+                    eventTitle.text = foundElement.eventName
+                }
+                if (foundElement.gdgName.isNotEmpty()) {
+                    gdgName.text = foundElement.gdgName
+                }
+                if (foundElement.rsvp.isNotEmpty()) {
+                    rsvp.text = foundElement.rsvp
+                }
+                if (foundElement.date.isNotEmpty()) {
+                    dateAndTime.text = foundElement.date
+                }
+                if (foundElement.aboutEvent.isNotEmpty()) {
+                    desc.text = foundElement.aboutEvent
+                }
+                if (foundElement.addresss.isNotEmpty()) {
+                    address.text = foundElement.addresss
                 }
             }
-
         })
 
 
