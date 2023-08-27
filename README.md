@@ -17,3 +17,4 @@ Features-
 4. Old GDG-Find details of old GDG and Groups(from https://gdgsearch.com/)
 5. All events which ended last week or started will be displayed in last week events
 6. Can be connected with the Liquid Galaxy and GDG can be visualise on Google earth
+7.
