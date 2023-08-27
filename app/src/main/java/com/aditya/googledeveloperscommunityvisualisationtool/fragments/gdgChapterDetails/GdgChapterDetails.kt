@@ -1,5 +1,6 @@
 package com.aditya.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails
 
+import android.app.Activity
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
@@ -20,6 +21,7 @@ import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -96,9 +98,15 @@ class GdgChapterDetails : Fragment() {
     lateinit var instagramLogo:CircleImageView
     lateinit var textToSpeech: TextToSpeechClass
     lateinit var ttsSharedPreferences: SharedPreferences
-
     var handler=Handler()
+    lateinit var activ:FragmentActivity
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (!requireActivity().isFinishing && !requireActivity().isDestroyed) {
+             activ = requireActivity()
+        }
+    }
      override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -116,7 +124,8 @@ class GdgChapterDetails : Fragment() {
          scrollView.visibility=View.GONE
 
          textToSpeech= TextToSpeechClass(requireContext())
-         ttsSharedPreferences=activity?.getSharedPreferences("TextToSpeechSwitch",Context.MODE_PRIVATE)!!
+
+         ttsSharedPreferences=activ.getSharedPreferences("TextToSpeechSwitch",Context.MODE_PRIVATE)
              val code=textToSpeech.initialise()
              if(code== TextToSpeech.SUCCESS){
                  Log.d("tts","enabled")
@@ -186,29 +195,50 @@ class GdgChapterDetails : Fragment() {
          startOrbitGdgButton=binding.StartOrbitGdgButton
          stopOrbitGgdButton=binding.StopOrbitGdgButton
 
-         startOrbitGdgButton.setOnClickListener { orbit() }
-         startOrbitGdgButton.setOnClickListener { orbit() }
+         startOrbitGdgButton.setOnClickListener {
+             Log.d("GdgChapterDetails","Inside the Start Orbit ")
+             orbit()
+         startOrbitGdgButton.visibility=View.INVISIBLE
+             stopOrbitGgdButton.visibility=View.VISIBLE
+         }
+         stopOrbitGgdButton.setOnClickListener { stopOrbit()
+             Log.d("GdgChapterDetails","Inside the Stop Orbit ")
+             stopOrbitGgdButton.visibility=View.INVISIBLE
+             startOrbitGdgButton.visibility=View.VISIBLE}
 
 
         return view
     }
 
     private fun stopOrbit() {
+        Log.d("OrbitGDG","Inside the Stop orbit ")
+        val isConnected = AtomicBoolean(false)
+        testPriorConnection(activ, isConnected)
+        val sharedPreferences = activ.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
+        handler.postDelayed({
+            if (isConnected.get()) {
+                Log.d("OrbitGDG","connected to lg ")
+                oribitGDG!!.stop()
+            }
+            loadConnectionStatus(sharedPreferences)
+        }, 1200)
     }
 
     private fun orbit() {
-        Log.d("Orbit","Inside the orbit ")
+        Log.d("OrbitGDG","Inside the orbit ")
         val isConnected = AtomicBoolean(false)
-        testPriorConnection(requireActivity(), isConnected)
-        val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
+        if(activity!=null)
+        testPriorConnection(activ, isConnected)
+        val sharedPreferences = activ.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
         handler.postDelayed({
             if (isConnected.get()) {
+                Log.d("OrbitGDG","connected to lg  ")
                 oribitGDG = OrbitGDGThread(
                     args.chapter,
                 )
                 oribitGDG!!.start()
             }
-            loadConnectionStatus(sharedPreferences!!)
+            loadConnectionStatus(sharedPreferences)
         }, 1200)
     }
 
@@ -243,7 +273,7 @@ class GdgChapterDetails : Fragment() {
         }
 
     private fun loadConnectionStatus() {
-        val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
+        val sharedPreferences = activ.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
 
         val isConnected = sharedPreferences?.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
         val act=activity as MainActivity
@@ -264,10 +294,8 @@ class GdgChapterDetails : Fragment() {
         Log.d("GDGChapterDetials","Starting Tour")
 
         val isConnected = AtomicBoolean(false)
-        if(activity!=null){
-            testPriorConnection(requireActivity(), isConnected)
-        }
-        val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
+            testPriorConnection(activ, isConnected)
+        val sharedPreferences = activ.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
         handler.postDelayed({
             if (isConnected.get()) {
                 try {
@@ -284,19 +312,19 @@ class GdgChapterDetails : Fragment() {
                 }catch (e:Exception){
                     println("Could not connect to LG")
                 }
-//                showDialog(requireActivity(), "Starting the GDG TOUR")
+//                showDialog(activ, "Starting the GDG TOUR")
                 tourGDG = TourGDGThread(
                     tourGDGDataclass(args.chapter.banner.path,args.chapter.gdgName,args.chapter.about,args.chapter.latitude,args.chapter.longitude,args.chapter.city_name,args.chapter.country,gdgDetails.orgnaizersList,gdgDetails.pastEventsList,gdgDetails.upcomingEventsList) ,
-                    requireActivity(),
+                    activ,
                 )
                 tourGDG!!.start()
             }
-            loadConnectionStatus(sharedPreferences!!)
+            loadConnectionStatus(sharedPreferences)
         }, 5000)
     }
     private fun loadConnectionStatus(sharedPreferences: SharedPreferences) {
         val isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
-        val act=activity as MainActivity
+        val act=(activ as MainActivity)
         if (isConnected) {
             act.binding.appBarMain.LGConnected.visibility=View.VISIBLE
             act.binding.appBarMain.LGNotConnected.visibility=View.INVISIBLE
@@ -321,7 +349,7 @@ class GdgChapterDetails : Fragment() {
     private suspend fun getDetails() {
         val store=(activity as MainActivity)
         val gson = Gson()
-        sharedPref=activity?.getSharedPreferences(args.chapter.gdgName,Context.MODE_PRIVATE)!!
+        sharedPref=activ.getSharedPreferences(args.chapter.gdgName,Context.MODE_PRIVATE)!!
         editor=sharedPref.edit()
         val job=CoroutineScope(Dispatchers.IO).launch {
             gdgViewModel.getCompleteGDGdetails(args.chapter.url)
@@ -404,56 +432,56 @@ class GdgChapterDetails : Fragment() {
                 gdgName.visibility = View.VISIBLE
                 gdgName.startAnimation(
                     AnimationUtils.loadAnimation(
-                        requireContext(),
+                        activ,
                         android.R.anim.slide_in_left
                     )
                 )
                 cityName.visibility = View.VISIBLE
                 cityName.startAnimation(
                     AnimationUtils.loadAnimation(
-                        requireContext(),
+                        activ,
                         android.R.anim.slide_in_left
                     )
                 )
                 countryName.visibility = View.VISIBLE
                 countryName.startAnimation(
                     AnimationUtils.loadAnimation(
-                        requireContext(),
+                        activ,
                         android.R.anim.slide_in_left
                     )
                 )
                 member.visibility = View.VISIBLE
                 member.startAnimation(
                     AnimationUtils.loadAnimation(
-                        requireContext(),
+                        activ,
                         android.R.anim.slide_in_left
                     )
                 )
                 pasteventsRecycler.visibility = View.VISIBLE
                 pasteventsRecycler.startAnimation(
                     AnimationUtils.loadAnimation(
-                        requireContext(),
+                        activ,
                         android.R.anim.slide_in_left
                     )
                 )
                 upcomingEventsRecycler.visibility = View.VISIBLE
                 upcomingEventsRecycler.startAnimation(
                     AnimationUtils.loadAnimation(
-                        requireContext(),
+                        activ,
                         android.R.anim.slide_in_left
                     )
                 )
                 aboutgdgcardView.visibility = View.VISIBLE
                 aboutgdgcardView.startAnimation(
                     AnimationUtils.loadAnimation(
-                        requireContext(),
+                        activ,
                         android.R.anim.slide_in_left
                     )
                 )
                 organizerRecyclerView.visibility = View.VISIBLE
                 organizerRecyclerView.startAnimation(
                     AnimationUtils.loadAnimation(
-                        requireContext(),
+                        activ,
                         android.R.anim.slide_in_left
                     ),
                 )
@@ -608,56 +636,56 @@ class GdgChapterDetails : Fragment() {
                     gdgName.visibility = View.VISIBLE
                     gdgName.startAnimation(
                         AnimationUtils.loadAnimation(
-                            requireContext(),
+                            activ,
                             android.R.anim.slide_in_left
                         )
                     )
                     cityName.visibility = View.VISIBLE
                     cityName.startAnimation(
                         AnimationUtils.loadAnimation(
-                            requireContext(),
+                            activ,
                             android.R.anim.slide_in_left
                         )
                     )
                     countryName.visibility = View.VISIBLE
                     countryName.startAnimation(
                         AnimationUtils.loadAnimation(
-                            requireContext(),
+                            activ,
                             android.R.anim.slide_in_left
                         )
                     )
                     member.visibility = View.VISIBLE
                     member.startAnimation(
                         AnimationUtils.loadAnimation(
-                            requireContext(),
+                            activ,
                             android.R.anim.slide_in_left
                         )
                     )
                 pasteventsRecycler.visibility = View.VISIBLE
                 pasteventsRecycler.startAnimation(
                         AnimationUtils.loadAnimation(
-                            requireContext(),
+                            activ,
                             android.R.anim.slide_in_left
                         )
                     )
                 upcomingEventsRecycler.visibility = View.VISIBLE
                 upcomingEventsRecycler.startAnimation(
                         AnimationUtils.loadAnimation(
-                            requireContext(),
+                            activ,
                             android.R.anim.slide_in_left
                         )
                     )
                     aboutgdgcardView.visibility = View.VISIBLE
                     aboutgdgcardView.startAnimation(
                         AnimationUtils.loadAnimation(
-                            requireContext(),
+                            activ,
                             android.R.anim.slide_in_left
                         )
                     )
                 organizerRecyclerView.visibility = View.VISIBLE
                 organizerRecyclerView.startAnimation(
                         AnimationUtils.loadAnimation(
-                            requireContext(),
+                            activ,
                             android.R.anim.slide_in_left
                         ),
                 )
@@ -674,11 +702,17 @@ class GdgChapterDetails : Fragment() {
 
     private fun speakOut() {
         textToSpeech.speakText(gdgName.text.toString())
+        Log.d("GdgChapterDetails->TTS","TTS->speaking ->${gdgName.text.toString()}")
         textToSpeech.speakText(cityName.text.toString())
+        Log.d("GdgChapterDetails->TTS","TTS->speaking ->${cityName.text.toString()}")
         textToSpeech.speakText(countryName.text.toString())
+        Log.d("GdgChapterDetails->TTS","TTS->speaking ->${countryName.text.toString()}")
         textToSpeech.speakText(member.text.toString())
+        Log.d("GdgChapterDetails->TTS","TTS->speaking ->${member.text.toString()}")
         textToSpeech.speakText("About ${gdgName.text.toString()}")
+        Log.d("GdgChapterDetails->TTS","TTS->speaking ->About ${gdgName.text.toString()}")
         textToSpeech.speakText(aboutGdg.text.toString())
+        Log.d("GdgChapterDetails->TTS","TTS->speaking ->${aboutGdg.text.toString()}")
         for(i in organizerList){
             textToSpeech.speakText(i.organizername)
             textToSpeech.speakText(i.organizercompany)
@@ -704,6 +738,7 @@ class GdgChapterDetails : Fragment() {
         return events
     }
     override fun onDestroy() {
+        handler.removeCallbacks {  }
         textToSpeech.speechStop()
         super.onDestroy()
     }
@@ -715,6 +750,14 @@ class GdgChapterDetails : Fragment() {
             events.add(event)
         }
         return events
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+    override fun onDetach() {
+        super.onDetach()
     }
 
 }

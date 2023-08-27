@@ -67,7 +67,6 @@ class UpcomingEvents : Fragment() {
     lateinit var secondcardViewTextView:TextView
     lateinit var thirdCardViewTextView: TextView
     lateinit var upcomingRecyclerView:RecyclerView
-    lateinit var progressBar: ProgressBar
     lateinit var scrollView:ScrollView
     lateinit var lastEventViewModel:LastEventViewModel
     lateinit var upcomingEventViewModel:UpcoEventDetailsModel
@@ -90,8 +89,8 @@ class UpcomingEvents : Fragment() {
         val view= binding.root
 
 
-        progressBar=binding.progressBar
-        progressBar.visibility=View.VISIBLE
+//        progressBar=binding.progressBar
+//        progressBar.visibility=View.VISIBLE
         loadingAnimation=binding.loadinLottieAnimation
         loadingAnimation.visibility=View.VISIBLE
         loadingAnimation.playAnimation()
@@ -170,14 +169,16 @@ class UpcomingEvents : Fragment() {
 
     //if database is empty it will fetch data from the api otherwise refresh the adapter
     private fun checkDatabase() {
-            upcomingDatBaseViewModel.readAllEventViewModel.observe(fragmentLifecycleOwner!!, Observer {it->
+        Log.d("UpcomingEvents->CheckDatabase()", "inside the checkdatabase ")
+
+        upcomingDatBaseViewModel.readAllEventViewModel.observe(fragmentLifecycleOwner!!, Observer {it->
                 if (it.isEmpty()) {
                     CoroutineScope(Dispatchers.IO).launch {
+                        Log.d("UpcomingEvents->CheckDatabase()", "before network check")
                         networkCheckAndRun()
                     }
                 } else {
-                    Log.d("events", "inside the checkdatabase else part")
-                    if(progressBar.visibility==View.VISIBLE)progressBar.visibility=View.GONE
+                    Log.d("UpcomingEvents->CheckDatabase()", "inside the checkdatabase else part")
                     if(loadingAnimation.visibility==View.VISIBLE)loadingAnimation.visibility=View.GONE
                     if(secondcardViewTextView.visibility==View.GONE)secondcardViewTextView.visibility=View.VISIBLE
                     if(upcomingRecyclerView.visibility==View.GONE)upcomingRecyclerView.visibility=View.VISIBLE
@@ -206,7 +207,7 @@ class UpcomingEvents : Fragment() {
 
         lastweekroomViewModel.readlastweekEventViewModel.observe(fragmentLifecycleOwner!!, Observer {
             if(it.isNotEmpty()){
-                Log.d("upcomingevent","fragment created database size ${it.size} ")
+                Log.d("UpcomingEvents->CheckDatabase()","fragment created database size ${it.size} ")
                 val result=convertweekevententityToResult(it)
                 if(thirdCardViewTextView.visibility==View.GONE)thirdCardViewTextView.visibility=View.VISIBLE
                 if(lastweekRecyclerView.visibility==View.GONE)lastweekRecyclerView.visibility=View.VISIBLE
@@ -266,6 +267,7 @@ class UpcomingEvents : Fragment() {
     }
 
     private fun checkexistingevent(events: MutableList<UpcomingEventEntity>) {
+        Log.d("UpcomingEvents->checkexistingevent()", "inside checkexistingevent()")
         scrollView.visibility=View.GONE
         loadingAnimation.visibility=View.VISIBLE
         loadingAnimation.playAnimation()
@@ -275,7 +277,7 @@ class UpcomingEvents : Fragment() {
             val lastweekdate=currentDate.minusSeconds(604800)
             if(lastweekdate<eventDate && eventDate<currentDate){
 
-                Log.d("date","id->${events[i].title},Eventdate->${eventDate},currentdate->${currentDate},lastweekdate->${lastweekdate}")
+                Log.d("UpcomingEvents->CheckExistingEvent","id->${events[i].title},Eventdate->${eventDate},currentdate->${currentDate},lastweekdate->${lastweekdate}")
 
                 lastweekroomViewModel.addEventViewModel(weekEventEntity(
                     events[i].Chapter_location,
@@ -306,7 +308,7 @@ class UpcomingEvents : Fragment() {
 
                         if(foundElement!=null){
                             lastWeekEventDetViewModel.addEventViewModel(LastEventEntity(0,foundElement.eventName,foundElement.addresss,foundElement.url,foundElement.rsvp,foundElement.gdgName,foundElement.date,foundElement.aboutEvent,foundElement.organizers))
-                            Log.d("UpcomingEvent","${foundElement.eventName}  event added to Database was found")
+                            Log.d("UpcomingEvents","${foundElement.eventName}  event added to Database was found")
                         }else{
                             CoroutineScope(Dispatchers.IO).launch {
                                 CoroutineScope(Dispatchers.IO).launch {
@@ -317,32 +319,34 @@ class UpcomingEvents : Fragment() {
                                 val event=upcomingEventViewModel.returnEvents()
                                 val organizersString= Gson().toJson(event.mentors)
                                 lastWeekEventDetViewModel.addEventViewModel(LastEventEntity(0,event.title,event.address,events[i].url,event.rsvp,event.gdgName,event.dateAndTime,event.desc,organizersString))
-                                Log.d("UpcomingEvent","${foundElement?.eventName}  event added to Database was found")
+                                Log.d("UpcomingEvents","${foundElement?.eventName}  event added to Database was found")
                             }
                         }
                     })
-                Log.d("lastweek","${events[i].title} added to database")
+                Log.d("UpcomingEvents","last week ->${events[i].title} added to database")
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    delay(3000)
-                    withContext(Dispatchers.Main){
-                    lastweekroomViewModel.readlastweekEventViewModel.observe(fragmentLifecycleOwner!!,
-                        Observer {
-                            if(it.isNotEmpty()){
-                                Log.d("lastweek","database size ${it.size}")
-                                val result=convertweekevententityToResult(it)
-                                if(thirdCardViewTextView.visibility==View.GONE)thirdCardViewTextView.visibility=View.VISIBLE
-                                if(lastweekRecyclerView.visibility==View.GONE)lastweekRecyclerView.visibility=View.VISIBLE
-                                lastweekadapter.refreshData(result)
-                                Log.d("lastweek","lastweekeventslist size->${result.size}")
-                            }
-                        })}
-                }
+
 
             }
         }
-        Log.d("lastweek","before deleting the database")
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(3000)
+            withContext(Dispatchers.Main){
+                lastweekroomViewModel.readlastweekEventViewModel.observe(fragmentLifecycleOwner!!,
+                    Observer {
+                        if(it.isNotEmpty()){
+                            Log.d("UpcomingEvents","lastweek database size ${it.size}")
+                            val result=convertweekevententityToResult(it)
+                            if(thirdCardViewTextView.visibility==View.GONE)thirdCardViewTextView.visibility=View.VISIBLE
+                            if(lastweekRecyclerView.visibility==View.GONE)lastweekRecyclerView.visibility=View.VISIBLE
+                            lastweekadapter.refreshData(result)
+                            Log.d("UpcomingEvents","lastweekeventslist size->${result.size}")
+                        }
+                    })}
+        }
+        Log.d("UpcomingEvents","before deleting the database")
         upcomingDatBaseViewModel.deleteAllevent()
+        Log.d("UpcomingEvents","after deleting the database")
         CoroutineScope(Dispatchers.IO).launch {
             delay(3000)
             withContext(Dispatchers.Main) {
@@ -380,6 +384,7 @@ class UpcomingEvents : Fragment() {
     //Check For the Network:if available get the events
     private suspend fun networkCheckAndRun() {
         if(upcoEventViewMod.isNetworkAvailable()){
+            Log.d("UpcomingEvents","network Available")
             getAllUpcomingEvents()
         }else{
             Toast.makeText(binding.root.context, "Network Error", Toast.LENGTH_SHORT).show()
@@ -387,28 +392,22 @@ class UpcomingEvents : Fragment() {
     }
 
     private suspend fun getAllUpcomingEvents() {
+        Log.d("UpcomingEvents","inside getAllUpcomingEvents()")
 
         //getting the event from api
         withContext(Dispatchers.Main) {
-            if (progressBar.visibility == View.GONE) progressBar.visibility = View.VISIBLE
             if(loadingAnimation.visibility==View.GONE)loadingAnimation.visibility=View.VISIBLE
             loadingAnimation.playAnimation()
 
         }
         val job=CoroutineScope(Dispatchers.Main).launch {
-
             val job2=CoroutineScope(Dispatchers.IO).launch {
-
                 upcoEventViewMod.getResponseViewModel()
-
+                Log.d("UpcomingEvents","events got")
             }
-
-
             job2.join()
             eventlist = upcoEventViewMod.returnlistViewModel()
-            Log.d("eventlistsize",eventlist.size.toString())
-
-
+            Log.d("UpcomingEvents", "eventList size ->${eventlist.size.toString()}")
 
             withContext(Dispatchers.Main){
                 adapter.refreshData(eventlist)
@@ -417,7 +416,7 @@ class UpcomingEvents : Fragment() {
 
         delay(5000)
             job.join()
-        Log.d("upcomingevent","before inserttodatabase")
+        Log.d("UpcomingEvents","before inserttodatabase")
         insertToDatabase()
         withContext(Dispatchers.Main){
             checkDatabase()
@@ -431,7 +430,7 @@ class UpcomingEvents : Fragment() {
     //insert into the database
     private  fun insertToDatabase() {
 
-        Log.d("eventsizeininsertDatabase",eventlist.size.toString())
+        Log.d("UpcomingEvents->InsertDatabase","insertDatabase->${eventlist.size.toString()}")
 
         for (events in eventlist){
 
@@ -470,7 +469,7 @@ class UpcomingEvents : Fragment() {
 
 
     private fun convertDataType(list: List<UpcomingEventEntity>?): List<Result> {
-        Log.d("events","inside the convert  part")
+        Log.d("UpcomingEvents->ConvertDataTypes","inside the convert  part")
 
         val eventList= mutableListOf<Result>()
         if (list != null) {

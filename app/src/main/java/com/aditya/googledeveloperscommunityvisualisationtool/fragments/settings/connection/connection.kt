@@ -159,14 +159,18 @@ class connection : Fragment() {
 
      private fun connectionTest() {
          if(port.text.isEmpty()||lgipAddress.text.isEmpty()||lgnameEditText.text.isEmpty()||passwordEditText.text.isEmpty()){
-             if(port.text.isEmpty()){
-
+             if(port.text.isEmpty()&&lgipAddress.text.isEmpty()&&lgnameEditText.text.isEmpty()&&passwordEditText.text.isEmpty()){
+               CustomDialogUtility.showDialog(requireActivity(),R.drawable.warning_popup,"OOPS!, Something went wrong","You haven't Enter Any Details!!")
+             }
+             else if(port.text.isEmpty()){
+                 CustomDialogUtility.showDialog(requireActivity(),R.drawable.warning_popup,"OOPS!, Something went wrong","Please enter the Port Number!!")
              }else if(lgipAddress.text.isEmpty()){
+                CustomDialogUtility.showDialog(requireActivity(),R.drawable.warning_popup,"OOPS!, Something went wrong","Please enter the Ip Address!!")
 
              }else if(lgnameEditText.text.isEmpty()){
-
+                 CustomDialogUtility.showDialog(requireActivity(),R.drawable.warning_popup,"OOPS!, Something went wrong","Please enter LG Name!!")
              }else if(passwordEditText.text.isEmpty()){
-
+               CustomDialogUtility.showDialog(requireActivity(),R.drawable.warning_popup,"OOPS!, Something went wrong","Please enter the Password!!")
              }
          }else{
              val port = port!!.text.toString()

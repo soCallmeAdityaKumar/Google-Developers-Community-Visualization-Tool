@@ -18,6 +18,7 @@ import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import com.aditya.googledeveloperscommunityvisualisationtool.MainActivity
 import com.aditya.googledeveloperscommunityvisualisationtool.R
@@ -59,6 +60,14 @@ class Settings : Fragment() {
     lateinit var oldGDGRoomViewModel:oldGDGroomViewModel
     lateinit var upcomingEventRoomModel:UpcoEventroomViewmodel
     private lateinit var ttsSwitch:Switch
+    lateinit var activ: FragmentActivity
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (!requireActivity().isFinishing && !requireActivity().isDestroyed) {
+            activ = requireActivity()
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,7 +78,7 @@ class Settings : Fragment() {
         ttsSwitch=binding.ttsSwitch
         fifthCardView=binding.FifthcardView
         fourthCardView=binding.FourthcardView
-        sharedPref=activity?.getSharedPreferences("Theme",Context.MODE_PRIVATE)!!
+        sharedPref=activ.getSharedPreferences("Theme",Context.MODE_PRIVATE)
         prefEditor=sharedPref.edit()
         val night=sharedPref.getBoolean("Night",false)
 
@@ -78,7 +87,7 @@ class Settings : Fragment() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
 
-        ttsSharedPreferences=activity?.getSharedPreferences("TextToSpeechSwitch",Context.MODE_PRIVATE)!!
+        ttsSharedPreferences=activ.getSharedPreferences("TextToSpeechSwitch",Context.MODE_PRIVATE)
         ttsEditor=ttsSharedPreferences.edit()
         val ttsOn=ttsSharedPreferences.getBoolean("TTS",false)
 
@@ -99,9 +108,9 @@ class Settings : Fragment() {
         binding.FirstcardView.setOnClickListener{
             findNavController().navigate(R.id.action_settings_to_connection)
         }
-        binding.ThirdcardView.setOnClickListener {
-            findNavController().navigate(R.id.action_settings_to_alarm_notification)
-        }
+//        binding.ThirdcardView.setOnClickListener {
+//            findNavController().navigate(R.id.action_settings_to_alarm_notification)
+//        }
         fourthCardView.setOnClickListener{
             findNavController().navigate(R.id.action_settings_to_lgTask)
         }
@@ -137,7 +146,7 @@ class Settings : Fragment() {
         val navController = findNavController()
         val isRootFragment = navController.graph.startDestinationId == navController.currentDestination?.id
 
-        val customAppBar = (activity as MainActivity).binding.appBarMain
+        val customAppBar = (activ as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
         menuButton.setBackgroundResource(R.drawable.backarrow)
 //            menuButton?.visibility = View.GONE
@@ -169,21 +178,21 @@ class Settings : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
 
-        gdgChapterRoomModel=ViewModelProvider(requireActivity(),
+        gdgChapterRoomModel=ViewModelProvider(activ,
             ChapViewModelFact(requireContext())
         ).get(ChapterViewModel::class.java)
-        chapterUrlRoomModel=ViewModelProvider(requireActivity(), ChapUrlroomfactory(requireContext())).get(
+        chapterUrlRoomModel=ViewModelProvider(activ, ChapUrlroomfactory(requireContext())).get(
             ChapUrlroomViewModel::class.java)
-        lasteWeekRoomModel=ViewModelProvider(requireActivity(), lastweekroomfactory(requireContext())).get(
+        lasteWeekRoomModel=ViewModelProvider(activ, lastweekroomfactory(requireContext())).get(
             lastweekroommodel::class.java)
         lastWeekEventRoomModel=ViewModelProvider(requireActivity(),
             LastEventModelFact(requireContext())
         ).get(LastEventViewModel::class.java)
-        notificatioModel=ViewModelProvider(requireActivity(), NotifyViewModelFactory(requireContext())).get(
+        notificatioModel=ViewModelProvider(activ, NotifyViewModelFactory(requireContext())).get(
             NotifyViewModel::class.java)
-        oldGDGRoomViewModel=ViewModelProvider(requireActivity(), oldGDGroomFactory(requireContext())).get(
+        oldGDGRoomViewModel=ViewModelProvider(activ, oldGDGroomFactory(requireContext())).get(
             oldGDGroomViewModel::class.java)
-        upcomingEventRoomModel=ViewModelProvider(requireActivity(), UpcoEventRoomFactory(requireContext())).get(
+        upcomingEventRoomModel=ViewModelProvider(activ, UpcoEventRoomFactory(requireContext())).get(
             UpcoEventroomViewmodel::class.java)
 
     }
@@ -195,7 +204,7 @@ class Settings : Fragment() {
         notificatioModel.deleteAllNotification()
         oldGDGRoomViewModel.deleteAllOldGDGChapterModel()
         upcomingEventRoomModel.deleteAllevent()
-        val edit=activity?.getSharedPreferences("Flags",Context.MODE_PRIVATE)!!.edit()
+        val edit=activ.getSharedPreferences("Flags",Context.MODE_PRIVATE)!!.edit()
         edit.apply{
             putInt("flag1",0)
         }
@@ -205,10 +214,11 @@ class Settings : Fragment() {
     }
     private fun showAlertDialog() {
         val dialogView = layoutInflater.inflate(R.layout.clean_database_alert, null)
-        dialogView.setBackgroundResource(android.R.color.transparent)
+//        dialogView.setBackgroundResource(android.R.color.transparent)
         val alertDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialogView.findViewById<AppCompatButton>(R.id.confirm).setOnClickListener {
             deleteAllDatabase()
             alertDialog.cancel()

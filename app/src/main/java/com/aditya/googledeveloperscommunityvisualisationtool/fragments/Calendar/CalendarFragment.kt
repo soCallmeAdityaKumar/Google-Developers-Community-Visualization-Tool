@@ -31,10 +31,17 @@ import com.events.calendar.utils.EventsCalendarUtil.today
 import com.events.calendar.views.EventsCalendar
 import com.aditya.googledeveloperscommunityvisualisationtool.R
 import com.aditya.googledeveloperscommunityvisualisationtool.databinding.FragmentCalendarBinding
+import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.Organizers
+import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.processNextEventInCurrentThread
 import org.w3c.dom.Text
 import ru.cleverpumpkin.calendar.CalendarDate
 import ru.cleverpumpkin.calendar.CalendarView
@@ -72,11 +79,26 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
          sharedPref=activity?.getSharedPreferences("EventCalendar",Context.MODE_PRIVATE)!!
          editor=sharedPref?.edit()!!
         editor?.apply()
-
+        val event:MutableList<String> = mutableListOf()
+        if(sharedPref.all.size!=0){
+            sharedPref.all.forEach{
+                event.add(sharedPref.getString(it.key,"")!!)
+            }
+        }
+        val calendar=Calendar.getInstance()
+//                val formatter=SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
+//                calendar.setTime(formatter.parse(i.start_date))
+        var originalFormatter = ZonedDateTime.parse("2023-09-16T19:00:00+05:30")
+        val instant = originalFormatter.toInstant()
+        val date = Date.from(instant)
+        calendar.setTime(date)
         listOfCalendar= arrayOf()
             val start=Calendar.getInstance()
             val end=Calendar.getInstance()
             end.add(Calendar.YEAR,2)
+        calendar.add(Calendar.DAY_OF_MONTH,0)
+        eventsCalendar.addEvent(calendar)
+        Log.d("CalendarFragment","Begin Calendar")
             eventsCalendar.setSelectionMode(eventsCalendar.SINGLE_SELECTION) //set mode of Calendar
                 .setToday(today)
                 .setMonthRange(start, end)
@@ -96,8 +118,6 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
 
-        eventsCalendar.setCallback(this)
-
         eventsDatabaseViewModel=ViewModelProvider(this, UpcoEventRoomFactory(requireContext())).get(UpcoEventroomViewmodel::class.java)
         eventsDatabaseViewModel.readAllEventViewModel.observe(viewLifecycleOwner,Observer{it->
             for(i in it){
@@ -111,12 +131,28 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
                 Log.d("CalendarFragment","event.startdate->${i.start_date}+Calendar.time->${calendar.time}+Fulldate->${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]+1}-${calendar[Calendar.YEAR]}")
                 calendar.add(Calendar.DAY_OF_MONTH,0)
                 eventsCalendar.addEvent(calendar)
+                val event=CalendarDataDetails("${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]}-${calendar[Calendar.YEAR]}",date,i.title,i.picture.thumbnail_url.toString())
+                var eventString= Gson().toJson(event)
+                if(sharedPref.contains("${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]}-${calendar[Calendar.YEAR]}")){
+                    var eventFromPref=sharedPref.getString("${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]}-${calendar[Calendar.YEAR]}","")
+//                    val eventlistType=object : TypeToken<MutableList<CalendarDataDetails>>() {}.type
+//                    val eventClass:MutableList<CalendarDataDetails> =Gson().fromJson<CalendarDataDetails>(eventFromPref,eventlistType)
+//                    eventClass.add(event)
+//                    eventClass.toList()
+//                    eventString=Gson().toJson(eventClass)
+
+                    Log.d("CalendarFragment","${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]}-${calendar[Calendar.YEAR]} found again with ${i.title} previous->$eventFromPref ")
+
+                }
                 editor.apply {
-                    editor.putString("${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]}-${calendar[Calendar.YEAR]}",i.title)
+                    Log.d("CalendarFragment","$eventString added ")
+                    editor.putString("${calendar[Calendar.DATE]}-${calendar[Calendar.MONTH]}-${calendar[Calendar.YEAR]}",eventString)
                     apply()
                 }
             }
         })
+        eventsCalendar.setCallback(this)
+
 
     }
     override fun onResume() {
@@ -160,11 +196,11 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
     }
 
     override fun onDayLongPressed(selectedDate: Calendar?) {
-        Log.e("LONG", "CLICKED")
+        Log.e("CalendarFragment", "LONG->CLICKED")
     }
 
     override fun onDaySelected(selectedDate: Calendar?) {
-        Log.e("SHORT",selectedDate?.time.toString())
+        Log.e("CalendarFragment","SHORT->${selectedDate?.time.toString()}")
 //        ${getDateString(selectedDate?.timeInMillis)}
         val dateString="${selectedDate?.get(Calendar.DATE)}-${selectedDate?.get(Calendar.MONTH)}-${selectedDate?.get(Calendar.YEAR)}"
         selectedDate!!.time
@@ -189,11 +225,26 @@ class CalendarFragment : Fragment() ,EventsCalendar.Callback{
 
         val eventDate:TextView=dialog.findViewById(R.id.bottom_sheet_date)
         val evenTitle:TextView=dialog.findViewById(R.id.event_bottom_Title)
+        val logo:CircleImageView=dialog.findViewById(R.id.eventLogo)
 
-        eventDate.text=date.toString()
         Log.d("CalendarFragment","Data selected for event ->$date")
-        evenTitle.text=sharedPref.getString(date,"")
+        val eventString=sharedPref.getString(date,"")
+        val eventlistType=object : TypeToken<CalendarDataDetails>() {}.type
+        val eventClass:CalendarDataDetails =Gson().fromJson(eventString,eventlistType)
 
+        evenTitle.text=eventClass.title
+        eventDate.text=eventClass.actualDate.toString().dropLast(18)
+        if(eventClass.logoLink.isNotEmpty()){
+            Glide.with(binding.root)
+                .load(eventClass.logoLink)
+                .centerCrop()
+                .into(logo)
+        }else{
+            Glide.with(binding.root)
+                .load(resources.getDrawable(R.drawable.gdglogo))
+                .centerCrop()
+                .into(logo)
+        }
         dialog.show()
         dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

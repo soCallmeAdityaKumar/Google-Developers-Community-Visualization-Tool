@@ -41,5 +41,10 @@
         android:visible="true"
         android:icon="@drawable/clockimg"
         android:title="@string/Old_Data"/>
+        <item android:id="@+id/aboutFragment"
+            android:visible="true"
+            android:title="ABOUT"
+            android:icon="@drawable/aboutlogo"/>
+
     </group>
 </menu>

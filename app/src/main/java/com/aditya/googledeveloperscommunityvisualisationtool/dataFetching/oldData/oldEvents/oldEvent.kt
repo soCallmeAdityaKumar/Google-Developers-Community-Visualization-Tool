@@ -15,7 +15,9 @@ import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +41,7 @@ import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.Orga
 import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.PastEvents
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,10 +62,20 @@ class oldEvent : Fragment() {
     lateinit var tourGDG:TourGDGThread
     lateinit var EventAdapter:oldEventAdapter
     lateinit var organizerAdapter:oldGdgOrganAdap
+    lateinit var NopastEventsText:TextView
+    lateinit var noOrganizersText:TextView
 //    lateinit var progressBar: ProgressBar
     lateinit var scrollView:ScrollView
     lateinit var loadingAnimation:LottieAnimationView
     var handler=Handler()
+    lateinit var activ:FragmentActivity
+
+    override fun onAttach(context: Context) {
+        if (!requireActivity().isFinishing && !requireActivity().isDestroyed) {
+            activ = requireActivity()
+        }
+        super.onAttach(context)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,18 +95,23 @@ class oldEvent : Fragment() {
         gdgName.text=endpoint.chaptername.name
         cityName=binding.cityname
         cityName.text=endpoint.chaptername.city+ ","+endpoint.chaptername.country
+        noOrganizersText=binding.NoOrganizersText
+        NopastEventsText=binding.noPastEventText
 //        countryname=binding.countryname
 //        countryname.text=endpoint.chaptername.country
 
+        NopastEventsText.visibility=View.VISIBLE
         eventList= listOf()
         pasteventRecyclerView=binding.eventRecyclerView
+        pasteventRecyclerView.visibility=View.GONE
         pasteventRecyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         EventAdapter= oldEventAdapter(eventList)
         pasteventRecyclerView.adapter=EventAdapter
 
-
+        noOrganizersText.visibility=View.VISIBLE
         organizerList= listOf()
         organizerrecyclerView=binding.OrganizersRecyclerView
+        organizerrecyclerView.visibility=View.GONE
         organizerrecyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         organizerAdapter= oldGdgOrganAdap(organizerList)
         organizerrecyclerView.adapter=organizerAdapter
@@ -110,14 +128,14 @@ class oldEvent : Fragment() {
             oldEventViewModel.getResponse(endpoint.chaptername.urlname)
             Log.d("oldevent","reponse sent")
         }
-        CoroutineScope(Dispatchers.IO).launch {
+        viewLifecycleOwner.lifecycleScope.launch {
+//        CoroutineScope(Dispatchers.IO).launch {
             job.join()
             delay(4000)
             Log.d("oldevent","after response")
             withContext(Dispatchers.Main){
                 var gdgList=oldEventViewModel.getOldEventsViewModel()
                 eventList=gdgList.events
-                EventAdapter.refreshdata(eventList)
                 Log.d("oldevent",eventList.size.toString())
                 organizerList=gdgList.organizers
                 Log.d("oldevent",organizerList.size.toString())
@@ -130,14 +148,23 @@ class oldEvent : Fragment() {
                 cityName.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
 //                countryname.startAnimation(AnimationUtils.loadAnimation(requireContext(),android.R.anim.slide_in_left))
 
-                organizerAdapter.refreshdata(organizerList)
+                if(eventList.isNotEmpty()){
+                    EventAdapter.refreshdata(eventList)
+                    pasteventRecyclerView.visibility=View.VISIBLE
+                    NopastEventsText.visibility=View.GONE
+                }
+                if(organizerList.isNotEmpty()){
+                    organizerAdapter.refreshdata(organizerList)
+                    organizerrecyclerView.visibility=View.VISIBLE
+                    noOrganizersText.visibility=View.GONE
+                }
             }
         }
 
     }
     override fun onResume() {
         super.onResume()
-        val customAppBar = (activity as MainActivity).binding.appBarMain
+        val customAppBar = (activ as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
 
         val navController = findNavController()
@@ -165,8 +192,8 @@ class oldEvent : Fragment() {
 
     private fun tour() {
         val isConnected = AtomicBoolean(false)
-        LGConnectionTest.testPriorConnection(requireActivity(), isConnected)
-        val sharedPreferences = activity?.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name,
+        LGConnectionTest.testPriorConnection(activ, isConnected)
+        val sharedPreferences = activ.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name,
             Context.MODE_PRIVATE
         )
         val tourOrganizer=convertOrganizerToOrganizers(organizerList)
@@ -201,17 +228,17 @@ class oldEvent : Fragment() {
                         tourPastEvent,
                         listOf()
                     ) ,
-                    requireActivity(),
+                    activ,
                 )
                 tourGDG!!.start()
             }
-            loadConnectionStatus(sharedPreferences!!)
+            loadConnectionStatus(sharedPreferences)
         }, 5000)
     }
 
     private fun loadConnectionStatus(sharedPreferences: SharedPreferences) {
         val isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name, false)
-        val act=activity as MainActivity
+        val act=activ as MainActivity
         if (isConnected) {
             act.binding.appBarMain.LGConnected.visibility=View.VISIBLE
             act.binding.appBarMain.LGNotConnected.visibility=View.INVISIBLE
@@ -238,4 +265,9 @@ class oldEvent : Fragment() {
         return mutableList.toList()
     }
 
+    override fun onDestroyView() {
+        handler.removeCallbacks {  }
+        viewLifecycleOwner.lifecycleScope.cancel()
+        super.onDestroyView()
+    }
 }

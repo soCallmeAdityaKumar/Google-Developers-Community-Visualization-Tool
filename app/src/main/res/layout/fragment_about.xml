@@ -1,8 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.AboutFragment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/appName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="GOOGLE DEVELOPER COMMUNITY VISUALIZATION TOOl"
+            android:textColor="@color/MainHeadingText"
+            android:textSize="40dp"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/AppLogo"
+            android:layout_width="800dp"
+            android:layout_height="500dp"
+            android:src="@drawable/googledeveloperscommunitylogo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appName" />
+
+        <TextView
+            android:id="@+id/authorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Author:"
+            android:textColor="#1090CB"
+            android:textSize="30dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/AppLogo" />
+
+        <TextView
+            android:id="@+id/AuthorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Aditya Kumar"
+            android:textColor="@color/MainHeadingText"
+            android:textSize="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toEndOf="@+id/authorText"
+            app:layout_constraintTop_toBottomOf="@+id/AppLogo" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/emailAutor"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/gmail_icons"
+
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.44"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/authorText" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/githubAuthor"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/github_mark"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toEndOf="@+id/emailAutor"
+            app:layout_constraintTop_toBottomOf="@+id/authorText" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/linkedInauthor"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/linkedin_icon"
+            app:layout_constraintStart_toEndOf="@+id/githubAuthor"
+            app:layout_constraintTop_toBottomOf="@+id/authorText" />
+
+        <TextView
+            android:id="@+id/mentorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Mentor:"
+            android:textColor="#1090CB"
+            android:textSize="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.21"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailAutor" />
+
+        <TextView
+            android:id="@+id/mentorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yash Raj Bharti, Andreu Ibáñez Perales"
+            android:textColor="@color/MainHeadingText"
+            android:textSize="30dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toEndOf="@+id/mentorText"
+            app:layout_constraintTop_toBottomOf="@+id/githubAuthor" />
+
+        <TextView
+            android:id="@+id/organizationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Organization:"
+            android:textColor="#1090CB"
+            android:textSize="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.34"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mentorText" />
+
+        <TextView
+            android:id="@+id/Organization"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Liquid Galaxy Project"
+            android:textColor="@color/MainHeadingText"
+            android:textSize="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toEndOf="@+id/organizationText"
+            app:layout_constraintTop_toBottomOf="@+id/mentorName" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/gmailLogo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/gmail_icons"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.39"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/organizationText" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/linkedInLogo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/linkedin_icon"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toEndOf="@+id/gmailLogo"
+            app:layout_constraintTop_toBottomOf="@+id/organizationText" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/twitterLogo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/twitter_logo"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toEndOf="@+id/linkedInLogo"
+            app:layout_constraintTop_toBottomOf="@+id/organizationText" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/githubLogo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/github_mark"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toEndOf="@+id/twitterLogo"
+            app:layout_constraintTop_toBottomOf="@+id/organizationText" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/websiteLogo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/google__g__logo"
+            app:layout_constraintStart_toEndOf="@+id/githubLogo"
+            app:layout_constraintTop_toBottomOf="@+id/organizationText" />
+
+        <ImageView
+            android:id="@+id/splashScreen"
+            android:layout_width="900dp"
+            android:layout_height="600dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/splash_credit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linkedInLogo" />
+
+        <TextView
+            android:id="@+id/ProjectDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Project Description"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/MainHeadingText"
+            android:textSize="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/splashScreen" />
+
+        <TextView
+            android:id="@+id/firstText"
+            android:layout_width="1200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/aboutText"
+            android:textColor="@color/MainHeadingText"
+            android:textSize="25dp"
+            android:layout_marginBottom="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ProjectDesc" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

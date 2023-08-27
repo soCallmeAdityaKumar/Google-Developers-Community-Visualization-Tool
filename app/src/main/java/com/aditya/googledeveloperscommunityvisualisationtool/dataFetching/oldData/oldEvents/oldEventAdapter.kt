@@ -27,8 +27,9 @@ class oldEventAdapter(var eventList:List<Event>):RecyclerView.Adapter<oldEventAd
 
     override fun onBindViewHolder(holder: myViewHolder, position: Int) {
         holder.eventName.text=eventList[position].name
-        holder.cityname.text=eventList[position].local_date
-        holder.countryname.text=eventList[position].group.region
+        holder.cityname.text=eventList[position].group.name
+        holder.countryname.text=eventList[position].local_date
+        holder.countryname.maxLines=3
         holder.eventName.setSelected(true)
         holder.cityname.setSelected(true)
         holder.countryname.setSelected(true)

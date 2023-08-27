@@ -46,6 +46,7 @@ import com.aditya.googledeveloperscommunityvisualisationtool.roomdatabase.gdgCha
 import com.aditya.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import com.aditya.googledeveloperscommunityvisualisationtool.databinding.FragmentHomeBinding
 import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.HomeDirections
+import com.airbnb.lottie.LottieAnimationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -83,6 +84,7 @@ class Home : Fragment() {
     private lateinit var searchView:androidx.appcompat.widget.SearchView
     private lateinit var pieChart: PieChart
     private lateinit var statisticsText:TextView
+    private lateinit var loadingAnimation:LottieAnimationView
     lateinit var gdgChapterRecyclerView: RecyclerView
     lateinit var scrollView:ScrollView
     lateinit var secondcardview:CardView
@@ -131,7 +133,8 @@ class Home : Fragment() {
         secondcardview=binding.SecondcardView
         thirdCardView=binding.thirdCardview
         statisticsText=binding.firstcardviewTextView
-        progressBar=binding.progressBar
+//        progressBar=binding.progressBar
+        loadingAnimation=binding.loadinlottieanimation
         activeChapterText=binding.fourthcardviewTextView
         cloudImageView=binding.cloudImage
         statisticsImageView=binding.statisticsImage
@@ -145,7 +148,9 @@ class Home : Fragment() {
         secondcardview.visibility=View.GONE
         statisticsText.visibility=View.GONE
         activeChapterText.visibility=View.GONE
-        progressBar.visibility=View.VISIBLE
+//        progressBar.visibility=View.VISIBLE
+        loadingAnimation.visibility=View.VISIBLE
+        loadingAnimation.playAnimation()
         statisticsImageView.visibility=View.GONE
 
 
@@ -290,7 +295,11 @@ class Home : Fragment() {
 //                delay(5000)
                 withContext(Dispatchers.Main){
                     setDataToPie()
-                    if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
+//                    if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
+                    if(loadingAnimation.visibility==View.GONE) {
+                        loadingAnimation.visibility = View.VISIBLE
+                        loadingAnimation.playAnimation()
+                    }
                     statisticsImageView.visibility = View.VISIBLE
                     statisticsText.visibility = View.VISIBLE
                     secondcardview.visibility = View.VISIBLE
@@ -554,7 +563,10 @@ class Home : Fragment() {
                 if(it.isNotEmpty()){
                 if (flag2 == 0) {
                     flag2 = 1
-                    if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
+//                    if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
+                    if(loadingAnimation.visibility==View.VISIBLE) {
+                        loadingAnimation.visibility = View.GONE
+                    }
                     scrollView.visibility = View.VISIBLE
                     activeChapterText.visibility = View.VISIBLE
                     gdgChapterRecyclerView.visibility = View.VISIBLE

@@ -22,7 +22,9 @@ import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.mode
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility.buildCommandTour
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility.buildCommandWriteOrbit
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility.buildCommandwriteStartTourFile
+import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility.buildPlacemarkInMaster
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility.buildWriteBalloonFile
+import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility.buildWritePlacemarkFile
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility.buildWriteShapeFile
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.Shape.Shape
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.balloon.Balloon
@@ -49,24 +51,6 @@ private constructor() {
         sendPoiToLG(poi, listener)
     }
 
-    /**
-     * Create the lGCommand to send to the liquid galaxy
-     *
-     * @param listener The LGCommand listener
-     */
-    private fun sendPoiToLG(poi: POI, listener: LGCommand.Listener?) {
-        val lgCommand = LGCommand(
-            buildCommandPOITest(poi),
-            LGCommand.CRITICAL_MESSAGE,
-            object:LGCommand.Listener {
-                override fun onResponse(response: String?) {
-                    listener?.onResponse(response)
-                }
-            })
-        val lgConnectionManager = LGConnectionManager.getInstance()
-        lgConnectionManager!!.startConnection()
-        lgConnectionManager.addCommandToLG(lgCommand)
-    }
 
     /**
      * First Clean the KML and then do the orbit
@@ -331,6 +315,41 @@ private constructor() {
         cleanFileKMLs(0)
         sendBalloonTourGDG(balloon, null)
         sendPoiToLG(poi, null)
+        sendPlacemarkwithTour(poi,null)
+
+    }
+    /**
+     * Create the lGCommand to send to the liquid galaxy
+     *
+     * @param listener The LGCommand listener
+     */
+    private fun sendPoiToLG(poi: POI, listener: LGCommand.Listener?) {
+        val lgCommand = LGCommand(
+            buildCommandPOITest(poi),
+            LGCommand.CRITICAL_MESSAGE,
+            object:LGCommand.Listener {
+                override fun onResponse(response: String?) {
+                    listener?.onResponse(response)
+                }
+            })
+        val lgConnectionManager = LGConnectionManager.getInstance()
+        lgConnectionManager!!.startConnection()
+        lgConnectionManager.addCommandToLG(lgCommand)
+    }
+    private fun sendPlacemarkwithTour(poi: POI,listener: LGCommand.Listener?){
+        var lgCommand=LGCommand(
+            buildPlacemarkInMaster(poi),
+            LGCommand.CRITICAL_MESSAGE,
+            object :LGCommand.Listener{
+                override fun onResponse(response: String?) {
+                    listener?.onResponse(response)
+                }
+            }
+        )
+        val lgConnectionManager = LGConnectionManager.getInstance()
+        lgConnectionManager!!.startConnection()
+        lgConnectionManager.addCommandToLG(lgCommand)
+        handler.postDelayed({ writeFilePlacemarkFile() }, 1000)
     }
 
     /**
@@ -370,7 +389,19 @@ private constructor() {
         lgConnectionManager.addCommandToLG(lgCommand)
     }
 
-    /**
+    private fun writeFilePlacemarkFile() {
+        val lgCommand = LGCommand(
+            buildWritePlacemarkFile(),
+            LGCommand.CRITICAL_MESSAGE, object : LGCommand.Listener {
+                override fun onResponse(response: String?) {
+
+                }
+            })
+        val lgConnectionManager = LGConnectionManager.getInstance()
+        lgConnectionManager!!.startConnection()
+        lgConnectionManager.addCommandToLG(lgCommand)
+    }
+        /**
      * Send the tour kml
      * @param actions Storyboard's actions
      * @param listener Listener

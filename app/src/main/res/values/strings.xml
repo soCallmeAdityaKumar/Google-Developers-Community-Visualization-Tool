@@ -68,10 +68,11 @@
     <string name="connected">LG Connected</string>
     <string name="notification">NOTIFICATION</string>
     <string name="port" translatable="false">22</string>
-    <string name="old_event" translatable="false">OLD EVENT</string>
+    <string name="old_event" translatable="false">OLD GDG</string>
     <string name="event_details" translatable="false">EVENT DETAILS</string>
     <string name="upcomingevent_details" translatable="false">EVENT DETAILS</string>
     <string name="clearDatabaseMessage" translatable="false"> Would you like to delete all data from database?</string>
+    <string name="aboutText">1) Discover the new Google Developer Group right on your Home Screen. Stay in the loop with upcoming events, community insights, and organizers\' details, all seamlessly sourced from the official https://gdg.community.dev/.\n\n 2) Users can conveniently view upcoming events under the Upcoming Events section. Upon refreshing, recently concluded events from the previous week will also be showcased, providing a comprehensive snapshot of recent activities.\n\n 3) Retrieve legacy Google Developer Groups from the dedicated source, https://gdgsearch.com/, crafted by Kevin Simper, offering insight into historical Google Developer Group chapters and their contributions.</string>
 
     <string-array name="languages">
         <item>English</item>

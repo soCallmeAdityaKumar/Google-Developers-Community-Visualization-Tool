@@ -11,9 +11,16 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.aditya.googledeveloperscommunityvisualisationtool.databinding.FragmentLastWeekEventDetailsBinding
+import com.aditya.googledeveloperscommunityvisualisationtool.fragments.gdgChapterDetails.OrganizersAdapter
+import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.Organizers
 import com.aditya.googledeveloperscommunityvisualisationtool.roomdatabase.lastWeekEvent.LastEventModelFact
 import com.aditya.googledeveloperscommunityvisualisationtool.roomdatabase.lastWeekEvent.LastEventViewModel
+import com.airbnb.lottie.LottieAnimationView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class LastWeekEventDetails : Fragment() {
     val title:LastWeekEventDetailsArgs by navArgs()
@@ -23,9 +30,13 @@ class LastWeekEventDetails : Fragment() {
    lateinit var address:TextView
    lateinit var eventTitle:TextView
    lateinit var dateAndTime:TextView
-   lateinit var desc:TextView
+   lateinit var organizerList:List<Organizers>
+    lateinit var memberrecyclerView: RecyclerView
+    lateinit var organizersAdapter: OrganizersAdapter
+    lateinit var desc:TextView
    lateinit var rsvp:TextView
-    private var fragmentLifecycleOwner: LifecycleOwner?=null
+   private var fragmentLifecycleOwner: LifecycleOwner?=null
+    lateinit var lotteAnimationView: LottieAnimationView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +53,19 @@ class LastWeekEventDetails : Fragment() {
         dateAndTime=binding.dateandtime
         desc=binding.desc
         rsvp=binding.rsvp
+        memberrecyclerView=binding.memberRecyclerView
+        lotteAnimationView=binding.loadinLottieAnimation
+
+        lotteAnimationView.visibility=View.VISIBLE
+        lotteAnimationView.playAnimation()
+
+        organizerList=listOf()
+        memberrecyclerView.layoutManager=
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL,false)
+        organizersAdapter= OrganizersAdapter(organizerList)
+        memberrecyclerView.adapter=organizersAdapter
+
+
 
 
 
@@ -59,6 +83,7 @@ class LastWeekEventDetails : Fragment() {
 
             val foundElement=list.find { it.eventName==title.eventTitle }
             if(foundElement!=null){
+                lotteAnimationView.visibility=View.GONE
                 if (foundElement.eventName.isNotEmpty()) {
                     eventTitle.text = foundElement.eventName
                 }
@@ -73,9 +98,16 @@ class LastWeekEventDetails : Fragment() {
                 }
                 if (foundElement.aboutEvent.isNotEmpty()) {
                     desc.text = foundElement.aboutEvent
+                    Log.d("LastWeekEventDetails","desc of event->${foundElement.aboutEvent}")
                 }
                 if (foundElement.addresss.isNotEmpty()) {
                     address.text = foundElement.addresss
+                }
+                if(foundElement.organizers.isNotEmpty()){
+                    val organizersString=foundElement.organizers
+                    val organizerlistType=object : TypeToken<List<Organizers>>() {}.type
+                    organizerList= Gson().fromJson(organizersString,organizerlistType)
+                    organizersAdapter.refreshData(organizerList)
                 }
             }
         })

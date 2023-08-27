@@ -63,6 +63,14 @@ object ActionBuildCommandUtility {
         Log.w(TAG_DEBUG, "command: $command")
         return command
     }
+    @JvmStatic
+    fun buildWritePlacemarkFile(): String {
+        val command = "echo 'http://lg1:81/slave_1.kml'  > " +
+                BASE_PATH +
+                "kmls.txt"
+        Log.w(TAG_DEBUG, "command: $command")
+        return command
+    }
 
     /**
      * Build the command to paint a balloon in Liquid Galaxy
@@ -83,6 +91,7 @@ object ActionBuildCommandUtility {
                 "  <Icon> \n" +
                 "   <href>https://raw.githubusercontent.com/soCallmeAdityaKumar/Google-Developers-Community-Visualization-Tool/main/app/src/main/assets/splashimage.png</href> \n" +
                 "  </Icon> \n" +
+                "    <gx:balloonVisibility>1</gx:balloonVisibility>\n" +
                 "  <overlayXY x=\"0\" y=\"1\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
                 "  <screenXY x=\"0.02\" y=\"0.95\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
                 "  <rotationXY x=\"0\" y=\"0\" xunits=\"fraction\" yunits=\"fraction\"/> \n" +
@@ -203,7 +212,7 @@ object ActionBuildCommandUtility {
                 "</BalloonStyle>\n"+
                 "</Style>\n"+
                 " <Placemark id=\"" + TEST_PLACE_MARK_ID + "\">\n" +
-                "<name>Google Developer Group</name>\n"+
+                "<name>"+balloon.name+"</name>\n"+
                 "<Snippet maxLines=\"0\"></Snippet>\n"+
                 "<description>\n" +
                 "<![CDATA[\n" +
@@ -322,6 +331,39 @@ object ActionBuildCommandUtility {
         return startCommand+organizersCommand+pastDec+pastEventCommand+UpcoDec+upcoEventcommand+endCommand
     }
 
+     fun buildPlacemarkInMaster(poi: POI):String{
+         val TEST_PLACE_MARK_ID = "testPlaceMark12345"
+
+         var startCommand = "echo '"+
+                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                 "<kml xmlns=\"http://www.opengis.net/kml/2.2\"\n" +
+                 " xmlns:gx=\"http://www.google.com/kml/ext/2.2\">\n" +
+                 " <Document>\n" +
+                 " <Placemark id=\"" + TEST_PLACE_MARK_ID + "\">\n" +
+                 "    <name>helloBalloon.kml</name>\n" +
+                 "<Style id=\"purple_paddle\">\n"+
+                 "<IconStyle>\n"+
+                 "<Icon>\n"+
+                 "<href>https://raw.githubusercontent.com/soCallmeAdityaKumar/Google-Developers-Community-Visualization-Tool/main/app/src/main/res/drawable/googledeveloper_placemark.png</href>\n"+
+                 "</Icon>\n"+
+                 "</IconStyle>\n"+
+                 "</Style>\n"+
+                 "<name>Google Developer Group</name>\n"+
+//                "    <styleUrl>#purple_paddle</styleUrl>\n"+
+                 "    <gx:balloonVisibility>1</gx:balloonVisibility>\n" +
+                 "    <Point>\n" +
+                 "      <coordinates>" + poi?.poiLocation?.longitude + "," + poi?.poiLocation?.latitude + ",0</coordinates>\n" +
+                 "    </Point>\n" +
+                 "  </Placemark>\n" +
+                 "</Document>\n" +
+                 "</kml>" +
+                 "' > " +
+                 BASE_PATH +
+                 "kml/slave_1.kml"
+        Log.w(TAG_DEBUG,startCommand)
+        return startCommand
+
+    }
 
 //    @JvmStatic
 //    fun buildCommandBalloonTest(balloon: Balloon): String {
@@ -413,6 +455,7 @@ object ActionBuildCommandUtility {
         val route = filePath!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         return route[route.size - 1]
     }
+
 
     /**
      * @return Command to write the path to the shape.kml
@@ -824,7 +867,12 @@ object ActionBuildCommandUtility {
 
     @JvmStatic
     fun buildCommandCleanSlaves(): String {
-        val command = "echo '' > " + BASE_PATH + "kmls.txt "
+        val blank = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
+        "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">"+
+        "<Document>"+
+        "</Document>"+
+        "</kml>"
+        val command = "echo '"+blank+"' > " + BASE_PATH + "kml/slave_2.kml"
         Log.w(TAG_DEBUG, "commandCleanSlaves: $command")
         return command
     }
@@ -832,6 +880,17 @@ object ActionBuildCommandUtility {
         val command="sshpass -p $password ssh -t lg$i \"echo $password | sudo -S reboot\""
         Log.w(TAG_DEBUG, "commandRebootSlaves: $command")
         return command
+    }
+    fun buildCleanLogo():String{
+        val blank="<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
+        "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">"+
+        "<Document id=\"slave_3\">"+
+        "</Document>"+
+        "</kml>"
+        val command = "echo '"+blank+"' > " + BASE_PATH + "kml/slave_3.kml"
+        Log.w(TAG_DEBUG, "commandCleanLogo: $command")
+        return command
+
     }
 
 }

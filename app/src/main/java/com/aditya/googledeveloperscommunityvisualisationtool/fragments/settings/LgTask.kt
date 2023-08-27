@@ -32,6 +32,7 @@ class LgTask : Fragment() {
     private lateinit var password:String
     private lateinit var lgName:String
     private lateinit var port:String
+    private lateinit var cleanLogoButton:Button
     var screenAmount=5
 
 
@@ -50,12 +51,16 @@ class LgTask : Fragment() {
         saveKMLButton=binding.SaveKml
         resetRefreshButton=binding.ResetRefresh
         setRefreshButton=binding.SetRefresh
+        cleanLogoButton=binding.CleanLogo
 
         loadSharedData()
 
 
         rebootLGButton.setOnClickListener {
             startrebootLg()
+        }
+        cleanLogoButton.setOnClickListener {
+            cleanLogo()
         }
 
         powerOffLgButton.setOnClickListener {
@@ -76,6 +81,24 @@ class LgTask : Fragment() {
         }
         return view
     }
+
+    private fun cleanLogo() {
+        try {
+            val lgConnectionManager = LGConnectionManager.getInstance()
+            lgConnectionManager!!.startConnection()
+            val lgCommand = LGCommand(
+                ActionBuildCommandUtility.buildCleanLogo(),
+                LGCommand.CRITICAL_MESSAGE, object : LGCommand.Listener {
+                    override fun onResponse(response: String?) {
+
+                    }
+                })
+            lgConnectionManager.addCommandToLG(lgCommand)
+        }catch (e:Exception){
+            println("Could not connect to LG")
+        }
+    }
+
     private fun loadSharedData() {
         val sharedPreferences = activity?.getSharedPreferences(
             ConstantPrefs.SHARED_PREFS.name,

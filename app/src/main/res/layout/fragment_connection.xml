@@ -22,22 +22,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialCardViewLgName">
-
-        <EditText
-            android:id="@+id/IpAddressEditText"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/cardview"
-            android:fontFamily="@font/poppins_medium"
-            android:backgroundTint="@color/CardViewTransparent"
-            android:hint="@string/lg_ip_address"
-            android:padding="20dp"
-            android:textAlignment="viewStart"
-            android:textColor="@color/MainHeadingText"
-            android:textSize="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:src="@drawable/lgipadress_svg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/IpAddressEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cardview"
+                android:backgroundTint="@color/CardViewTransparent"
+                android:fontFamily="@font/poppins_medium"
+                android:hint="@string/lg_ip_address"
+                android:padding="20dp"
+                android:layout_marginTop="5dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/MainHeadingText"
+                android:textSize="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardViewPort"
@@ -50,22 +66,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialCardViewipAddress">
-
-        <EditText
-            android:id="@+id/PortEditText"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/cardview"
-            android:fontFamily="@font/poppins_medium"
-            android:backgroundTint="@color/CardViewTransparent"
-            android:hint="@string/port"
-            android:padding="20dp"
-            android:textAlignment="viewStart"
-            android:textColor="@color/MainHeadingText"
-            android:textSize="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/port_svg"
+                android:layout_margin="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/PortEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cardview"
+                android:backgroundTint="@color/CardViewTransparent"
+                android:fontFamily="@font/poppins_medium"
+                android:hint="@string/port"
+                android:padding="20dp"
+                android:layout_marginTop="5dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/MainHeadingText"
+                android:textSize="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView5"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <!--    <EditText-->
@@ -89,21 +120,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <EditText
-            android:id="@+id/LgNameEditText"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/cardview"
-            android:backgroundTint="@color/CardViewTransparent"
-            android:fontFamily="@font/poppins_medium"
-            android:hint="@string/lg_name"
-            android:padding="20dp"
-            android:textAlignment="viewStart"
-            android:textColor="@color/MainHeadingText"
-            android:textSize="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:src="@drawable/lg_name_svg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/LgNameEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cardview"
+                android:backgroundTint="@color/CardViewTransparent"
+                android:fontFamily="@font/poppins_medium"
+                android:hint="@string/lg_name"
+                android:padding="20dp"
+                android:layout_marginTop="5dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/MainHeadingText"
+                android:textSize="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -119,6 +169,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/password_svg"
+        android:layout_margin="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/LgPassword"
         android:layout_width="0dp"
@@ -129,12 +189,13 @@
         android:hint="@string/lg_password"
         android:inputType="textPassword"
         android:padding="20dp"
+        android:layout_marginTop="5dp"
         android:textAlignment="viewStart"
         android:textColor="@color/MainHeadingText"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView

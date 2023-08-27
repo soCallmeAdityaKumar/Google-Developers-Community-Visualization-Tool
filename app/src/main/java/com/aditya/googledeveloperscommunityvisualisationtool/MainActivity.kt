@@ -99,6 +99,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.oldEvent->resources.getString(R.string.old_event)
                 R.id.lastWeekEventDetails->getString(R.string.event_details)
                 R.id.upcomingEventDetails->getString(R.string.upcomingevent_details)
+                R.id.lgTask->"LG TASKS"
+                R.id.aboutFragment->"ABOUT"
                 else -> resources.getString(R.string.app_name)
             }
             binding.appBarMain.notifyImage.setImageDrawable(getDrawable(R.drawable.notify_light_logo))
@@ -195,6 +197,8 @@ class MainActivity : AppCompatActivity() {
                     editor?.apply()
                     Log.d("ConnectionMain LGConnectionManager","connected  $delayMillis")
                     loadConnectionStatus()
+                    ActionController.instance?.sendBalloonWithLogos(this)
+
                 }
             },2000)
 
