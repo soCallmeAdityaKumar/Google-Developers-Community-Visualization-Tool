@@ -197,18 +197,11 @@ class Settings : Fragment() {
 
     }
     private fun deleteAllDatabase() {
-        gdgChapterRoomModel.deleteAllChapterViewModel()
-        chapterUrlRoomModel.deleteAllChapterUrlViewModel()
         lastWeekEventRoomModel.deleteAllevent()
         lasteWeekRoomModel.deleteAlllastWeekViewModel()
         notificatioModel.deleteAllNotification()
         oldGDGRoomViewModel.deleteAllOldGDGChapterModel()
         upcomingEventRoomModel.deleteAllevent()
-        val edit=activ.getSharedPreferences("Flags",Context.MODE_PRIVATE)!!.edit()
-        edit.apply{
-            putInt("flag1",0)
-        }
-
         Toast.makeText(requireContext(),"ALl Databases are cleared! Now fresh data will be downloaded",
             Toast.LENGTH_LONG).show()
     }

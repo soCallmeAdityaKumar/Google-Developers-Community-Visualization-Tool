@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.aditya.googledeveloperscommunityvisualisationtool.MainActivity
 import com.aditya.googledeveloperscommunityvisualisationtool.connection.LGCommand
 import com.aditya.googledeveloperscommunityvisualisationtool.connection.LGConnectionManager
 import com.aditya.googledeveloperscommunityvisualisationtool.create.utility.model.ActionBuildCommandUtility
@@ -17,6 +18,7 @@ import com.aditya.googledeveloperscommunityvisualisationtool.dialog.CustomDialog
 import com.aditya.googledeveloperscommunityvisualisationtool.utility.ConstantPrefs
 import com.aditya.googledeveloperscommunityvisualisationtool.R
 import com.aditya.googledeveloperscommunityvisualisationtool.databinding.FragmentLgTaskBinding
+import java.util.regex.Pattern
 
 
 class LgTask : Fragment() {
@@ -105,14 +107,32 @@ class LgTask : Fragment() {
             Context.MODE_PRIVATE
         )
             val hostNport = sharedPreferences?.getString(ConstantPrefs.URI_TEXT.name, "")!!.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            lgipAddress=hostNport[0]
-            port=hostNport[1]
+             lgipAddress = ""
+             port = ""
+            if (hostNport.isNotEmpty()) {
+                lgipAddress = hostNport[0]
+            if(isValidHostNPort("${hostNport[0]}:${hostNport[1]}")){
+                lgipAddress=hostNport[0]
+                port=hostNport[1]
+            }
+
+        }
+//            lgipAddress=hostNport[0]
+//            port=hostNport[1]
             lgName = sharedPreferences.getString(ConstantPrefs.USER_NAME.name, "")!!
             password = sharedPreferences.getString(ConstantPrefs.USER_PASSWORD.name, "")!!
 
 
     }
 
+    private fun isValidHostNPort(hostPort: String): Boolean {
+        return HOST_PORT.matcher(hostPort).matches()
+    }
+    companion object {
+        //private static final String TAG_DEBUG = "MainActivity";
+        private val HOST_PORT =
+            Pattern.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+$")
+    }
     private fun startrebootLg(){
         val dialog = CustomDialogUtility.getDialog(requireActivity(),R.drawable.warning_popup, resources.getString(R.string.rebootLG))
         dialog.setCanceledOnTouchOutside(false)

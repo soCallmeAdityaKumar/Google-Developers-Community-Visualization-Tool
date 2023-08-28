@@ -31,6 +31,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.regex.Pattern
 
 class MainActivity : AppCompatActivity() {
@@ -124,7 +127,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkConnection() {
-        var connectionPref = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, Context.MODE_PRIVATE)
+            var connectionPref = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, Context.MODE_PRIVATE)
             if (connectionPref.getString(ConstantPrefs.URI_TEXT.name, "")!!.isNotEmpty()) {
                 var timeout=0
                 val hostNport =
@@ -229,6 +232,20 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
+        val flagSharedpref=getSharedPreferences("Flags",Context.MODE_PRIVATE)!!
+        val flagSharedEditor=flagSharedpref.edit()
+        val pieSharePref=getSharedPreferences("PieSharedPref",Context.MODE_PRIVATE)!!.edit()
+
+        var currentDate= LocalDateTime.now().atZone(ZoneId.systemDefault())
+        if(currentDate>= ZonedDateTime.parse(flagSharedpref.getString("previousDate","$currentDate")).plusSeconds(259200)){
+            flagSharedEditor.apply{
+                putInt("flag1",0)
+                apply()
+            }
+            CoroutineScope(Dispatchers.Main).launch {
+                pieSharePref.clear().apply()
+            }
+        }
 
     }
 }

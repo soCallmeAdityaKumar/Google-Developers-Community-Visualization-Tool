@@ -56,6 +56,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.internal.wait
 import java.lang.Exception
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -227,8 +230,7 @@ class GdgChapterDetails : Fragment() {
     private fun orbit() {
         Log.d("OrbitGDG","Inside the orbit ")
         val isConnected = AtomicBoolean(false)
-        if(activity!=null)
-        testPriorConnection(activ, isConnected)
+        if(activity!=null) testPriorConnection(activ, isConnected)
         val sharedPreferences = activ.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
         handler.postDelayed({
             if (isConnected.get()) {
@@ -294,7 +296,7 @@ class GdgChapterDetails : Fragment() {
         Log.d("GDGChapterDetials","Starting Tour")
 
         val isConnected = AtomicBoolean(false)
-            testPriorConnection(activ, isConnected)
+        testPriorConnection(activ, isConnected)
         val sharedPreferences = activ.getSharedPreferences(ConstantPrefs.SHARED_PREFS.name, MODE_PRIVATE)
         handler.postDelayed({
             if (isConnected.get()) {
@@ -356,8 +358,17 @@ class GdgChapterDetails : Fragment() {
         }
         job.join()
         gdgDetails = gdgViewModel.getdetails()
+        var currDate= LocalDateTime.now().atZone(ZoneId.systemDefault())
+        val prevDate= ZonedDateTime.parse(sharedPref.getString("Date","$currDate")).plusSeconds(3600)
+        Log.d("GdgChapterDetails","PrevDate->$prevDate  CurrDate->$currDate")
+        if(prevDate<=currDate){
+            sharedPref.edit().clear().apply()
+            Log.d("GdgChapterDetails","PrevDate<= CurrDate sharedPref.all.size->${sharedPref.all.size}")
 
+            sharedPref.all.size
+        }
         if(sharedPref.getString("gdgname",null)==args.chapter.gdgName) {
+
             Log.d("storedargs",args.chapter.gdgName)
             Log.d("stored",sharedPref.getString("gdgname",null).toString())
             gdgName.text = sharedPref.getString("gdgname", null)
@@ -573,7 +584,10 @@ class GdgChapterDetails : Fragment() {
                 }
                 if (store.storedgdgData<2) {
                     store.storedgdgData+=1
+                    var currentDate= LocalDateTime.now().atZone(ZoneId.systemDefault())
+                    Log.d("GdgChapterDetails","Current ->$currentDate stored")
                     editor.apply {
+                        putString("Date",currentDate.toString())
                         putString("gdgname", gdgDetails.gdgName)
                         putString("cityname", args.chapter.city_name)
                         putString("countryname", args.chapter.country)
@@ -587,7 +601,7 @@ class GdgChapterDetails : Fragment() {
                         putString("email",gdgDetails.emailLink)
 
 
-                        val stringorganizer = gson.toJson(organizerList)
+                         val stringorganizer = gson.toJson(organizerList)
                          val stringpastevent = gson.toJson(pastEventsList)
                          val stringupcoming = gson.toJson(upcomingEventlist)
 

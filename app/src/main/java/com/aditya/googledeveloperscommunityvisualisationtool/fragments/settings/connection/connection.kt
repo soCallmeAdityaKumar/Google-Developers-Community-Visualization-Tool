@@ -313,8 +313,15 @@ class connection : Fragment() {
             changeToNewView()
         } else {
             val hostNport = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name, "")!!.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val iptext=hostNport[0]
-            val porttext=hostNport[1]
+            var iptext=""
+            var porttext=""
+            if (hostNport.isNotEmpty()) {
+                iptext = hostNport[0]
+                if(isValidHostNPort("${hostNport[0]}:${hostNport[1]}")){
+                    iptext=hostNport[0]
+                    porttext=hostNport[1]
+                }
+            }
             val usernameText = sharedPreferences.getString(ConstantPrefs.USER_NAME.name, "")
             val passwordText = sharedPreferences.getString(ConstantPrefs.USER_PASSWORD.name, "")
             val isTryToReconnect =

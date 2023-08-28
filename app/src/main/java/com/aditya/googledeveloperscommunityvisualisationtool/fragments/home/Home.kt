@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.ScrollView
@@ -49,6 +50,7 @@ import com.aditya.googledeveloperscommunityvisualisationtool.fragments.home.Home
 import com.airbnb.lottie.LottieAnimationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.handleCoroutineException
 import kotlinx.coroutines.launch
@@ -57,6 +59,10 @@ import kotlinx.coroutines.withContext
 import okhttp3.internal.wait
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.HashMap
 import java.util.Locale
 import javax.net.ssl.HandshakeCompletedListener
@@ -102,11 +108,16 @@ class Home : Fragment() {
     var hanlder=Handler()
     lateinit var flagSharedpref:SharedPreferences
     lateinit var flagSharedEditor:SharedPreferences.Editor
+    var updateUrlsize=0
+    var updateGdgSize=0
     var flag2=0
     var flag1=0
     var flag3=0
     var flag4=0
     var urlGetChapterList= listOf<ChaptersUrlEntity>()
+    lateinit var job4:Job
+    lateinit var job3:Job
+    lateinit var job5:Job
 
 
     override fun onAttach(context: Context) {
@@ -193,16 +204,13 @@ class Home : Fragment() {
         }
 
 
+        //Try to Fetch for new GDG url
         sharedPref = activity?.getSharedPreferences("didShowPrompt", Context.MODE_PRIVATE)!!
         val prefEdit = sharedPref?.edit()
-
 //        objectsToAnimate= listOf(binding.cloudFlyingImage,binding.gdgImage)
 //        startFlyingAnimation(binding.avatarImageView)
 
-
         return view
-
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -220,8 +228,17 @@ class Home : Fragment() {
         chapterDatabaseViewModel=ViewModelProvider(requireActivity(),ChapViewModelFact(requireContext())).get(ChapterViewModel::class.java)
         Log.d("coroutines", "before checkurldatabase")
 
+
+
+        chapUrlroomViewModel.readAllChapterUrlViewModel.observe(fragmentLifecycleOwner!!,Observer{
+            updateUrlsize=it.size
+        })
+        chapterDatabaseViewModel.readAllChaptersViewModel.observe(fragmentLifecycleOwner!!,Observer{
+            updateGdgSize=it.size
+        })
         loadConnectionStatus()
         forPieMaking=(activity as MainActivity).mainActivityPieMaking
+
 //        startPieChartmaking()
 
 
@@ -229,6 +246,7 @@ class Home : Fragment() {
     private fun checkurlDatabase() {
 
         var urlListsize=0
+
         chapterDatabaseViewModel.readAllChaptersViewModel.observe(fragmentLifecycleOwner!!,Observer{chapterList->
             Log.d("Home->checkurlDatabase()->chapterDatabaseViewModel","inside the chapterDatabaseViewModel")
             if(flag1==0){
@@ -237,8 +255,11 @@ class Home : Fragment() {
                     urlListsize=urlList.size
                     if(flag1==0){
                         flag1++
+                        var previousDate= LocalDateTime.now().atZone(ZoneId.systemDefault())
                         flagSharedEditor.apply{
                             putInt("flag1",1)
+                            putString("previousDate",previousDate.toString())
+                            Log.d("Home","Previous Date->${previousDate.toString()} stored in Pref}")
                             apply()
                         }
                         CoroutineScope(Dispatchers.IO).launch {
@@ -296,10 +317,6 @@ class Home : Fragment() {
                 withContext(Dispatchers.Main){
                     setDataToPie()
 //                    if (progressBar.visibility == View.VISIBLE) progressBar.visibility = View.GONE
-                    if(loadingAnimation.visibility==View.GONE) {
-                        loadingAnimation.visibility = View.VISIBLE
-                        loadingAnimation.playAnimation()
-                    }
                     statisticsImageView.visibility = View.VISIBLE
                     statisticsText.visibility = View.VISIBLE
                     secondcardview.visibility = View.VISIBLE
@@ -319,7 +336,9 @@ class Home : Fragment() {
             }
 
         }else{
-            setDataToPieFromPref()
+            CoroutineScope(Dispatchers.Main).launch{
+                setDataToPieFromPref()
+            }
         }
     }
 
@@ -371,53 +390,64 @@ class Home : Fragment() {
     private fun setDataToPieFromPref() {
         Log.d("Home->startPieChartmaking()","Inside the startPieChartmaking")
         var j=0
-        val listOfColor= listOf("#FFA726","#66BB6A","#EF5350","#29B6F6","#FFC8DD","#2B2D42","#8D99AE","#D5BDAF","#E4C1F9","#7400B8")
-        counrtyList.add("All")
-        if(pieSharePref.all.size==10) {
-            pieSharePref.all.forEach { map ->
-                pieChart.addPieSlice(
-                    PieModel(
-                        map.key,
-                        map.value as Float,
-                        Color.parseColor(listOfColor[j])
+        if(pieSharePref.getInt("flag1",1)==1){
+            val listOfColor= listOf("#FFA726","#66BB6A","#EF5350","#29B6F6","#FFC8DD","#2B2D42","#8D99AE","#D5BDAF","#E4C1F9","#7400B8")
+            counrtyList.add("All")
+            if(pieSharePref.all.size==10) {
+                pieSharePref.all.forEach { map ->
+                    pieChart.addPieSlice(
+                        PieModel(
+                            map.key,
+                            map.value as Float,
+                            Color.parseColor(listOfColor[j])
+                        )
                     )
-                )
-                countryCount.add(
-                    CountryCountData(
-                        listOfColor[j],
-                        map.key,
-                        Integer.parseInt(map.value.toString().dropLast(2))
+                    countryCount.add(
+                        CountryCountData(
+                            listOfColor[j],
+                            map.key,
+                            Integer.parseInt(map.value.toString().dropLast(2))
+                        )
                     )
-                )
-                counrtyList.add(map.key)
-                j++
+                    counrtyList.add(map.key)
+                    j++
+                }
             }
-        }
-        pieChartAdapter.refreshData(countryCount)
-        countryAdapter.refreshData(counrtyList)
-        statisticsText.visibility = View.VISIBLE
-        secondcardview.visibility = View.VISIBLE
-        statisticsImageView.visibility = View.VISIBLE
+            pieChartAdapter.refreshData(countryCount)
+            countryAdapter.refreshData(counrtyList)
+            statisticsText.visibility = View.VISIBLE
+            secondcardview.visibility = View.VISIBLE
+            statisticsImageView.visibility = View.VISIBLE
 
-        statisticsText.startAnimation(
-            AnimationUtils.loadAnimation(
-                requireContext(),
-                android.R.anim.slide_in_left
+            statisticsText.startAnimation(
+                AnimationUtils.loadAnimation(
+                    requireContext(),
+                    android.R.anim.slide_in_left
+                )
             )
-        )
-        secondcardview.startAnimation(
-            AnimationUtils.loadAnimation(
-                requireContext(),
-                android.R.anim.slide_in_left
+            secondcardview.startAnimation(
+                AnimationUtils.loadAnimation(
+                    requireContext(),
+                    android.R.anim.slide_in_left
+                )
             )
-        )
-        pieChart.startAnimation()
+            pieChart.startAnimation()
+        }
+
     }
 
     override fun onResume() {
         super.onResume()
         loadConnectionStatus()
         setDataToPieFromPref()
+        if(flagSharedpref.getInt("flag1",-1)!=-1){
+            if(flagSharedpref.getInt("flag1",-1)==0){
+                flag1=0
+                job3.cancel()
+                job4.cancel()
+                job5.cancel()
+            }
+        }
         Log.d("Home->onResume","onResume() called")
         val customAppBar = (activity as MainActivity).binding.appBarMain
         val menuButton = customAppBar.menuButton
@@ -458,12 +488,9 @@ class Home : Fragment() {
     }
 
 
-    //Check if chapter_url database is empty then fetch data and if
-
-
     private fun getAllGdgChapter(j:Int) {
         Log.d("Home->getAllGdgChapter()", "beforedelay")
-        val job4=CoroutineScope(Dispatchers.Main).launch {
+         job4=CoroutineScope(Dispatchers.Main).launch {
            chapUrlroomViewModel.readAllChapterUrlViewModel.observe(fragmentLifecycleOwner!!,
                Observer { gdgURlChapterEntity ->
                    urlGetChapterList=gdgURlChapterEntity
@@ -472,7 +499,7 @@ class Home : Fragment() {
                        flag3++
                        var i=j
                        Log.d("Home->getAllGdgChapter()", "starting from ${urlGetChapterList[j].url}")
-                       CoroutineScope(Dispatchers.IO).launch {
+                       job3=CoroutineScope(Dispatchers.IO).launch {
                            while (i>=0) {
                                if(i==urlGetChapterList.size){
                                    break
@@ -498,10 +525,10 @@ class Home : Fragment() {
                                        details.about
                                    )
                                )
-                               Log.d(
-                                   "Home->getAllGdgChapter()",
-                                   "${urlGetChapterList[i].url} gdgdetials response added to database"
-                               )
+//                               Log.d(
+//                                   "Home->getAllGdgChapter()",
+//                                   "${urlGetChapterList[i].url} gdgdetials response added to database"
+//                               )
                                i++
                            }
 
@@ -525,7 +552,7 @@ class Home : Fragment() {
             mostChaptersCountry.entries.sortedByDescending { it.value }.take(10)
                 .forEach { sortedMap[it.key] = it.value }
         }
-        counrtyList.add("All")
+//        counrtyList.add("All")
             sortedMap.forEach{(k,v)->Log.d("Home->setDataToPie()->sorted","$k->$v")}
             sortedMap.forEach { (k, v) ->
                 pieEditor.apply{
@@ -554,7 +581,8 @@ class Home : Fragment() {
     }
 
     private fun getChapterFromDatabase() {
-        CoroutineScope(Dispatchers.Main).launch{
+        Log.d("Home->getChapterFromDatabase","Inside the getChapterFrom Database")
+        job5=CoroutineScope(Dispatchers.Main).launch{
 
             chapterDatabaseViewModel.readAllChaptersViewModel.observe(fragmentLifecycleOwner!!,Observer { it ->
 
@@ -718,5 +746,14 @@ class Home : Fragment() {
         animatorSet.start()
     }
 
+    fun convertZonedDateTimeToString(zonedDateTime: ZonedDateTime): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddHH:mm:ss")
+        return zonedDateTime.format(formatter)
+    }
+
+    fun convertStringToZonedDateTime(dateTimeString: String): ZonedDateTime {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm:ss")
+        return ZonedDateTime.parse(dateTimeString, formatter)
+    }
 
 }

@@ -132,15 +132,11 @@ class UpcomingEventDetails : Fragment() {
         aboutcardView=binding.aboutcardView
         notifyButton=binding.notifyButton
 
-
-
         organizerList=listOf()
 
         memberrecyclerView.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         organizersAdapter= OrganizersAdapter(organizerList)
         memberrecyclerView.adapter=organizersAdapter
-
-
 
 
         return view

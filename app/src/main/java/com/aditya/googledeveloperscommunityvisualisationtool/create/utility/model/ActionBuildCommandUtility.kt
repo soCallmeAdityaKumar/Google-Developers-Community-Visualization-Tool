@@ -216,7 +216,7 @@ object ActionBuildCommandUtility {
                 "<Snippet maxLines=\"0\"></Snippet>\n"+
                 "<description>\n" +
                 "<![CDATA[\n" +
-                "<table width=\"400\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n"+
+                "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n"+
                 "<tr>\n"+
                 "<td colspan=\"2\" align=\"center\">\n"+
                 "<img src="+ balloon.imageUri+" alt=\"picture\" width=\"400\" height=\"150\" />\n"+
@@ -234,7 +234,7 @@ object ActionBuildCommandUtility {
 //                "</tr>\n"+
                 "<tr>\n"+
                 "<td colspan=\"1\">\n"+
-                "<p>About GDG</p>\n"+
+                "<p><h5>About GDG</h5></p>\n"+
                 "</td>\n"+
                 "</tr>\n"+
                 "<tr>\n"+
@@ -244,10 +244,11 @@ object ActionBuildCommandUtility {
                 "</tr>\n"+
                 "<tr>\n"+
                 "<td colspan=\"2\">\n"+
-                "<p>Organizers</p>\n"+
+                "<p><h4>Organizers</h4></p>\n"+
                 "</td>\n"+
                 "</tr>\n"
-                var organizersCommand="<tr>No Organizers</tr>\n"
+                var organizersCommand=""
+                organizersCommand="<tr><td>No Organizers</td></tr>\n"
                 if(organizersList.isNotEmpty()){
                     var organizersNameCommand="<tr>\n"
                     for(organisers in organizersList){
@@ -266,18 +267,18 @@ object ActionBuildCommandUtility {
                     orgImgCommand+="</tr>\n"
                     organizersCommand=organizersNameCommand+orgCompanyCommand+orgImgCommand
                 }
-                var pastDec=("<tr>\n"+
+                var pastDec="<tr>\n"+
                 "<td colspan=\"2\">\n"+
-                "<p>Past Events</p>\n"+
+                "<p><h4>Past Events</h4></p>\n"+
                 "</td>\n"+
-                "</tr>\n")
-                var pastEventCommand="<tr>No Past Events</tr>\n"
+                "</tr>\n"
+                var pastEventCommand=""
                 if(pastEventList.isNotEmpty()){
                     var pasteventname="<tr>\n"
                     for(event in pastEventList){
-                        pasteventname+="<td>"+event.pastEventstitle+"</td>"
+                        pasteventname+="<td width=\"20\">"+event.pastEventstitle+"</td>"
                     }
-                    pasteventname+="/tr>\n<tr>\n"
+                    pasteventname+="</tr>\n<tr>\n"
                     var pastEventType=""
                     for(type in pastEventList){
                         pastEventType+="<td>"+type.pastEventstype+"</td>"
@@ -289,26 +290,32 @@ object ActionBuildCommandUtility {
                     }
                     pastDateEvent+="</tr>\n"
                     pastEventCommand=pasteventname+pastEventType+pastDateEvent
+                }else{
+                    pastEventCommand="<tr><td>No Past Events</td></tr>\n"
                 }
-                val UpcoDec=("<tr>\n"+
+                val UpcoDec="<tr>\n"+
                 "<td colspan=\"2\">\n"+
-                "<p>Upcoming Events</p>\n"+
+                "<p><h4>Upcoming Events</h4></p>\n"+
                 "</td>\n"+
-                "</tr>\n")
-                var upcoEventcommand="<tr>No Upcoming Event</tr>\n"
+                "</tr>\n"
+                var upcoEventcommand=""
                 if(upcomingEventList.isNotEmpty()){
                     var upcoEventName="<tr>\n"
                     for(event in upcomingEventList){
                         upcoEventName+="<td>"+event.upcomingEventstitle+"</td>"
                     }
-                    upcoEventName+="/tr>\n<tr>\n"
+                    upcoEventName+="</tr>\n<tr>\n"
                     var upcoDateEvent=""
                     for(date in upcomingEventList){
                         upcoDateEvent+="<td>"+date.upcomingEventsdate+"</td>"
                     }
                     upcoDateEvent+="</tr>\n"
+                    upcoEventcommand=upcoEventName+upcoDateEvent
                 }
-                val endCommand=("<tr>\n"+
+                else{
+                    upcoEventcommand="<tr><td>No Upcoming Event</td></tr>\n"
+                }
+                val endCommand="<tr>\n"+
                 "<td colspan=\"2\" align=\"center\">\n"+
                 "<font color=\"#999999\">@Google Developer Visualization Tool 2023</font>\n"+
                 "</td>\n"+
@@ -326,7 +333,7 @@ object ActionBuildCommandUtility {
                 "</kml>" +
                 "' > " +
                 BASE_PATH +
-                "kml/slave_2.kml")
+                "kml/slave_2.kml"
         Log.w(TAG_DEBUG, startCommand+organizersCommand+pastDec+pastEventCommand+UpcoDec+upcoEventcommand+endCommand)
         return startCommand+organizersCommand+pastDec+pastEventCommand+UpcoDec+upcoEventcommand+endCommand
     }

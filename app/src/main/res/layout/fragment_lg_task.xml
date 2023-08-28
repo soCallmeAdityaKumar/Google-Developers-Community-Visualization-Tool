@@ -87,7 +87,7 @@
         android:fontFamily="@font/poppins_medium"
         android:padding="10dp"
         android:textColor="@color/white"
-        android:text="@string/reset_refresh"
+        android:text="@string/set_refresh"
         android:textSize="30dp"
         app:layout_constraintBaseline_toBaselineOf="@+id/PowerOffLg"
         app:layout_constraintEnd_toStartOf="@+id/SaveKml"
