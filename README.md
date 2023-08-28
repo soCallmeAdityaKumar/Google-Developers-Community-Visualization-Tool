@@ -79,7 +79,7 @@ If you're interested in contributing to this project, feel free to submit a pull
 
 ## Credits
 
-This app was made possible with the help of mentor Yash Raj Bharti, organization admin Andreu Ibáñez Perales, and testers from Liquid Galaxy LAB.The app wouldn’t have succeeded too if it wasn’t for Liquid Galaxy Lab Testers, Mohamed Zazou, Navdeep Singh, Imad Laichi, who helped in testing the app on real liquid galaxy rigs and helped me find any troubles that might have appeared during the testing process.
+This app was made possible with the help of mentor Yash Raj Bharti, organization admin Andreu Ibáñez Perales, and testers from Liquid Galaxy LAB: Mohamed Zazou, Navdeep Singh, Imad Laichi, who helped in testing the app on real liquid galaxy rigs and helped me find any troubles that might have appeared during the testing process.
 
 Special thanks to Kevin Simper, the author of the https://gdgsearch.com/ project.
 
